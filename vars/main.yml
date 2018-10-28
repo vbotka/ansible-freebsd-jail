@@ -1,0 +1,55 @@
+---
+# vars freebsd-jail
+
+#bsd_jail_enable: true
+#bsd_jail_debug: true
+#bsd_jail_conf_backup: no
+
+#bsd_jail_jails:
+#  - jailname: "test_01"
+#    present: yes
+#    start: yes
+#    jailtype: "zfs"
+#    flavour: "default"
+#    conf:
+#      interface: "lo1"
+#      ip4.addr: "10.2.0.10"
+#  - jailname: "test_02"
+#    present: yes
+#    start: yes
+#    jailtype: "zfs"
+#    flavour: "default"
+#    conf:
+#      interface: "em0"
+#      ip4.addr: "10.1.0.52"
+#  - jailname: "test_03"
+#    present: yes
+#    start: yes
+#    jailtype: "zfs"
+#    flavour: "ansible"
+#    firstboot: "/root/firstboot.sh"
+#    conf:
+#      interface: "em0"
+#      ip4.addr: "10.1.0.53"
+
+#bsd_ezjail_enable: true
+#bsd_ezjail_use_zfs: "YES"
+#bsd_ezjail_jailzfs: "zroot/jails"
+#bsd_ezjail_jaildir: "/local/jails"
+
+#bsd_ezjail_conf:
+#  - "ezjail_use_zfs=\"{{ bsd_ezjail_use_zfs }}\""
+#  - "ezjail_jailzfs={{ bsd_ezjail_jailzfs }}"
+#  - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
+#  - "ezjail_ftphost=http://ftp.freebsd.org"
+#  - "ezjail_use_zfs_for_jails=YES"
+
+#bsd_ezjail_flavours:
+#  - flavour: "default"
+#    dir: "files/default"
+#    archive: "files/default.tar"
+#  - flavour: "ansible"
+#    archive: "files/ansible.tar"
+
+# EOF
+...

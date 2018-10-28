@@ -1,0 +1,55 @@
+---
+
+- name: "FreeBSD Jail debug."
+  vars:
+    msg: |
+         ansible_architecture [ {{ ansible_architecture }} ]
+         ansible_os_family [ {{ ansible_os_family }} ]
+         ansible_distribution [ {{ ansible_distribution }} ]
+         ansible_distribution_major_version [ {{ ansible_distribution_major_version }} ]
+         ansible_distribution_version [ {{ ansible_distribution_version }} ]
+         ansible_distribution_release [ {{ ansible_distribution_release }} ]
+
+         bsd_jail_jails
+         {{ bsd_jail_jails | to_nice_yaml }}
+
+         bsd_jail_enable [ {{ bsd_jail_enable }} ]
+         bsd_jail_conf_backup [ {{ bsd_jail_conf_backup }} ]
+         bsd_jail_service [ {{ bsd_jail_service }} ]
+         bsd_jail_conf_path [ {{ bsd_jail_conf_path }} ]
+         bsd_jail_conf_file [ {{ bsd_jail_conf_file }} ]
+         bsd_jail_conf_owner [ {{ bsd_jail_conf_owner }} ]
+         bsd_jail_conf_group [ {{ bsd_jail_conf_group }} ]
+         bsd_jail_conf_mode [ {{ bsd_jail_conf_mode }} ]
+         bsd_jail_conf
+         {{ bsd_jail_conf | to_nice_yaml }}
+         bsd_jail_id_dir [ {{ bsd_jail_id_dir }} ]
+         bsd_jail_stamp_dir [ {{ bsd_jail_stamp_dir }} ]
+         bsd_jail_fstab_dir [ {{ bsd_jail_fstab_dir }} ]
+         
+         bsd_ezjail_enable [ {{ bsd_ezjail_enable }} ]
+         bsd_ezjail_service [ {{ bsd_ezjail_service }} ]
+         bsd_ezjail_conf_path [ {{ bsd_ezjail_conf_path }} ]
+         bsd_ezjail_conf_file [ {{ bsd_ezjail_conf_file }} ]
+         bsd_ezjail_conf_owner [ {{ bsd_ezjail_conf_owner }} ]
+         bsd_ezjail_conf_group [ {{ bsd_ezjail_conf_group }} ]
+         bsd_ezjail_conf_mode [ {{ bsd_ezjail_conf_mode }} ]
+         bsd_ezjail_conf
+         {{ bsd_ezjail_conf | to_nice_yaml}}
+         bsd_ezjail_use_zfs [ {{ bsd_ezjail_use_zfs }} ]
+         bsd_ezjail_jailzfs [ {{ bsd_ezjail_jailzfs }} ]
+         bsd_ezjail_jaildir [ {{ bsd_ezjail_jaildir }} ]
+         bsd_ezjail_flavours
+         {{ bsd_ezjail_flavours | to_nice_yaml }}
+
+         freebsd_install_method [ {{ freebsd_install_method }} ]
+         freebsd_use_packages [ {{ freebsd_use_packages | default('absent') }} ]
+         bsd_jail_packages
+         {{ bsd_jail_packages | to_nice_yaml }}
+         bsd_jail_packages_extra
+         {{ bsd_jail_packages_extra | to_nice_yaml }}
+  debug:
+    msg: "{{ msg.split('\n') }}"
+
+# EOF
+...

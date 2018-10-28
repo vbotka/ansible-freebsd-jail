@@ -1,0 +1,58 @@
+---
+# defaults freebsd_jail
+
+bsd_jail_enable: false
+bsd_jail_debug: false
+bsd_jail_conf_backup: yes
+
+# install method
+freebsd_install_method: packages
+freebsd_use_packages: yes
+
+# packages
+bsd_jail_packages:
+  - sysutils/ezjail
+bsd_jail_packages_extra: []
+
+# service
+bsd_jail_service: jail
+
+# conf
+bsd_jail_conf_path: /etc
+bsd_jail_conf_file: "{{ bsd_jail_conf_path }}/jail.conf"
+bsd_jail_conf_owner: root
+bsd_jail_conf_group: wheel
+bsd_jail_conf_mode: "0644"
+bsd_jail_conf: []
+
+# jails
+bsd_jail_id_dir: /var/run
+bsd_jail_stamp_dir: /var/db/jail-stamps
+bsd_jail_fstab_dir: /etc/jail
+bsd_jail_jails: []
+
+# ezjail
+bsd_ezjail_enable: true
+bsd_ezjail_service: ezjail
+bsd_ezjail_conf_path: /usr/local/etc
+bsd_ezjail_conf_file: "{{ bsd_ezjail_conf_path }}/ezjail.conf"
+bsd_ezjail_conf_owner: root
+bsd_ezjail_conf_group: wheel
+bsd_ezjail_conf_mode: "0644"
+bsd_ezjail_conf:
+  - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
+  - "ezjail_ftphost=http://ftp.freebsd.org"
+bsd_ezjail_use_zfs: "NO"
+# bsd_ezjail_jaildir and bsd_jail_jailzfs
+# - will not be created by this role
+# - shall be created before running this role
+# - existence will be checked
+bsd_ezjail_jailzfs: zroot/jails
+bsd_ezjail_jaildir: /local/jails # $jailroot
+bsd_ezjail_flavours: []
+
+# misc
+command_result: { "failed": no }
+
+# EOF
+...

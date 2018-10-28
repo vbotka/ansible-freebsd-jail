@@ -1,0 +1,54 @@
+---
+
+# Interfaces
+- name: "assert: Check existence of interfaces."
+  fail:
+    msg: "ERROR: Interface {{ item }} does not exist. End of play."
+  loop: "{{ bsd_jail_jails | json_query('[].conf.interface') }}"
+  when: item not in ansible_interfaces
+
+# Jaildir
+- name: "assert: Check existence of storage {{ bsd_ezjail_jaildir }}"
+  block:
+    - stat:
+        path: "{{ bsd_ezjail_jaildir }}"
+      register: command_result
+    - name: "assert: Storage {{ bsd_ezjail_jaildir }} does not exist."
+      fail:
+        msg: "ERROR: Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
+      when: not command_result.stat.exists
+  when: bsd_ezjail_use_zfs|upper != "YES"
+
+# ZFS
+- name: "assert: Check existence of storage {{ bsd_ezjail_jailzfs }}"
+  block:
+    - zfs_facts:
+        dataset: "{{ bsd_ezjail_jailzfs }}"
+      register: command_result
+      ignore_errors: true
+    - name: "assert: Storage {{ bsd_ezjail_jailzfs }} does not exist."
+      fail:
+        msg: "ERROR: Storage {{ bsd_ezjail_jailzfs }} does not exist. End of play."
+      when: command_result.failed
+  when: bsd_ezjail_use_zfs|upper == "YES"
+
+# TODO
+# * Check network
+# ifconfig_lo1_alias0="inet 10.2.0.10 netmask 255.255.255.255"
+# gateway_enable="YES"
+# * Check sysctl
+# sysctl net.inet.ip.forwarding=1
+# * Check PF
+# ext_if="em0"
+# jail_if="lo1"
+# IP_PUB="192.0.2.1"
+# IP_JAIL_WWW="10.6.6.6"
+# NET_JAIL="10.6.6.0/24"
+# PORT_WWW="{80,443}"
+# # nat all jail traffic
+# nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
+# # redirect www
+# rdr pass on $ext_if proto tcp from any to $IP_PUB port $PORT_WWW -> $IP_JAIL_WWW
+
+# EOF
+...

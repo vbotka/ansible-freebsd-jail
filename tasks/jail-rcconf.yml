@@ -1,0 +1,24 @@
+---
+
+- name: "jail-rcconf: Enable and start jail service."
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^jail_enable"
+    line: "jail_enable=\"YES\""
+    backup: "{{ bsd_jail_conf_backup }}"
+  notify: enable and start jail
+  when: bsd_jail_enable
+
+- name: "jail-rcconf: Disable and stop jail service."
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^jail_enable"
+    line: "jail_enable=\"NO\""
+    backup: "{{ bsd_jail_conf_backup }}"
+  notify: disable and stop jail
+  when: not bsd_jail_enable
+
+- meta: flush_handlers
+
+# EOF
+...

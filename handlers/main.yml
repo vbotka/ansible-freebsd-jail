@@ -1,0 +1,65 @@
+---
+# handlers freebsd_jail
+
+# ezjail
+
+- name: enable and start ezjail
+  service:
+    name: "{{ bsd_ezjail_service }}"
+    state: started
+    enabled: yes
+
+- name: disable and stop ezjail
+  service:
+    name: "{{ bsd_ezjail_service }}"
+    state: stopped
+    enabled: no
+
+- name: start ezjail
+  service:
+    name: "{{ bsd_ezjail_service }}"
+    state: started
+
+- name: stop ezjail
+  service:
+    name: "{{ bsd_ezjail_service }}"
+    state: stopped
+
+- name: restart ezjail
+  service:
+    name: "{{ bsd_ezjail_service }}"
+    state: restarted
+  when: bsd_ezjail_enable
+
+# jail
+
+- name: enable and start jail
+  service:
+    name: "{{ bsd_jail_service }}"
+    state: started
+    enabled: yes
+
+- name: disable and stop jail
+  service:
+    name: "{{ bsd_jail_service }}"
+    state: stopped
+    enabled: no
+
+- name: start jail
+  service:
+    name: "{{ bsd_jail_service }}"
+    state: started
+
+- name: stop jail
+  service:
+    name: "{{ bsd_jail_service }}"
+    state: stopped
+
+- name: restart jail
+  service:
+    name: "{{ bsd_jail_service }}"
+    state: restarted
+  when: bsd_jail_enable
+
+# EOF
+...

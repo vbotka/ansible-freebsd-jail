@@ -1,0 +1,22 @@
+---
+
+- name: "firstboot: Create stamp dir {{ bsd_jail_stamp_dir }}"
+  file:
+    state: directory
+    path: "{{ bsd_jail_stamp_dir }}"
+
+- name: "firstboot: Exec firstboot scripts in the jails."
+  shell: "/usr/sbin/jexec {{ item.jailname }} {{ item.firstboot }} && touch {{ stamp_file }}"
+  args:
+    creates: "{{ stamp_file }}"
+  loop: "{{ bsd_jail_jails }}"
+  vars:
+    stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
+  when:
+    - bsd_jail_enable
+    - item.present
+    - item.start
+    - item.firstboot is defined
+
+# EOF
+...

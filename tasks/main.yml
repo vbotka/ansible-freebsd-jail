@@ -1,0 +1,47 @@
+---
+# tasks freebsd_jail
+
+- import_tasks: debug.yml
+  when: bsd_jail_debug
+  tags:
+    - always
+    - bsd_jail_debug
+
+- import_tasks: assert.yml
+  tags: bsd_jail_assert
+
+- import_tasks: packages.yml
+  tags: bsd_jail_packages
+
+- import_tasks: ezjail-conf.yml
+  tags: bsd_jail_ezjail_conf
+
+- import_tasks: ezjail-rcconf.yml
+  tags: bsd_jail_ezjail_rcconf
+
+- import_tasks: install.yml
+  tags: bsd_jail_install
+
+- import_tasks: flavours.yml
+  tags: bsd_jail_flavours
+
+- import_tasks: create.yml
+  tags: bsd_jail_create
+
+- import_tasks: fstab.yml
+  tags: bsd_jail_fstab
+
+- import_tasks: jail-conf.yml
+  tags: bsd_jail_jail_conf
+
+- import_tasks: jail-rcconf.yml
+  tags: bsd_jail_jail_rcconf
+
+- import_tasks: start.yml
+  tags: bsd_jail_start
+
+- import_tasks: firstboot.yml
+  tags: bsd_jail_firstboot
+
+# EOF
+...

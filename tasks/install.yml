@@ -1,0 +1,9 @@
+---
+
+- name: "install: Install {{ bsd_ezjail_jaildir }}/basejail }}"
+  command: ezjail-admin install
+  args:
+    creates: "{{ bsd_ezjail_jaildir }}/basejail"
+
+# EOF
+...

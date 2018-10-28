@@ -1,0 +1,16 @@
+---
+
+- name: "create: Delete jails."
+  include_tasks: delete.yml
+  loop: "{{ bsd_jail_jails }}"
+  when: not item.present
+
+- name: "create: Create jails."
+  command: "ezjail-admin create -f {{ item.flavour }} -c {{ item.jailtype }} {{ item.jailname }} \'{{ item.conf['interface'] }}{{'|'}}{{ item.conf['ip4.addr'] }}\' "
+  args:
+    creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+  loop: "{{ bsd_jail_jails }}"
+  when: item.present
+
+# EOF
+...

@@ -1,0 +1,9 @@
+---
+
+- hosts: localhost
+  remote_user: root
+  roles:
+    - ansible-freebsd-jail
+
+# EOF
+...

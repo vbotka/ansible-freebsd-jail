@@ -1,0 +1,24 @@
+---
+
+- name: "rcconf: Enable and start ezjail."
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^ezjail_enable"
+    line: "ezjail_enable=\"YES\""
+    backup: "{{ bsd_jail_conf_backup }}"
+  notify: enable and start ezjail
+  when: bsd_ezjail_enable
+
+- name: "rcconf: Disable and stop ezjail."
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^ezjail_enable"
+    line: "ezjail_enable=\"NO\""
+    backup: "{{ bsd_jail_conf_backup }}"
+  notify: disable and stop ezjail
+  when: not bsd_ezjail_enable
+
+- meta: flush_handlers
+
+# EOF
+...

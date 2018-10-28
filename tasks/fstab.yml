@@ -1,0 +1,18 @@
+---
+
+- name: "fstab: Create directory {{ bsd_jail_fstab_dir }}"
+  file:
+    state: directory
+    path: "{{ bsd_jail_fstab_dir }}"
+
+- name: "fstab: Create fstab files."
+  template:
+    src: fstab.j2
+    dest: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
+    owner: "{{ bsd_jail_conf_owner }}"
+    group: "{{ bsd_jail_conf_group }}"
+    mode: "{{ bsd_jail_conf_mode }}"
+  loop: "{{ bsd_jail_jails }}"
+
+# EOF
+...
