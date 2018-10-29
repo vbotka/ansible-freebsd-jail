@@ -75,7 +75,47 @@ ansible_perl_interpreter=/usr/local/bin/perl
 ```
 # ansible-playbook jail.yml
 ```
-		
+
+Example 1. Variables of recommended roles
+-----------------------------------------
+
+**freebsd_network**
+```
++fn_cloned_interfaces: "lo1"
++fn_aliases:
++  - { interface: "lo1", alias: "alias0", options: "inet 10.2.0.10 netmask 255.255.255.255" }
++  - { interface: "em0", alias: "alias1", options: "inet 10.1.0.51 netmask 255.255.255.255" }
++  - { interface: "em0", alias: "alias2", options: "inet 10.1.0.52 netmask 255.255.255.255" }
+```
+
+**freebsd_zfs**
+```
++fzfs_manage:
++  - name: zroot/jails
++    state: present
++    extra_zfs_properties:
++      compression: on
++      mountpoint: /local/jails
++fzfs_mountpoints:
++  - mountpoint: /local/jails
++    owner: root
++    group: wheel
++    mode: "0700"
+```
+
+**freebsd_postinstall**
+```
++fp_sysctl:
++  - { name: "net.inet.ip.forwarding", value: "1" }
++  - { name: "security.jail.set_hostname_allowed", value: "1" }
++  - { name: "security.jail.socket_unixiproute_only", value: "1" }
++  - { name: "security.jail.sysvipc_allowed", value: "0" }
++  - { name: "security.jail.enforce_statfs", value: "2" }
++  - { name: "security.jail.allow_raw_sockets", value: "0" }
++  - { name: "security.jail.chflags_allowed", value: "0" }
++  - { name: "security.jail.jailed", value: "0" }
++  - { name: "vfs.zfs.prefetch_disable", value: "0" }
+```
 
 References
 ----------
