@@ -65,7 +65,7 @@ Workflow
 <SERVER2-IP-OR-FQDN>
 [server:vars]
 ansible_connection=ssh
-ansible_user=freebsd
+ansible_user=admin
 ansible_python_interpreter=/usr/local/bin/python2.7
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
@@ -74,6 +74,12 @@ ansible_perl_interpreter=/usr/local/bin/perl
 
 ```
 # ansible-playbook jail.yml
+```
+
+6) Test connection with the jail.
+```
+# ansible 10.1.0.52 -m setup | grep ansible_distribution_release
+        "ansible_distribution_release": "11.2-RELEASE",
 ```
 
 Example 1. Variables of recommended roles
@@ -121,6 +127,38 @@ Example 1. Variables of recommended roles
 +  - { name: "security.jail.chflags_allowed", value: "0" }
 +  - { name: "security.jail.jailed", value: "0" }
 +  - { name: "vfs.zfs.prefetch_disable", value: "0" }
+```
+
+Example 2. Ansible flavour tar file
+-----------------------------------
+```
+./etc/
+./usr/
+./root/
+./home/
+./home/admin/
+./home/admin/.ssh/
+./home/admin/.ssh/authorized_keys
+./root/firstboot.sh
+./usr/local/
+./usr/local/etc/
+./usr/local/etc/sudoers
+./etc/resolv.conf
+./etc/rc.d/
+./etc/rc.conf
+./etc/rc.d/ezjail.flavour.default
+```
+
+Example 3. Ansible firstboot.sh
+-------------------------------
+```
+#!/bin/sh
+env ASSUME_ALWAYS_YES=YES pkg install sudo
+env ASSUME_ALWAYS_YES=YES pkg install perl5
+env ASSUME_ALWAYS_YES=YES pkg install python27
+pw useradd -n admin -s /bin/sh -m
+chown -R admin:admin /home/admin
+echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 ```
 
 References
