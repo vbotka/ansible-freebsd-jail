@@ -103,6 +103,12 @@ Example 1. Variables of recommended roles
 +    mode: "0700"
 ```
 
+**freebsd_pf**
+```
++pf_rules_nat:
++  - nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
+```
+
 **freebsd_postinstall**
 ```
 +fp_sysctl:
