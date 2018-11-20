@@ -1,19 +1,19 @@
 ---
 
-- name: "start: Stop jails."
+- name: "start: Stop jails"
   command: "/etc/rc.d/jail stop {{ item.jailname }}"
   args:
-    removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{'.'}}id"
+    removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   loop: "{{ bsd_jail_jails }}"
   when:
     - bsd_jail_enable
     - item.present
     - not item.start
 
-- name: "start: Start jails."
+- name: "start: Start jails"
   command: "/etc/rc.d/jail start {{ item.jailname }}"
   args:
-    creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{'.'}}id"
+    creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   loop: "{{ bsd_jail_jails }}"
   when:
     - bsd_jail_enable

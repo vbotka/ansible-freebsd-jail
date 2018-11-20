@@ -1,3 +1,4 @@
+---
 galaxy_info:
   role_name: freebsd_jail
   author: Vladimir Botka
@@ -5,7 +6,7 @@ galaxy_info:
   company: https://botka.link
   github_branch: master
   license: BSD
-  min_ansible_version: 2.6
+  min_ansible_version: 2.7
   platforms:
     - name: FreeBSD
       versions:

@@ -48,11 +48,12 @@ bsd_ezjail_use_zfs: "NO"
 # - shall be created before running this role
 # - existence will be checked
 bsd_ezjail_jailzfs: zroot/jails
-bsd_ezjail_jaildir: /local/jails # $jailroot
+bsd_ezjail_jaildir: /local/jails     # $jailroot
 bsd_ezjail_flavours: []
 
 # misc
-command_result: { "failed": no }
+command_result:
+  "failed": no
 
 # EOF
 ...

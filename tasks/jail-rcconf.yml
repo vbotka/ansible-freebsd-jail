@@ -1,6 +1,6 @@
 ---
 
-- name: "jail-rcconf: Enable and start jail service."
+- name: "jail-rcconf: Enable and start jail service"
   lineinfile:
     dest: "/etc/rc.conf"
     regexp: "^jail_enable"
@@ -9,7 +9,7 @@
   notify: enable and start jail
   when: bsd_jail_enable
 
-- name: "jail-rcconf: Disable and stop jail service."
+- name: "jail-rcconf: Disable and stop jail service"
   lineinfile:
     dest: "/etc/rc.conf"
     regexp: "^jail_enable"

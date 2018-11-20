@@ -5,7 +5,7 @@
     state: directory
     path: "{{ bsd_jail_fstab_dir }}"
 
-- name: "fstab: Create fstab files."
+- name: "fstab: Create fstab files"
   template:
     src: fstab.j2
     dest: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"

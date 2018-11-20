@@ -1,25 +1,23 @@
 ---
 
-- name: "packages: Install packages."
+- name: "packages: Install packages"
   pkgng:
-    name: "{{ item }}"
-  loop: "{{ bsd_jail_packages }}"
+    name: "{{ bsd_jail_packages }}"
   when: freebsd_install_method == "packages"
 
-- name: "packages: Install ports."
+- name: "packages: Install ports"
   portinstall:
     name: "{{ item }}"
     use_packages: "{{ freebsd_use_packages }}"
   loop: "{{ bsd_jail_packages }}"
   when: freebsd_install_method == "ports"
 
-- name: "packages: Install extra packages."
+- name: "packages: Install extra packages"
   pkgng:
-    name: "{{ item }}"
-  loop: "{{ bsd_jail_packages_extra }}"
+    name: "{{ bsd_jail_packages_extra }}"
   when: freebsd_install_method == "packages"
 
-- name: "packages: Install extra ports."
+- name: "packages: Install extra ports"
   portinstall:
     name: "{{ item }}"
     use_packages: "{{ freebsd_use_packages }}"

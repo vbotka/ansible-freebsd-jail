@@ -1,6 +1,6 @@
 ---
 
-- name: "rcconf: Enable and start ezjail."
+- name: "rcconf: Enable and start ezjail"
   lineinfile:
     dest: "/etc/rc.conf"
     regexp: "^ezjail_enable"
@@ -9,7 +9,7 @@
   notify: enable and start ezjail
   when: bsd_ezjail_enable
 
-- name: "rcconf: Disable and stop ezjail."
+- name: "rcconf: Disable and stop ezjail"
   lineinfile:
     dest: "/etc/rc.conf"
     regexp: "^ezjail_enable"

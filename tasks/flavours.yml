@@ -1,12 +1,12 @@
 ---
 
-- name: "flavours: Create directories."
+- name: "flavours: Create directories"
   file:
     state: directory
     path: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/etc/rc.d"
   loop: "{{ bsd_ezjail_flavours }}"
 
-- name: "flavours: Unarchive files."
+- name: "flavours: Unarchive files"
   unarchive:
     src: "{{ item.archive }}"
     dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
@@ -15,7 +15,7 @@
     - item.archive is defined
     - not ansible_check_mode
 
-- name: "flavours: Synchronize files."
+- name: "flavours: Synchronize files"
   synchronize:
     archive: no
     checksum: yes

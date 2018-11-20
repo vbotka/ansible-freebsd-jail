@@ -1,7 +1,7 @@
 ---
 
 # Interfaces
-- name: "assert: Check existence of interfaces."
+- name: "assert: Check existence of interfaces"
   fail:
     msg: "ERROR: Interface {{ item }} does not exist. End of play."
   loop: "{{ bsd_jail_jails | json_query('[].conf.interface') }}"
@@ -10,7 +10,8 @@
 # Jaildir
 - name: "assert: Check existence of storage {{ bsd_ezjail_jaildir }}"
   block:
-    - stat:
+    - name: "assert: Stat {{ bsd_ezjail_jaildir }}"
+      stat:
         path: "{{ bsd_ezjail_jaildir }}"
       register: command_result
     - name: "assert: Storage {{ bsd_ezjail_jaildir }} does not exist."
@@ -22,7 +23,8 @@
 # ZFS
 - name: "assert: Check existence of storage {{ bsd_ezjail_jailzfs }}"
   block:
-    - zfs_facts:
+    - name: "assert: Collect zfs_facts"
+      zfs_facts:
         dataset: "{{ bsd_ezjail_jailzfs }}"
       register: command_result
       ignore_errors: true

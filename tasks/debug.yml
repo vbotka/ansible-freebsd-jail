@@ -1,6 +1,6 @@
 ---
 
-- name: "FreeBSD Jail debug."
+- name: "FreeBSD Jail debug"
   vars:
     msg: |
          ansible_architecture [ {{ ansible_architecture }} ]
@@ -26,7 +26,7 @@
          bsd_jail_id_dir [ {{ bsd_jail_id_dir }} ]
          bsd_jail_stamp_dir [ {{ bsd_jail_stamp_dir }} ]
          bsd_jail_fstab_dir [ {{ bsd_jail_fstab_dir }} ]
-         
+
          bsd_ezjail_enable [ {{ bsd_ezjail_enable }} ]
          bsd_ezjail_service [ {{ bsd_ezjail_service }} ]
          bsd_ezjail_conf_path [ {{ bsd_ezjail_conf_path }} ]
@@ -35,7 +35,7 @@
          bsd_ezjail_conf_group [ {{ bsd_ezjail_conf_group }} ]
          bsd_ezjail_conf_mode [ {{ bsd_ezjail_conf_mode }} ]
          bsd_ezjail_conf
-         {{ bsd_ezjail_conf | to_nice_yaml}}
+         {{ bsd_ezjail_conf | to_nice_yaml }}
          bsd_ezjail_use_zfs [ {{ bsd_ezjail_use_zfs }} ]
          bsd_ezjail_jailzfs [ {{ bsd_ezjail_jailzfs }} ]
          bsd_ezjail_jaildir [ {{ bsd_ezjail_jaildir }} ]

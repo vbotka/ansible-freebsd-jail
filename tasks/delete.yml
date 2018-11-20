@@ -3,7 +3,7 @@
 - name: "delete: Stop jail {{ item.jailname }}"
   command: "/etc/rc.d/jail stop {{ item.jailname }}"
   args:
-    removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{'.'}}id"
+    removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   when: bsd_jail_enable
 
 - name: "delete: Delete jail {{ item.jailname }}"

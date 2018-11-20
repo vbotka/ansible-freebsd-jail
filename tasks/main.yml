@@ -3,9 +3,7 @@
 
 - import_tasks: debug.yml
   when: bsd_jail_debug
-  tags:
-    - always
-    - bsd_jail_debug
+  tags: [always, bsd_jail_debug]
 
 - import_tasks: assert.yml
   tags: bsd_jail_assert

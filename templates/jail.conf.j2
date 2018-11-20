@@ -15,9 +15,9 @@ path = "{{ bsd_ezjail_jaildir }}/$name";
 {% for item in bsd_jail_jails %}
 {% if item.present %}
 {{ item.jailname }} {
-        host.hostname = {{'"'}}{{ item.jailname }}{{'"'}};
+        host.hostname = {{ '"' }}{{ item.jailname }}{{ '"' }};
 {% for key, value in item.conf.iteritems() %}
-	{{ key }} = {{'"'}}{{ value }}{{'"'}};
+	{{ key }} = {{ '"' }}{{ value }}{{ '"' }};
 {% endfor %}
 }
 {% endif %}
