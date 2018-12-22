@@ -8,6 +8,8 @@ bsd_jail_conf_backup: yes
 # install method
 freebsd_install_method: packages
 freebsd_use_packages: yes
+freebsd_install_retries: 10
+freebsd_install_delay: 5
 
 # packages
 bsd_jail_packages:
