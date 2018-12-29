@@ -44,6 +44,7 @@ bsd_ezjail_conf_mode: "0644"
 bsd_ezjail_conf:
   - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
   - "ezjail_ftphost=http://ftp.freebsd.org"
+# - "ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist"
 bsd_ezjail_use_zfs: "NO"
 # bsd_ezjail_jaildir and bsd_jail_jailzfs
 # - will not be created by this role

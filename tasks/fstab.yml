@@ -5,6 +5,13 @@
     state: directory
     path: "{{ bsd_jail_fstab_dir }}"
 
+- name: "fstab: Delete fstab files"
+  file:
+    state: absent
+    path: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
+  loop: "{{ bsd_jail_jails }}"
+  when: not item.present
+
 - name: "fstab: Create fstab files"
   template:
     src: fstab.j2
@@ -13,6 +20,7 @@
     group: "{{ bsd_jail_conf_group }}"
     mode: "{{ bsd_jail_conf_mode }}"
   loop: "{{ bsd_jail_jails }}"
+  when: item.present
 
 # EOF
 ...
