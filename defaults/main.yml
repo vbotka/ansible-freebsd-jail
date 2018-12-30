@@ -4,6 +4,7 @@
 bsd_jail_enable: False
 bsd_jail_debug: False
 bsd_jail_conf_backup: Yes
+bsd_jail_mount_iso: False
 
 # install method
 freebsd_install_method: packages
