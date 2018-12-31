@@ -10,6 +10,7 @@
     name: vbotka.freebsd_postinstall
     tasks_from: mount-iso.yml
   when: bsd_jail_mount_iso
+  tags: bsd_jail_mount_iso
 
 - import_tasks: assert.yml
   tags: bsd_jail_assert

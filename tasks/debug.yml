@@ -26,6 +26,7 @@
          bsd_jail_id_dir [ {{ bsd_jail_id_dir }} ]
          bsd_jail_stamp_dir [ {{ bsd_jail_stamp_dir }} ]
          bsd_jail_fstab_dir [ {{ bsd_jail_fstab_dir }} ]
+         bsd_jail_mount_iso [ {{ bsd_jail_mount_iso }} ]
 
          bsd_ezjail_enable [ {{ bsd_ezjail_enable }} ]
          bsd_ezjail_service [ {{ bsd_ezjail_service }} ]
