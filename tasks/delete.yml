@@ -1,5 +1,15 @@
 ---
 
+- name: "delete: Debug"
+  vars:
+    msg: |
+         item.jailname [ {{ item.jailname }} ]
+         bsd_jail_id_dir [ {{ bsd_jail_id_dir }} ]
+         bsd_ezjail_jaildir [ {{ bsd_ezjail_jaildir }} ]
+  debug:
+    msg: "{{ msg.split('\n') }}"
+  when: bsd_jail_debug
+
 - name: "delete: Stop jail {{ item.jailname }}"
   command: "/etc/rc.d/jail stop {{ item.jailname }}"
   args:
