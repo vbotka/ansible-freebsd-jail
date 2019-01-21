@@ -85,7 +85,8 @@ ansible_perl_interpreter=/usr/local/bin/perl
 Example 1. Variables of recommended roles
 -----------------------------------------
 
-**freebsd_network**
+[freebsd_network*](https://galaxy.ansible.com/vbotka/freebsd_network)
+
 ```
 +fn_cloned_interfaces: "lo1"
 +fn_aliases:
@@ -94,7 +95,8 @@ Example 1. Variables of recommended roles
 +  - { interface: "em0", alias: "alias2", options: "inet 10.1.0.52 netmask 255.255.255.255" }
 ```
 
-**freebsd_zfs**
+[freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs)
+
 ```
 +fzfs_manage:
 +  - name: zroot/jails
@@ -109,13 +111,15 @@ Example 1. Variables of recommended roles
 +    mode: "0700"
 ```
 
-**freebsd_pf**
+[freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
+
 ```
 +pf_rules_nat:
 +  - nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
 ```
 
-**freebsd_postinstall**
+[freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
+
 ```
 +fp_sysctl:
 +  - { name: "net.inet.ip.forwarding", value: "1" }
@@ -127,6 +131,14 @@ Example 1. Variables of recommended roles
 +  - { name: "security.jail.chflags_allowed", value: "0" }
 +  - { name: "security.jail.jailed", value: "0" }
 +  - { name: "vfs.zfs.prefetch_disable", value: "0" }
+```
+
+To manage ZFS inside the jail add these too
+
+```
++  - { name: "security.jail.mount_allowed", value: "1" }
++  - { name: "security.jail.mount_devfs_allowed", value: "1" }
++  - { name: "security.jail.mount_zfs_allowed", value: "1" }
 ```
 
 Example 2. Ansible flavour tar file
@@ -171,6 +183,7 @@ References
 - [jail - Manage system jails](https://www.freebsd.org/cgi/man.cgi?jail(8))
 - [Trying to understand jail networking](https://forums.freebsd.org/threads/trying-to-understand-jail-networking.54046/)
 - [Can't get iocage jail to have internet connectivity(ping: ssend socket: Operation not permitted)](https://forums.freenas.org/index.php?threads/cant-get-iocage-jail-to-have-internet-connectivity.62905/)
+- [How to create a ZFS dataset within a jail?](https://forums.freebsd.org/threads/how-to-create-a-zfs-dataset-within-a-jail.62198/)
 
 License
 -------
