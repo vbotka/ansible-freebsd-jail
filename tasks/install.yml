@@ -1,9 +1,37 @@
 ---
+- name: "install: Set install command"
+  set_fact:
+    local_command: ezjail-admin install
+
+- name: "install: Set install command. Fetch and install man pages."
+  set_fact:
+    local_command: "{{ local_command }} -m"
+  when: bsd_ezjail_install_man
+
+- name: "install: Set install command. Fetch and install sources."
+  set_fact:
+    local_command: "{{ local_command }} -s"
+  when: bsd_ezjail_install_src
+
+- name: "install: Set install command. Fetch and extract a ports tree."
+  set_fact:
+    local_command: "{{ local_command }} -p"
+  when: bsd_ezjail_install_ports
+
+- name: "install: Debug. ezjail-admin install command"
+  debug:
+    var: local_command
+  when: bsd_jail_debug
 
 - name: "install: Install {{ bsd_ezjail_jaildir }}/basejail }}"
-  command: ezjail-admin install
+  command: "{{ local_command }}"
+  when: bsd_ezjail_install_force
+
+- name: "install: Install {{ bsd_ezjail_jaildir }}/basejail }}"
+  command: "{{ local_command }}"
   args:
     creates: "{{ bsd_ezjail_jaildir }}/basejail"
+  when: not bsd_ezjail_install_force
 
 # EOF
 ...

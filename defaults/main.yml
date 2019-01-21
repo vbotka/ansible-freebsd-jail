@@ -56,6 +56,12 @@ bsd_ezjail_jailzfs: zroot/jails
 bsd_ezjail_jaildir: /local/jails     # $jailroot
 bsd_ezjail_flavours: []
 
+# ezjail-admin install options
+bsd_ezjail_install_force: False
+bsd_ezjail_install_man: False
+bsd_ezjail_install_src: False
+bsd_ezjail_install_ports: False
+
 # misc
 command_result:
   "failed": no
