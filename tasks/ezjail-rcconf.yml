@@ -3,7 +3,7 @@
 - name: "ezjail-rcconf: Enable and start ezjail"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^ezjail_enable"
+    regexp: "^\\s*ezjail_enable\\s*="
     line: "ezjail_enable=\"YES\""
     backup: "{{ bsd_jail_conf_backup }}"
   notify: enable and start ezjail
@@ -12,7 +12,7 @@
 - name: "ezjail-rcconf: Disable and stop ezjail"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^ezjail_enable"
+    regexp: "^\\s*ezjail_enable\\s*="
     line: "ezjail_enable=\"NO\""
     backup: "{{ bsd_jail_conf_backup }}"
   notify: disable and stop ezjail

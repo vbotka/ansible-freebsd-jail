@@ -7,7 +7,7 @@
   loop: "{{ bsd_jail_jails }}"
   when:
     - bsd_jail_enable
-    - item.present
+    - item.present|default('true')
     - not item.start
 
 - name: "start: Start jails"
@@ -17,7 +17,7 @@
   loop: "{{ bsd_jail_jails }}"
   when:
     - bsd_jail_enable
-    - item.present
+    - item.present|default('true')
     - item.start
 
 # EOF

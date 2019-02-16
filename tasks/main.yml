@@ -18,20 +18,17 @@
 - import_tasks: packages.yml
   tags: bsd_jail_packages
 
+- import_tasks: flavours.yml
+  tags: bsd_jail_flavours
+
 - import_tasks: ezjail-conf.yml
   tags: bsd_jail_ezjail_conf
 
 - import_tasks: ezjail-rcconf.yml
   tags: bsd_jail_ezjail_rcconf
 
-- import_tasks: install.yml
-  tags: bsd_jail_install
-
-- import_tasks: flavours.yml
-  tags: bsd_jail_flavours
-
-- import_tasks: create.yml
-  tags: bsd_jail_create
+- import_tasks: ezjail-admin.yml
+  tags: bsd_jail_ezjail_admin
 
 - import_tasks: fstab.yml
   tags: bsd_jail_fstab

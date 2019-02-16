@@ -1,23 +1,18 @@
 # {{ ansible_managed }}
-exec.start = "/bin/sh /etc/rc";
-exec.stop = "/bin/sh /etc/rc.shutdown";
-exec.clean;
-
-mount.fstab           = "{{ bsd_jail_fstab_dir }}/fstab.${name}";
-mount.devfs;
-mount.fdescfs;
-mount.procfs;
-
-devfs_ruleset         = "4";
-
-path = "{{ bsd_ezjail_jaildir }}/$name";
+{% for conf in bsd_jail_jails_defaults %}
+{{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+{% endfor %}
 
 {% for item in bsd_jail_jails %}
-{% if item.present %}
+{% if item.present|default('true') %}
 {{ item.jailname }} {
         host.hostname = {{ '"' }}{{ item.jailname }}{{ '"' }};
-{% for key, value in item.conf.iteritems() %}
-	{{ key }} = {{ '"' }}{{ value }}{{ '"' }};
+        ip4.addr = {{ item.interface|map(attribute='ip4')|join(',') }};
+{% for conf in item.parameters %}
+	{{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+{% endfor %}
+{% for conf in item.jail_conf %}
+	{{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
 {% endfor %}
 }
 {% endif %}

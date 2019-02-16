@@ -3,7 +3,7 @@
 - name: "jail-rcconf: Enable and start jail service"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^jail_enable"
+    regexp: "^\\s*jail_enable\\s*="
     line: "jail_enable=\"YES\""
     backup: "{{ bsd_jail_conf_backup }}"
   notify: enable and start jail
@@ -12,7 +12,7 @@
 - name: "jail-rcconf: Disable and stop jail service"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^jail_enable"
+    regexp: "^\\s*jail_enable\\s*="
     line: "jail_enable=\"NO\""
     backup: "{{ bsd_jail_conf_backup }}"
   notify: disable and stop jail

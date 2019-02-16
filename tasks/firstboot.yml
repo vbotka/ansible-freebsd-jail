@@ -14,7 +14,7 @@
     stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
   when:
     - bsd_jail_enable
-    - item.present
+    - item.present|default('true')
     - item.start
     - item.firstboot is defined
 

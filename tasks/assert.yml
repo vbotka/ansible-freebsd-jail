@@ -4,7 +4,7 @@
 - name: "assert: Check existence of interfaces"
   fail:
     msg: "ERROR: Interface {{ item }} does not exist. End of play."
-  loop: "{{ bsd_jail_jails | json_query('[].conf.interface') }}"
+  loop: "{{ bsd_jail_jails | json_query('[].conf.interface[].dev') }}"
   when: item not in ansible_interfaces
 
 # Jaildir

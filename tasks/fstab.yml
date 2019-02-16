@@ -10,7 +10,7 @@
     state: absent
     path: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
   loop: "{{ bsd_jail_jails }}"
-  when: not item.present
+  when: not item.present|default('present')
 
 - name: "fstab: Create fstab files"
   template:
@@ -20,7 +20,7 @@
     group: "{{ bsd_jail_conf_group }}"
     mode: "{{ bsd_jail_conf_mode }}"
   loop: "{{ bsd_jail_jails }}"
-  when: item.present
+  when: item.present|default('present')
 
 # EOF
 ...

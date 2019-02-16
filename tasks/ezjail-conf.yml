@@ -8,7 +8,11 @@
     group: "{{ bsd_ezjail_conf_group }}"
     mode: "{{ bsd_ezjail_conf_mode }}"
     backup: "{{ bsd_jail_conf_backup }}"
-#  notify: restart ezjail
+
+# TODO (if changed):
+# 1) stop jails
+# 2) reinstall everything
+# 3) start jails
 
 # EOF
 ...

@@ -1,0 +1,32 @@
+---
+- name: "ezjail-admin: Set ezjail-admin command"
+  set_fact:
+    local_command: "ezjail-admin {{ bsd_ezjail_admin_command }}
+                                 {{ bsd_ezjail_admin_options }}"
+
+- name: "ezjail-admin: Debug. ezjail-admin command"
+  debug:
+    var: local_command
+  when: bsd_jail_debug
+
+- name: "ezjail-admin: Run {{ local_command }} when bsd_ezjail_admin_force"
+  command: "{{ local_command }}"
+  when: bsd_ezjail_admin_force
+
+- name: "ezjail-admin: Run {{ local_command }} when basejail does not exist"
+  command: "{{ local_command }}"
+  args:
+    creates: "{{ bsd_ezjail_jaildir }}/basejail"
+
+- name: "ezjail-admin: Delete jails"
+  include_tasks: delete.yml
+  loop: "{{ bsd_jail_jails }}"
+  when: not item.present|default('true')
+
+- name: "ezjail-admin: Create jails"
+  include_tasks: create.yml
+  loop: "{{ bsd_jail_jails }}"
+  when: item.present|default('true')
+
+# EOF
+...

@@ -1,20 +1,58 @@
 ---
 
-- name: "create: Delete jails"
-  include_tasks: delete.yml
-  loop: "{{ bsd_jail_jails }}"
-  when: not item.present
+- name: "ezjail-admin:create: Set ezjail-admin command"
+  set_fact:
+    local_command: >-
+            ezjail-admin create
+            -f {{ item.flavour }}
+            -c {{ item.jailtype }}
+            {{ item.jailname }}
+            '{% for ifc in item.interface %}{{
+            ifc.dev }}{{ '|' }}{{ ifc.ip4 }}{%
+            if not loop.last %},{% endif %}{% endfor %}'
 
-- name: "create: Create jails"
-  command: >
-    ezjail-admin create -f {{ item.flavour }}
-                        -c {{ item.jailtype }}
-                        {{ item.jailname }}
-                        \'{{ item.conf['interface'] }}{{ '|' }}{{ item.conf['ip4.addr'] }}\'
+- name: "ezjail-admin:create: Debug ezjail-admin command"
+  debug:
+    var: local_command
+  when: bsd_jail_debug
+
+- name: "ezjail-admin:create: Create jails"
+  command: "{{ local_command }}"
   args:
     creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
-  loop: "{{ bsd_jail_jails }}"
-  when: item.present
+
+- name: "ezjail-admin:create: Create variable local_parameters"
+  set_fact:
+    local_parameters: "{{ local_parameters|default('') + ' '
+                        + parameter.key + '='
+                        + parameter.val|ternary('1','0') }}"
+  loop: "{{ item.parameters|default([]) }}"
+  loop_control:
+    loop_var: parameter
+  check_mode: no
+
+- name: "ezjail-admin:create: Debug local_parameters"
+  debug:
+    msg: "{{ local_parameters|trim }}"
+  when: bsd_jail_debug
+
+- name: "ezjail-admin:create:
+         Configure parameters {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+  lineinfile:
+    path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+    regexp: "^\\s*export\\s+jail_{{ item.jailname }}_parameters\\s*="
+    line: "export jail_{{ item.jailname }}_parameters=\"{{ local_parameters|trim }}\""
+
+- name: "ezjail-admin:create:
+         Configure {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+  lineinfile:
+    path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+    regexp: "^\\s*export\\s+jail_{{ item.jailname }}_{{ export.key }}\\s*="
+    line: "export jail_{{ item.jailname }}_{{ export.key }}=\"{{ export.val }}\""
+  loop: "{{ item.ezjail_conf|default([]) }}"
+  loop_control:
+    loop_var: export
+  when: not ansible_check_mode
 
 # EOF
 ...

@@ -1,55 +1,61 @@
 ---
 # vars freebsd-jail
 
+# present_all: true
+# start_all: true
+
 # bsd_jail_enable: true
 # bsd_jail_debug: true
 # bsd_jail_conf_backup: no
+# bsd_jail_mount_iso: true
 
+# JAIL.CONF(5) FreeBSD File Formats Manual
+# https://www.freebsd.org/cgi/man.cgi?query=jail.conf
+# To remove a jail keep the entry and set present=false start=false
+#
 # bsd_jail_jails:
-#  - jailname: "test_01"
-#    present: yes
-#    start: yes
-#    jailtype: "zfs"
-#    flavour: "default"
-#    conf:
-#      interface: "lo1"
-#      ip4.addr: "10.2.0.10"
-#  - jailname: "test_02"
-#    present: yes
-#    start: yes
-#    jailtype: "zfs"
-#    flavour: "default"
-#    conf:
-#      interface: "em0"
-#      ip4.addr: "10.1.0.52"
-#  - jailname: "test_03"
-#    present: yes
-#    start: yes
-#    jailtype: "zfs"
-#    flavour: "ansible"
-#    firstboot: "/root/firstboot.sh"
-#    conf:
-#      interface: "em0"
-#      ip4.addr: "10.1.0.53"
+#   - jailname: "test_01"
+#     present: "{{ present_all }}"
+#     start: "{{ start_all }}"
+#     jailtype: "zfs"
+#     flavour: "ansible"
+#     firstboot: "/root/firstboot.sh"
+#     interface:
+#       - {dev: "lo1", ip4: "127.0.2.1"}
+#       - {dev: "wlan0", ip4: "10.1.0.51"}
+#     parameters:
+#       - {key: "allow.raw_sockets", val: "true"}
+#     jail_conf:
+#       - {key: "mount.devfs"}
+#     ezjail_conf: []
 
+# bsd_ezjail
+#
 # bsd_ezjail_enable: true
 # bsd_ezjail_use_zfs: "YES"
+# bsd_ezjail_use_zfs_for_jails: "YES"
 # bsd_ezjail_jailzfs: "zroot/jails"
 # bsd_ezjail_jaildir: "/local/jails"
-
 # bsd_ezjail_conf:
-#  - "ezjail_use_zfs=\"{{ bsd_ezjail_use_zfs }}\""
-#  - "ezjail_jailzfs={{ bsd_ezjail_jailzfs }}"
-#  - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
-#  - "ezjail_ftphost=http://ftp.freebsd.org"
-#  - "ezjail_use_zfs_for_jails=YES"
+#   - "ezjail_use_zfs=\"{{ bsd_ezjail_use_zfs }}\""
+#   - "ezjail_use_zfs_for_jails=\"{{ bsd_ezjail_use_zfs_for_jails }}\""
+#   - "ezjail_jailzfs={{ bsd_ezjail_jailzfs }}"
+#   - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
+#   - "ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist"
+##  - "ezjail_ftphost=http://ftp.freebsd.org"
 
 # bsd_ezjail_flavours:
-#  - flavour: "default"
-#    dir: "files/default"
-#    archive: "files/default.tar"
-#  - flavour: "ansible"
-#    archive: "files/ansible.tar"
+#   - flavour: "default"
+#     dir: "files/default"
+#     archive: "files/default.tar"
+#   - flavour: "ansible"
+#     archive: "files/ansible.tar"
+
+# bsd_ezjail_admin
+#
+# bsd_ezjail_admin_force: false
+# bsd_ezjail_admin_command: "install"
+# bsd_ezjail_admin_options: "-m -s -p"
 
 # EOF
 ...

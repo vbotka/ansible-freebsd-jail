@@ -32,6 +32,16 @@ bsd_jail_conf: []
 bsd_jail_id_dir: /var/run
 bsd_jail_stamp_dir: /var/db/jail-stamps
 bsd_jail_fstab_dir: /etc/jail
+bsd_jail_jails_defaults:
+  - {key: "path", val: "{{ bsd_ezjail_jaildir }}/$name"}
+  - {key: "mount.fstab", val: "{{ bsd_jail_fstab_dir }}/fstab.${name}"}
+  - {key: "exec.start", val: "/bin/sh /etc/rc"}
+  - {key: "exec.stop", val: "/bin/sh /etc/rc.shutdown"}
+  - {key: "devfs_ruleset", val: "4"}
+  - {key: "exec.clean"}
+  - {key: "mount.devfs"}
+  - {key: "mount.fdescfs"}
+  - {key: "mount.procfs"}
 bsd_jail_jails: []
 
 # ezjail
@@ -43,8 +53,11 @@ bsd_ezjail_conf_owner: root
 bsd_ezjail_conf_group: wheel
 bsd_ezjail_conf_mode: "0644"
 bsd_ezjail_conf:
+  - "ezjail_use_zfs=\"{{ bsd_ezjail_use_zfs }}\""
+  - "ezjail_use_zfs_for_jails=\"{{ bsd_ezjail_use_zfs_for_jails }}\""
   - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
   - "ezjail_ftphost=http://ftp.freebsd.org"
+# - "ezjail_jailzfs={{ bsd_ezjail_jailzfs }}"
 # - "ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist"
 bsd_ezjail_use_zfs: "NO"
 bsd_ezjail_use_zfs_for_jails: "NO"
@@ -56,11 +69,17 @@ bsd_ezjail_jailzfs: zroot/jails
 bsd_ezjail_jaildir: /local/jails     # $jailroot
 bsd_ezjail_flavours: []
 
-# ezjail-admin install options
-bsd_ezjail_install_force: False
-bsd_ezjail_install_man: False
-bsd_ezjail_install_src: False
-bsd_ezjail_install_ports: False
+# ezjail-admin
+bsd_ezjail_admin_force: False     # True:run ezjail-admin even if basejail exists
+bsd_ezjail_admin_command: "install"
+# "install" function sub-command is normally run once in the life of
+# the ezjail environment. It allocates the directory structure used by
+# ezjail and populates the base jail using the minimal distribution
+# set from a FreeBSD FTP server.
+# See also ezjail-admin "update" to install the base jail from source,
+# as well as a method to update the base jail using freebsd-update(8).
+# (man ezjail-admin)
+bsd_ezjail_admin_options: ""
 
 # misc
 command_result:
