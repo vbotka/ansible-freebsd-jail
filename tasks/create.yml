@@ -1,5 +1,6 @@
 ---
 
+# ezjail-admin create jailname
 - name: "ezjail-admin:create: Set ezjail-admin command"
   set_fact:
     local_command: >-
@@ -16,11 +17,12 @@
     var: local_command
   when: bsd_jail_debug
 
-- name: "ezjail-admin:create: Create jails"
+- name: "ezjail-admin:create: Create jail {{ item.jailname }}"
   command: "{{ local_command }}"
   args:
     creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
 
+# config ezjail/jailname
 - name: "ezjail-admin:create: Create variable local_parameters"
   set_fact:
     local_parameters: "{{ local_parameters|default('') + ' '
@@ -52,7 +54,6 @@
   loop: "{{ item.ezjail_conf|default([]) }}"
   loop_control:
     loop_var: export
-  when: not ansible_check_mode
 
 # EOF
 ...

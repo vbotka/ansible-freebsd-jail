@@ -2,7 +2,7 @@
 galaxy_info:
   role_name: freebsd_jail
   author: Vladimir Botka
-  description: FreeBSD Jails.
+  description: FreeBSD Jails Management.
   company: https://botka.link
   github_branch: master
   license: BSD

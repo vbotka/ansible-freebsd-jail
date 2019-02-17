@@ -23,7 +23,7 @@
   loop: "{{ bsd_jail_jails }}"
   when: not item.present|default('true')
 
-- name: "ezjail-admin: Create jails"
+- name: "ezjail-admin: Create and configure jails"
   include_tasks: create.yml
   loop: "{{ bsd_jail_jails }}"
   when: item.present|default('true')

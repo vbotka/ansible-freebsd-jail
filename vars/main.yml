@@ -14,12 +14,12 @@
 # To remove a jail keep the entry and set present=false start=false
 #
 # bsd_jail_jails:
-#   - jailname: "test_01"
-#     present: "{{ present_all }}"
-#     start: "{{ start_all }}"
-#     jailtype: "zfs"
-#     flavour: "ansible"
-#     firstboot: "/root/firstboot.sh"
+#   - jailname: "test_01"                          # required
+#     present: "{{ present_all }}"                 # default: true
+#     start: "{{ start_all }}"                     # required
+#     jailtype: "zfs"                              # required
+#     flavour: "ansible"                           # required
+#     firstboot: "/root/firstboot.sh"              # optional
 #     interface:
 #       - {dev: "lo1", ip4: "127.0.2.1"}
 #       - {dev: "wlan0", ip4: "10.1.0.51"}

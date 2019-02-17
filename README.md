@@ -3,21 +3,22 @@ freebsd_jail
 
 [![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-jail.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-jail)
 
-[Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jail Management.
+[Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
 
 Requirements
 ------------
 
-Preconfigured network, firewall, NAT and ZFS(recommended) is required.
+- Preconfigured network, firewall and NAT is required.
+- ZFS is recommended.
 
 
 Recommended
 -----------
 
 - Configure Network [vbotka.freebsd_network](https://galaxy.ansible.com/vbotka/freebsd_network/)
-- Configure ZFS [vbotka.freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs/)
 - Configure PF firewall [vbotka.freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
+- Configure ZFS [vbotka.freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs/)
 - Configure Poudriere [vbotka.freebsd_poudriere](https://galaxy.ansible.com/vbotka/freebsd_poudriere/)
 
 
@@ -78,8 +79,8 @@ ansible_perl_interpreter=/usr/local/bin/perl
 
 6) Test connection with the jail.
 ```
-# ansible 10.1.0.52 -m setup | grep ansible_distribution_release
-        "ansible_distribution_release": "11.2-RELEASE",
+# ansible test_01 -m setup | grep ansible_distribution_release
+        "ansible_distribution_release": "12.0-RELEASE",
 ```
 
 Example 1. Variables of recommended roles
@@ -88,52 +89,54 @@ Example 1. Variables of recommended roles
 [freebsd_network*](https://galaxy.ansible.com/vbotka/freebsd_network)
 
 ```
-+fn_cloned_interfaces: "lo1"
-+fn_aliases:
-+  - { interface: "lo1", alias: "alias0", options: "inet 10.2.0.10 netmask 255.255.255.255" }
-+  - { interface: "em0", alias: "alias1", options: "inet 10.1.0.51 netmask 255.255.255.255" }
-+  - { interface: "em0", alias: "alias2", options: "inet 10.1.0.52 netmask 255.255.255.255" }
+fn_cloned_interfaces:
+  - interface: "lo1"
+    options: []
+fn_aliases:                                                                                      
+  - interface: "wlan0"                                                                           
+    aliases:                                                                                     
+      - {alias: "alias1", options: "inet 10.1.0.51  netmask 255.255.255.255", state: "present"}  
+      - {alias: "alias2", options: "inet 10.1.0.52  netmask 255.255.255.255"}                    
 ```
 
 [freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs)
 
 ```
-+fzfs_manage:
-+  - name: zroot/jails
-+    state: present
-+    extra_zfs_properties:
-+      compression: on
-+      mountpoint: /local/jails
-+fzfs_mountpoints:
-+  - mountpoint: /local/jails
-+    owner: root
-+    group: wheel
-+    mode: "0700"
+fzfs_manage:
+  - name: zroot/jails
+    state: present
+    extra_zfs_properties:
+      compression: on
+      mountpoint: /local/jails
+fzfs_mountpoints:
+  - mountpoint: /local/jails
+    owner: root
+    group: wheel
+    mode: "0700"
 ```
 
 [freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
 
 ```
-+pf_rules_nat:
-+  - nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
+pf_rules_nat:
+  - nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
 ```
 
 [freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
 
 ```
-+fp_sysctl:
-+  - { name: "net.inet.ip.forwarding", value: "1" }
-+  - { name: "security.jail.set_hostname_allowed", value: "1" }
-+  - { name: "security.jail.socket_unixiproute_only", value: "1" }
-+  - { name: "security.jail.sysvipc_allowed", value: "0" }
-+  - { name: "security.jail.enforce_statfs", value: "2" }
-+  - { name: "security.jail.allow_raw_sockets", value: "0" }
-+  - { name: "security.jail.chflags_allowed", value: "0" }
-+  - { name: "security.jail.jailed", value: "0" }
-+  - { name: "vfs.zfs.prefetch_disable", value: "0" }
+fp_sysctl:
+  - { name: "net.inet.ip.forwarding", value: "1" }
+  - { name: "security.jail.set_hostname_allowed", value: "1" }
+  - { name: "security.jail.socket_unixiproute_only", value: "1" }
+  - { name: "security.jail.sysvipc_allowed", value: "0" }
+  - { name: "security.jail.allow_raw_sockets", value: "0" }
+  - { name: "security.jail.chflags_allowed", value: "0" }
+  - { name: "security.jail.jailed", value: "0" }
+  - { name: "security.jail.enforce_statfs", value: "2" }
 ```
 
-To manage ZFS inside the jail add these too
+To manage ZFS inside the jail add the following states
 
 ```
 +  - { name: "security.jail.mount_allowed", value: "1" }
@@ -141,7 +144,7 @@ To manage ZFS inside the jail add these too
 +  - { name: "security.jail.mount_zfs_allowed", value: "1" }
 ```
 
-Example 2. Ansible flavour tar file
+Example 2. Ansible flavour tar-file
 -----------------------------------
 ```
 ./etc/
