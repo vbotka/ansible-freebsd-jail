@@ -92,11 +92,11 @@ Example 1. Variables of recommended roles
 fn_cloned_interfaces:
   - interface: "lo1"
     options: []
-fn_aliases:                                                                                      
-  - interface: "wlan0"                                                                           
-    aliases:                                                                                     
-      - {alias: "alias1", options: "inet 10.1.0.51  netmask 255.255.255.255", state: "present"}  
-      - {alias: "alias2", options: "inet 10.1.0.52  netmask 255.255.255.255"}                    
+fn_aliases:
+  - interface: "wlan0"
+    aliases:
+      - {alias: "alias1", options: "inet 10.1.0.51  netmask 255.255.255.255", state: "present"}
+      - {alias: "alias2", options: "inet 10.1.0.52  netmask 255.255.255.255"}
 ```
 
 [freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs)
