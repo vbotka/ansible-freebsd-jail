@@ -1,5 +1,5 @@
 freebsd_jail
-==============
+============
 
 [![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-jail.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-jail)
 
@@ -25,7 +25,63 @@ Recommended
 Variables
 ---------
 
-TBD. Review defaults and examples in vars.
+(WIP). Review defaults and examples in vars.
+
+Parameters of the jails are configured in the the variable
+**bsd_jail_jails**
+
+```
+bsd_jail_jails:
+  - jailname: "test_01"
+    present: "true"
+    start: "true"
+    jailtype: "zfs"
+    flavour: "ansible"
+    firstboot: "/root/firstboot.sh"
+    interface:
+      - {dev: "lo1", ip4: "127.0.2.1"}
+      - {dev: "wlan0", ip4: "10.1.0.51"}
+    parameters:
+      - {key: "allow.raw_sockets", val: "true"}
+    jail_conf:
+      - {key: "mount.devfs"}
+    ezjail_conf: []
+```
+
+, or in the files from the directory **bsd_jail_objects_dir**
+
+```
+bsd_jail_objects_dir: "{{ playbook_dir }}/jail-objects.d"
+```
+
+See example of the configuration file below.
+
+```
+# cat test-02.conf
+---
+objects:
+  - jailname: "test_02"
+    present: "true"
+    start: "true"
+    jailtype: "zfs"
+    flavour: "ansible"
+    firstboot: "/root/firstboot.sh"
+    interface:
+      - {dev: "lo1", ip4: "127.0.2.2"}
+      - {dev: "wlan0", ip4: "10.1.0.52"}
+    parameters:
+      - {key: "allow.raw_sockets", val: "true"}
+    jail_conf:
+      - {key: "mount.devfs"}
+    ezjail_conf: []
+```
+
+To remove a jail keep the entry in the variable, or in the file and set
+
+```
+    start: "false"
+    present: "false"
+```
 
 
 Workflow

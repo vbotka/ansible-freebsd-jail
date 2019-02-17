@@ -1,0 +1,43 @@
+---
+
+# The "object" in the following tasks is the configuration of one, or
+# more jails.
+
+- name: "ezjail-jails: Debug bsd_jail_jails"
+  debug:
+    var: bsd_jail_jails
+  when: bsd_jail_debug
+
+- name: "ezjail-jails: Find object files in {{ bsd_jail_objects_dir }}"
+  find:
+    paths: "{{ bsd_jail_objects_dir }}"
+    patterns: "*.{{ bsd_jail_objects_dir_extension }}"
+  delegate_to: localhost
+  register: result
+
+- name: "ezjail-jails: Debug list object files in {{ bsd_jail_objects_dir }}"
+  debug:
+    msg: "{{ result | json_query('files[].path') }}"
+  when: bsd_jail_debug
+
+- name: "ezjail-jails: Read configuration from object files"
+  include_tasks: objects.yml
+  loop: "{{ result | json_query('files[].path') }}"
+
+- name: "ezjail-jails: Debug bsd_jail_jails"
+  debug:
+    var: bsd_jail_jails
+  when: bsd_jail_debug
+
+- name: "ezjail-jails: Delete jails"
+  include_tasks: delete.yml
+  loop: "{{ bsd_jail_jails }}"
+  when: not item.present|default('true')
+
+- name: "ezjail-jails: Create and configure jails"
+  include_tasks: create.yml
+  loop: "{{ bsd_jail_jails }}"
+  when: item.present|default('true')
+
+# EOF
+...

@@ -30,6 +30,9 @@
 - import_tasks: ezjail-admin.yml
   tags: bsd_jail_ezjail_admin
 
+- import_tasks: ezjail-jails.yml
+  tags: bsd_jail_ezjail_jails
+
 - import_tasks: fstab.yml
   tags: bsd_jail_fstab
 

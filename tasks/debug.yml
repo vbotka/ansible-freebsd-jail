@@ -11,10 +11,6 @@
          ansible_distribution_release [ {{ ansible_distribution_release }} ]
          ansible_interfaces {{ ansible_interfaces | to_yaml }}
 
-         bsd_jail_jails_defaults
-         {{ bsd_jail_jails_defaults | to_nice_yaml }}
-         bsd_jail_jails
-         {{ bsd_jail_jails | to_nice_yaml }}
          bsd_jail_enable [ {{ bsd_jail_enable }} ]
          bsd_jail_conf_backup [ {{ bsd_jail_conf_backup }} ]
          bsd_jail_service [ {{ bsd_jail_service }} ]
@@ -29,6 +25,12 @@
          bsd_jail_stamp_dir [ {{ bsd_jail_stamp_dir }} ]
          bsd_jail_fstab_dir [ {{ bsd_jail_fstab_dir }} ]
          bsd_jail_mount_iso [ {{ bsd_jail_mount_iso }} ]
+         bsd_jail_objects_dir [ {{ bsd_jail_objects_dir }} ]
+         bsd_jail_objects_dir_extension [ {{ bsd_jail_objects_dir_extension }} ]
+         bsd_jail_jails_defaults
+         {{ bsd_jail_jails_defaults | to_nice_yaml }}
+         bsd_jail_jails
+         {{ bsd_jail_jails | to_nice_yaml }}
 
          bsd_ezjail_enable [ {{ bsd_ezjail_enable }} ]
          bsd_ezjail_service [ {{ bsd_ezjail_service }} ]

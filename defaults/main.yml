@@ -43,6 +43,8 @@ bsd_jail_jails_defaults:
   - {key: "mount.fdescfs"}
   - {key: "mount.procfs"}
 bsd_jail_jails: []
+bsd_jail_objects_dir: "{{ role_path }}/files/jail-objects.d"
+bsd_jail_objects_dir_extension: conf
 
 # ezjail
 bsd_ezjail_enable: True

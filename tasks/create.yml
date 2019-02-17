@@ -44,6 +44,7 @@
     path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_parameters\\s*="
     line: "export jail_{{ item.jailname }}_parameters=\"{{ local_parameters|trim }}\""
+  when: not ansible_check_mode
 
 - name: "ezjail-admin:create:
          Configure {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
@@ -54,6 +55,7 @@
   loop: "{{ item.ezjail_conf|default([]) }}"
   loop_control:
     loop_var: export
+  when: not ansible_check_mode
 
 # EOF
 ...
