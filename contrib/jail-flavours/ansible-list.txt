@@ -1,0 +1,6 @@
+/home/admin/.ssh/authorized_keys
+/root/firstboot.sh
+/usr/local/etc/sudoers
+/etc/resolv.conf
+/etc/rc.conf
+/etc/rc.d/ezjail.flavour.default
