@@ -33,8 +33,8 @@ Parameters of the jails are configured in the the variable
 ```
 bsd_jail_jails:
   - jailname: "test_01"
-    present: "true"
-    start: "true"
+    present: true
+    start: true
     jailtype: "zfs"
     flavour: "ansible"
     firstboot: "/root/firstboot.sh"
@@ -61,8 +61,8 @@ See example of the configuration file below.
 ---
 objects:
   - jailname: "test_02"
-    present: "true"
-    start: "true"
+    present: true
+    start: true
     jailtype: "zfs"
     flavour: "ansible"
     firstboot: "/root/firstboot.sh"
@@ -79,8 +79,8 @@ objects:
 To remove a jail keep the entry in the variable, or in the file and set
 
 ```
-    start: "false"
-    present: "false"
+    start: false
+    present: false
 ```
 
 
@@ -202,6 +202,8 @@ To manage ZFS inside the jail add the following states
 
 Example 2. Ansible flavour tarball
 ----------------------------------
+See [contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/master/contrib/jail-flavours)
+
 ```
 ./etc/
 ./usr/
@@ -226,7 +228,7 @@ Example 3. Ansible firstboot.sh
 #!/bin/sh
 env ASSUME_ALWAYS_YES=YES pkg install sudo
 env ASSUME_ALWAYS_YES=YES pkg install perl5
-env ASSUME_ALWAYS_YES=YES pkg install python27
+env ASSUME_ALWAYS_YES=YES pkg install python36
 pw useradd -n admin -s /bin/sh -m
 chown -R admin:admin /home/admin
 echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
