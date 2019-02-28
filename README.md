@@ -123,7 +123,7 @@ Workflow
 [server:vars]
 ansible_connection=ssh
 ansible_user=admin
-ansible_python_interpreter=/usr/local/bin/python2.7
+ansible_python_interpreter=/usr/local/bin/python3.6
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
