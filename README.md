@@ -176,6 +176,9 @@ fzfs_mountpoints:
 ```
 pf_rules_nat:
   - nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
+pf_rules_rdr:
+  - rdr pass on $ext_if proto tcp from any to 10.1.0.51 port { 80 443 } -> 127.0.2.1
+  - rdr pass on $ext_if proto tcp from any to 10.1.0.52 port { 80 443 } -> 127.0.2.2
 ```
 
 [freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
