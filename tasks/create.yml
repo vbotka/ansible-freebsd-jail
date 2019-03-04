@@ -1,6 +1,16 @@
 ---
 
-# ezjail-admin create jailname
+- name: "ezjail-admin:create: Debug {{ item.jailname }}"
+  debug:
+    var: item
+  when: bsd_jail_debug
+
+# ezjail-admin create jailname or restore archive
+- name: "ezjail-admin:create: Set ezjail-admin command"
+  set_fact:
+    local_command: "ezjail-admin restore {{ item.archive }}"
+  when: item.archive is defined
+
 - name: "ezjail-admin:create: Set ezjail-admin command"
   set_fact:
     local_command: >-
@@ -11,6 +21,7 @@
             '{% for ifc in item.interface %}{{
             ifc.dev }}{{ '|' }}{{ ifc.ip4 }}{%
             if not loop.last %},{% endif %}{% endfor %}'
+  when: item.archive is undefined
 
 - name: "ezjail-admin:create: Debug ezjail-admin command"
   debug:

@@ -1,6 +1,6 @@
 ---
 
-- name: "ezjail-admin:delete: Debug"
+- name: "ezjail-admin:delete: Debug {{ item.jailname }}"
   vars:
     msg: |
          item.jailname [ {{ item.jailname }} ]
