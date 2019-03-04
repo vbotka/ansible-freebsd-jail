@@ -76,13 +76,14 @@ objects:
     ezjail_conf: []
 ```
 
+
+
 To remove a jail keep the entry in the variable, or in the file and set
 
 ```
     start: false
     present: false
 ```
-
 
 Workflow
 --------
@@ -137,6 +138,82 @@ ansible_perl_interpreter=/usr/local/bin/perl
 ```
 # ansible test_01 -m setup | grep ansible_distribution_release
         "ansible_distribution_release": "12.0-RELEASE",
+```
+
+List jails
+----------
+
+```
+# ezjail-admin list
+STA JID  IP              Hostname                       Root Directory
+--- ---- --------------- ------------------------------ ------------------------
+ZR  34   127.0.2.2       test_02                        /local/jails/test_02
+    34   wlan0|10.1.0.52
+
+```
+
+Archive jail
+-------------
+
+```
+# ezjail-admin stop test_02
+# ezjail-admin archive test_02
+ ll /export/archive/jails/ezjail_archives/
+total 224008
+drwxr-x---  2 root  wheel        512 Mar  4 17:05 ./
+drwxr-x---  3 root  wheel        512 Mar  4 11:41 ../
+-rw-r--r--  1 root  wheel  114663346 Mar  4 17:05 test_02-201903041704.59.tar.gz
+```
+
+Delete jail
+-----------
+
+```
+# ezjail-admin delete -wf test_02
+```
+
+Restore and Start jail
+----------------------
+
+```
+# ezjail-admin restore test_02-201903041704.59.tar.gz
+# ezjail-admin list
+STA JID  IP              Hostname                       Root Directory
+--- ---- --------------- ------------------------------ ------------------------
+ZS  N/A  127.0.2.2       test_02                        /local/jails/test_02
+    N/A  wlan0|10.1.0.52
+# ezjail-admin start test_02
+# ezjail-admin list
+STA JID  IP              Hostname                       Root Directory
+--- ---- --------------- ------------------------------ ------------------------
+ZR  35   127.0.2.2       test_02                        /local/jails/test_02
+    35   wlan0|10.1.0.52
+```
+
+Restore and Start jail with Ansible
+-----------------------------------
+
+To restore a jail from the archive set the parameter *archive* to the filename of the archive.
+
+```
+# cat test-02.conf
+---
+objects:
+  - jailname: "test_02"
+    archive: "test_02-201903041704.59.tar.gz"
+    present: true
+    start: true
+    jailtype: "zfs"
+    flavour: "ansible"
+    firstboot: "/root/firstboot.sh"
+    interface:
+      - {dev: "lo1", ip4: "127.0.2.2"}
+      - {dev: "wlan0", ip4: "10.1.0.52"}
+    parameters:
+      - {key: "allow.raw_sockets", val: "true"}
+    jail_conf:
+      - {key: "mount.devfs"}
+    ezjail_conf: []
 ```
 
 Example 1. Variables of recommended roles
