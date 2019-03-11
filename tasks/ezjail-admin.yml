@@ -7,11 +7,11 @@
 - name: "ezjail-admin: Debug. ezjail-admin command"
   debug:
     var: local_command
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
 
 - name: "ezjail-admin: Run {{ local_command }} when bsd_ezjail_admin_force"
   command: "{{ local_command }}"
-  when: bsd_ezjail_admin_force
+  when: bsd_ezjail_admin_force|bool
 
 - name: "ezjail-admin: Run {{ local_command }} when basejail does not exist"
   command: "{{ local_command }}"

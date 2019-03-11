@@ -12,7 +12,7 @@
 - name: "packages: Install ports"
   portinstall:
     name: "{{ item }}"
-    use_packages: "{{ freebsd_use_packages }}"
+    use_packages: "{{ freebsd_use_packages|default(True) }}"
   loop: "{{ bsd_jail_packages }}"
   register: result
   retries: "{{ freebsd_install_retries }}"

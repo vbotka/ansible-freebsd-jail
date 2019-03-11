@@ -6,8 +6,8 @@
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   loop: "{{ bsd_jail_jails }}"
   when:
-    - bsd_jail_enable
-    - item.present|default('true')
+    - bsd_jail_enable|bool
+    - item.present|default(True)
     - not item.start
 
 - name: "start: Start jails"
@@ -16,8 +16,8 @@
     creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   loop: "{{ bsd_jail_jails }}"
   when:
-    - bsd_jail_enable
-    - item.present|default('true')
+    - bsd_jail_enable|bool
+    - item.present|default(True)
     - item.start
 
 # EOF

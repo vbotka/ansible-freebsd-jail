@@ -72,7 +72,8 @@ bsd_ezjail_jaildir: /local/jails     # $jailroot
 bsd_ezjail_flavours: []
 
 # ezjail-admin
-bsd_ezjail_admin_force: False     # True:run ezjail-admin even if basejail exists
+# bsd_ezjail_admin_force: True; run ezjail-admin even if basejail exists
+bsd_ezjail_admin_force: False
 bsd_ezjail_admin_command: "install"
 # "install" function sub-command is normally run once in the life of
 # the ezjail environment. It allocates the directory structure used by

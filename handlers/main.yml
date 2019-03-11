@@ -29,7 +29,7 @@
   service:
     name: "{{ bsd_ezjail_service }}"
     state: restarted
-  when: bsd_ezjail_enable
+  when: bsd_ezjail_enable|bool
 
 # jail
 
@@ -59,7 +59,7 @@
   service:
     name: "{{ bsd_jail_service }}"
     state: restarted
-  when: bsd_jail_enable
+  when: bsd_jail_enable|bool
 
 # EOF
 ...

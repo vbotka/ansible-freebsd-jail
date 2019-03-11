@@ -11,13 +11,13 @@
          stamp_file [ {{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot ]
   debug:
     msg: "{{ msg.split('\n') }}"
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
 
 - name: "ezjail-admin:delete: Stop jail {{ item.jailname }}"
   command: "/etc/rc.d/jail stop {{ item.jailname }}"
   args:
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
-  when: bsd_jail_enable
+  when: bsd_jail_enable|bool
 
 - name: "ezjail-admin:delete: Delete jail {{ item.jailname }}"
   command: "ezjail-admin delete -wf {{ item.jailname }}"

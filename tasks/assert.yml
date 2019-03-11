@@ -4,7 +4,7 @@
 - name: "assert: Debug interfaces"
   debug:
     msg: "{{ bsd_jail_jails | json_query('[].interface[].dev') }}"
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
 
 - name: "assert: Check existence of interfaces"
   fail:

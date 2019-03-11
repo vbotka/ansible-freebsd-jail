@@ -2,14 +2,14 @@
 # tasks freebsd_jail
 
 - import_tasks: debug.yml
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
   tags: [always, bsd_jail_debug]
 
 - name: Include vbotka.freebsd_postinstall mount-iso
   include_role:
     name: vbotka.freebsd_postinstall
     tasks_from: mount-iso.yml
-  when: bsd_jail_mount_iso
+  when: bsd_jail_mount_iso|bool
   tags: bsd_jail_mount_iso
 
 - import_tasks: assert.yml

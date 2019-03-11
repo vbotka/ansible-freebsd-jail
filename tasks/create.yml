@@ -3,7 +3,7 @@
 - name: "ezjail-admin:create: Debug {{ item.jailname }}"
   debug:
     var: item
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
 
 # ezjail-admin create jailname or restore archive
 - name: "ezjail-admin:create: Set ezjail-admin command"
@@ -26,7 +26,7 @@
 - name: "ezjail-admin:create: Debug ezjail-admin command"
   debug:
     var: local_command
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
 
 - name: "ezjail-admin:create: Create jail {{ item.jailname }}"
   command: "{{ local_command }}"
@@ -47,7 +47,7 @@
 - name: "ezjail-admin:create: Debug local_parameters"
   debug:
     msg: "{{ local_parameters|trim }}"
-  when: bsd_jail_debug
+  when: bsd_jail_debug|bool
 
 - name: "ezjail-admin:create:
          Configure parameters {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"

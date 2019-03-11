@@ -51,7 +51,7 @@
          bsd_ezjail_admin_force [ {{ bsd_ezjail_admin_force }} ]
 
          freebsd_install_method [ {{ freebsd_install_method }} ]
-         freebsd_use_packages [ {{ freebsd_use_packages | default('absent') }} ]
+         freebsd_use_packages [ {{ freebsd_use_packages | default(True) }} ]
          bsd_jail_packages
          {{ bsd_jail_packages | to_nice_yaml }}
          bsd_jail_packages_extra
