@@ -6,12 +6,12 @@
   when: bsd_jail_debug|bool
 
 # ezjail-admin create jailname or restore archive
-- name: "ezjail-admin:create: Set ezjail-admin command"
+- name: "ezjail-admin:create: Set command to restore jail from archive"
   set_fact:
     local_command: "ezjail-admin restore {{ item.archive }}"
   when: item.archive is defined
 
-- name: "ezjail-admin:create: Set ezjail-admin command"
+- name: "ezjail-admin:create: Set command to create jail"
   set_fact:
     local_command: >-
             ezjail-admin create
@@ -28,15 +28,19 @@
     var: local_command
   when: bsd_jail_debug|bool
 
-- name: "ezjail-admin:create: Create jail {{ item.jailname }}"
+- name: "ezjail-admin:create: Create or Restore jail {{ item.jailname }}"
   command: "{{ local_command }}"
   args:
     creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
 
 # config ezjail/jailname
+- name: "ezjail-admin:create: Clear variable local_parameters"
+  set_fact:
+    local_parameters: ""
+
 - name: "ezjail-admin:create: Create variable local_parameters"
   set_fact:
-    local_parameters: "{{ local_parameters|default('') + ' '
+    local_parameters: "{{ local_parameters + ' '
                         + parameter.key + '='
                         + parameter.val|ternary('1','0') }}"
   loop: "{{ item.parameters|default([]) }}"
@@ -55,7 +59,19 @@
     path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_parameters\\s*="
     line: "export jail_{{ item.jailname }}_parameters=\"{{ local_parameters|trim }}\""
+    backup: "{{ bsd_jail_conf_backup }}"
+  register: result
   when: not ansible_check_mode
+
+- name: "ezjail-admin:create: Debug result"
+  debug:
+    var: result
+  when: bsd_jail_debug|bool
+
+- name: "ezjail-admin:create: Create list of jails to be restarted by ezjail"
+  set_fact:
+    bsd_ezjail_restart_jails: "{{ bsd_ezjail_restart_jails + [ item.jailname ] }}"
+  when: result is changed
 
 - name: "ezjail-admin:create:
          Configure {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
@@ -63,6 +79,7 @@
     path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_{{ export.key }}\\s*="
     line: "export jail_{{ item.jailname }}_{{ export.key }}=\"{{ export.val }}\""
+    backup: "{{ bsd_jail_conf_backup }}"
   loop: "{{ item.ezjail_conf|default([]) }}"
   loop_control:
     loop_var: export

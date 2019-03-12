@@ -20,5 +20,10 @@
     - item.present|default(True)
     - item.start
 
+- name: "start: Restart jails with ezjail"
+  command: "/usr/local/etc/rc.d/ezjail restart {{ item }}"
+  loop: "{{ bsd_ezjail_restart_jails }}"
+  when: bsd_jail_enable|bool
+
 # EOF
 ...

@@ -84,6 +84,9 @@ bsd_ezjail_admin_command: "install"
 # (man ezjail-admin)
 bsd_ezjail_admin_options: ""
 
+# List of the restored jails to be restarted by ezjail
+bsd_ezjail_restart_jails: []
+
 # misc
 command_result:
   "failed": no
