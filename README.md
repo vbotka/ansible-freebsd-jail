@@ -193,19 +193,19 @@ ZR  35   127.0.2.2       test_02                        /local/jails/test_02
 Restore and Start jail with Ansible
 -----------------------------------
 
-To restore a jail from the archive set the parameter *archive* to the filename of the archive.
+To restore a jail from an archive set the parameter *archive* to the filename of the archive. Set *firstboot: "/usr/bin/true"* to avoid any changes and to set */var/db/jail-stamps/test_02-firstboot*. Keep other atributes of the object from which the archive was created.
 
 ```
 # cat test-02.conf
 ---
 objects:
   - jailname: "test_02"
-    archive: "test_02-201903041704.59.tar.gz"
     present: true
     start: true
+    archive: "test_02-201903041704.59.tar.gz"
+    firstboot: "/usr/bin/true"
     jailtype: "zfs"
     flavour: "ansible"
-    firstboot: "/root/firstboot.sh"
     interface:
       - {dev: "lo1", ip4: "127.0.2.2"}
       - {dev: "wlan0", ip4: "10.1.0.52"}
