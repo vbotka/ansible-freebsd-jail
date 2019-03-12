@@ -285,21 +285,13 @@ Example 2. Ansible flavour tarball
 See [contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/master/contrib/jail-flavours)
 
 ```
-./etc/
-./usr/
-./root/
-./home/
-./home/admin/
-./home/admin/.ssh/
-./home/admin/.ssh/authorized_keys
-./root/firstboot.sh
-./usr/local/
-./usr/local/etc/
-./usr/local/etc/sudoers
-./etc/resolv.conf
-./etc/rc.d/
-./etc/rc.conf
-./etc/rc.d/ezjail.flavour.default
+> tar tvf ansible.tar 
+-rwxr-xr-x root/wheel      274 2019-02-27 16:06 root/firstboot.sh
+-rw-r--r-- root/wheel       39 2019-02-17 08:47 etc/resolv.conf
+-rwxr-xr-x root/wheel     1821 2019-02-17 08:47 etc/rc.d/ezjail.flavour.default
+-rw------- admin/admin     738 2019-03-10 21:04 home/admin/.ssh/authorized_keys
+-r--r----- admin/admin    3712 2019-03-10 21:05 usr/local/etc/sudoers
+-rw-rw-r-- admin/admin      39 2019-03-10 21:05 etc/rc.conf
 ```
 
 Example 3. Ansible firstboot.sh
