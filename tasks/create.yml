@@ -60,6 +60,7 @@
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_parameters\\s*="
     line: "export jail_{{ item.jailname }}_parameters=\"{{ local_parameters|trim }}\""
     backup: "{{ bsd_jail_conf_backup }}"
+    create: yes
   register: result
   when: not ansible_check_mode
 
@@ -80,6 +81,7 @@
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_{{ export.key }}\\s*="
     line: "export jail_{{ item.jailname }}_{{ export.key }}=\"{{ export.val }}\""
     backup: "{{ bsd_jail_conf_backup }}"
+    create: yes
   loop: "{{ item.ezjail_conf|default([]) }}"
   loop_control:
     loop_var: export
