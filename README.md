@@ -43,6 +43,7 @@ bsd_jail_jails:
       - {dev: "wlan0", ip4: "10.1.0.51"}
     parameters:
       - {key: "allow.raw_sockets", val: "true"}
+      - {key: "allow.set_hostname", val: "true"}
     jail_conf:
       - {key: "mount.devfs"}
     ezjail_conf: []
@@ -71,6 +72,7 @@ objects:
       - {dev: "wlan0", ip4: "10.1.0.52"}
     parameters:
       - {key: "allow.raw_sockets", val: "true"}
+      - {key: "allow.set_hostname", val: "true"}
     jail_conf:
       - {key: "mount.devfs"}
     ezjail_conf: []
@@ -214,6 +216,33 @@ objects:
     jail_conf:
       - {key: "mount.devfs"}
     ezjail_conf: []
+```
+
+my-jail-admin.sh
+----------------
+
+[my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh) is a script to facilitate the automation of jail's management. Once a jail has been created, configured and archived it's easier to use [my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh) to delete and restore the jail. my-jail-admin.sh is not installed by default and should be manually copied if needed.
+
+```
+# my-jail-admin.sh delete test_01
+[Logging: /tmp/my-jail-admin.test_01]
+2019-03-20 12:23:58: test_01: delete: [OK]  jail-rcd:
+Stopping jails: test_01.
+2019-03-20 12:23:58: test_01: delete: [OK]  jail: test_01 stopped
+2019-03-20 12:23:58: test_01: delete: [OK]  ezjail-admin:
+ 
+2019-03-20 12:23:58: test_01: delete: [OK]  jail: test_01 deleted
+2019-03-20 12:23:58: test_01: delete: [OK]  lock: /var/db/jail-stamps/test_01-firstboot removed
+
+# my-jail-admin.sh restore test_01 test_01-firstboot
+2019-03-20 12:25:32: test_01: restore: [OK]  ezjail-admin:
+Warning: Some services already seem to be listening on IP 127.0.2.1
+...
+2019-03-20 12:25:32: test_01: restore: [OK]  jail: test_01 restored from test_01-firstboot
+2019-03-20 12:25:32: test_01: restore: [OK]  lock: /var/db/jail-stamps/test_01-firstboot created
+2019-03-20 12:25:33: test_01: restore: [OK]  jail-rcd:
+Starting jails: test_01.
+2019-03-20 12:25:33: test_01: restore: [OK]  jail: test_01 started
 ```
 
 Example 1. Variables of recommended roles
