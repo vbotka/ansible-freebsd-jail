@@ -3,7 +3,7 @@
 {{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
 {% endfor %}
 
-{% for item in bsd_jail_jails %}
+{% for item in bsd_jail_jails|sort(attribute='jailname') %}
 {% if item.present|default('true') %}
 {{ item.jailname }} {
         host.hostname = {{ '"' }}{{ item.jailname }}{{ '"' }};
