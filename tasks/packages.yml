@@ -4,19 +4,19 @@
   pkgng:
     name: "{{ bsd_jail_packages }}"
   register: result
-  retries: "{{ freebsd_install_retries }}"
   until: result is succeeded
+  retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
   when: freebsd_install_method == "packages"
 
 - name: "packages: Install ports"
   portinstall:
     name: "{{ item }}"
-    use_packages: "{{ freebsd_use_packages|default(True) }}"
+    use_packages: "{{ freebsd_use_packages|default(true) }}"
   loop: "{{ bsd_jail_packages }}"
   register: result
-  retries: "{{ freebsd_install_retries }}"
   until: result is succeeded
+  retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
   when: freebsd_install_method == "ports"
 
@@ -24,8 +24,8 @@
   pkgng:
     name: "{{ bsd_jail_packages_extra }}"
   register: result
-  retries: "{{ freebsd_install_retries }}"
   until: result is succeeded
+  retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
   when: freebsd_install_method == "packages"
 
@@ -35,8 +35,8 @@
     use_packages: "{{ freebsd_use_packages }}"
   loop: "{{ bsd_jail_packages_extra }}"
   register: result
-  retries: "{{ freebsd_install_retries }}"
   until: result is succeeded
+  retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
   when: freebsd_install_method == "ports"
 

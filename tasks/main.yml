@@ -16,6 +16,7 @@
   tags: bsd_jail_assert
 
 - import_tasks: packages.yml
+  when: bsd_jail_install|bool
   tags: bsd_jail_packages
 
 - import_tasks: flavours.yml

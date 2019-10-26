@@ -1,17 +1,25 @@
 ---
 
-- name: "ezjail-admin:create: Debug {{ item.jailname }}"
+- name: "ezjail-jails:create: Debug {{ item.jailname }}"
   debug:
     var: item
   when: bsd_jail_debug|bool
 
 # ezjail-admin create jailname or restore archive
-- name: "ezjail-admin:create: Set command to restore jail from archive"
-  set_fact:
-    local_command: "ezjail-admin restore {{ item.archive }}"
-  when: item.archive is defined
+- name: "ezjail-jails:create: Create stamp dir {{ bsd_jail_stamp_dir }}"
+  file:
+    state: "directory"
+    path: "{{ bsd_jail_stamp_dir }}"
 
-- name: "ezjail-admin:create: Set command to create jail"
+- name: "ezjail-jails:create: Set command to restore jail from archive"
+  set_fact:
+    local_command: "ezjail-admin restore {{ item.archive }} && touch {{ stamp_file }}"
+  vars:
+    stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
+  when: (item.archive is defined) and
+        bsd_ezjail_admin_restore
+
+- name: "ezjail-jails:create: Set command to create jail"
   set_fact:
     local_command: >-
             ezjail-admin create
@@ -21,24 +29,25 @@
             '{% for ifc in item.interface %}{{
             ifc.dev }}{{ '|' }}{{ ifc.ip4 }}{%
             if not loop.last %},{% endif %}{% endfor %}'
-  when: item.archive is undefined
+  when: (item.archive is undefined) or
+        (not bsd_ezjail_admin_restore)
 
-- name: "ezjail-admin:create: Debug ezjail-admin command"
+- name: "ezjail-jails:create: Debug ezjail-admin command"
   debug:
     var: local_command
   when: bsd_jail_debug|bool
 
-- name: "ezjail-admin:create: Create or Restore jail {{ item.jailname }}"
+- name: "ezjail-jails:create: Create or Restore jail {{ item.jailname }}"
   command: "{{ local_command }}"
   args:
     creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
 
 # config ezjail/jailname
-- name: "ezjail-admin:create: Clear variable local_parameters"
+- name: "ezjail-jails:create: Clear variable local_parameters"
   set_fact:
     local_parameters: ""
 
-- name: "ezjail-admin:create: Create variable local_parameters"
+- name: "ezjail-jails:create: Create variable local_parameters"
   set_fact:
     local_parameters: "{{ local_parameters + ' '
                         + parameter.key + '='
@@ -46,42 +55,42 @@
   loop: "{{ item.parameters|default([]) }}"
   loop_control:
     loop_var: parameter
-  check_mode: no
+  check_mode: false
 
-- name: "ezjail-admin:create: Debug local_parameters"
+- name: "ezjail-jails:create: Debug local_parameters"
   debug:
     msg: "{{ local_parameters|trim }}"
   when: bsd_jail_debug|bool
 
-- name: "ezjail-admin:create:
+- name: "ezjail-jails:create:
          Configure parameters {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
   lineinfile:
     path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_parameters\\s*="
     line: "export jail_{{ item.jailname }}_parameters=\"{{ local_parameters|trim }}\""
     backup: "{{ bsd_jail_conf_backup }}"
-    create: yes
+    create: true
   register: result
   when: not ansible_check_mode
 
-- name: "ezjail-admin:create: Debug result"
+- name: "ezjail-jails:create: Debug result"
   debug:
     var: result
   when: bsd_jail_debug|bool
 
-- name: "ezjail-admin:create: Create list of jails to be restarted by ezjail"
+- name: "ezjail-jails:create: Create list of jails to be restarted by ezjail"
   set_fact:
     bsd_ezjail_restart_jails: "{{ bsd_ezjail_restart_jails + [ item.jailname ] }}"
   when: result is changed
 
-- name: "ezjail-admin:create:
+- name: "ezjail-jails:create:
          Configure {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
   lineinfile:
     path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
     regexp: "^\\s*export\\s+jail_{{ item.jailname }}_{{ export.key }}\\s*="
     line: "export jail_{{ item.jailname }}_{{ export.key }}=\"{{ export.val }}\""
     backup: "{{ bsd_jail_conf_backup }}"
-    create: yes
+    create: true
   loop: "{{ item.ezjail_conf|default([]) }}"
   loop_control:
     loop_var: export

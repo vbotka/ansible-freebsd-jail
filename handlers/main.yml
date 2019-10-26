@@ -7,13 +7,13 @@
   service:
     name: "{{ bsd_ezjail_service }}"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: disable and stop ezjail
   service:
     name: "{{ bsd_ezjail_service }}"
     state: stopped
-    enabled: no
+    enabled: false
 
 - name: start ezjail
   service:
@@ -37,13 +37,13 @@
   service:
     name: "{{ bsd_jail_service }}"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: disable and stop jail
   service:
     name: "{{ bsd_jail_service }}"
     state: stopped
-    enabled: no
+    enabled: false
 
 - name: start jail
   service:

@@ -7,7 +7,7 @@
   loop: "{{ bsd_jail_jails }}"
   when:
     - bsd_jail_enable|bool
-    - item.present|default(True)
+    - item.present|default(true)
     - not item.start
 
 - name: "start: Start jails"
@@ -17,7 +17,7 @@
   loop: "{{ bsd_jail_jails }}"
   when:
     - bsd_jail_enable|bool
-    - item.present|default(True)
+    - item.present|default(true)
     - item.start
 
 - name: "start: Restart jails with ezjail"

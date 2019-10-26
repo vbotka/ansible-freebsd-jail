@@ -17,12 +17,12 @@
 
 - name: "ezjail-jails: Debug list object files in {{ bsd_jail_objects_dir }}"
   debug:
-    msg: "{{ result | json_query('files[].path') }}"
+    msg: "{{ result|json_query('files[].path') }}"
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Read configuration from object files"
-  include_tasks: objects.yml
-  loop: "{{ result | json_query('files[].path') }}"
+  include_tasks: fn/objects.yml
+  loop: "{{ result|json_query('files[].path') }}"
 
 - name: "ezjail-jails: Debug bsd_jail_jails"
   debug:
@@ -30,14 +30,14 @@
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Delete jails"
-  include_tasks: delete.yml
+  include_tasks: fn/delete.yml
   loop: "{{ bsd_jail_jails }}"
-  when: not item.present|default(True)
+  when: not item.present|default(true)
 
 - name: "ezjail-jails: Create and configure jails"
-  include_tasks: create.yml
+  include_tasks: fn/create.yml
   loop: "{{ bsd_jail_jails }}"
-  when: item.present|default(True)
+  when: item.present|default(true)
 
 # EOF
 ...

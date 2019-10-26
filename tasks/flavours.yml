@@ -17,8 +17,8 @@
 
 - name: "flavours: Synchronize files"
   synchronize:
-    archive: no
-    checksum: yes
+    archive: false
+    checksum: true
     src: "{{ item.dir }}/"
     dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
   loop: "{{ bsd_ezjail_flavours }}"
