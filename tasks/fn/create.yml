@@ -38,7 +38,7 @@
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails:create: Create or Restore jail {{ item.jailname }}"
-  command: "{{ local_command }}"
+  shell: "{{ local_command }}"
   args:
     creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
 
