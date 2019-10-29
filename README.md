@@ -26,7 +26,7 @@ Recommended
 Variables
 ---------
 
-(WIP). Review defaults and examples in vars.
+Review the defaults and examples in vars.
 
 Parameters of the jails are configured in the the variable
 **bsd_jail_jails**
@@ -50,7 +50,7 @@ bsd_jail_jails:
     ezjail_conf: []
 ```
 
-, or in the files from the directory **bsd_jail_objects_dir**
+,or in the files from the directory **bsd_jail_objects_dir**
 
 ```
 bsd_jail_objects_dir: "{{ playbook_dir }}/jail-objects.d"
@@ -196,8 +196,11 @@ ZR  35   127.0.2.2       test_02                        /local/jails/test_02
 Restore and Start jail with Ansible
 -----------------------------------
 
-To restore a jail from an archive set the parameter *archive* to the filename of the archive. Set *firstboot: "/usr/bin/true"* to avoid any changes and to set */var/db/jail-stamps/test_02-firstboot*. Keep other atributes of the object from which the archive was created.
-
+If the jail does not exist the jail is restored by default from the archive if the parameter archive is defined.
+```
+bsd_ezjail_admin_restore: true
+```
+To restore a jail from an archive set the parameter *archive* to the filename of the archive. For example
 ```
 # cat test-02.conf
 ---
@@ -206,7 +209,7 @@ objects:
     present: true
     start: true
     archive: "test_02-201903041704.59.tar.gz"
-    firstboot: "/usr/bin/true"
+    firstboot: "/root/firstboot.sh"
     jailtype: "zfs"
     flavour: "ansible"
     interface:
@@ -217,6 +220,16 @@ objects:
     jail_conf:
       - {key: "mount.devfs"}
     ezjail_conf: []
+```
+
+If the jail is restored from the archive a *jail-stamp* is created. This prevents the script in the parameter *firstboot* to run. For example
+```
+/var/db/jail-stamps/test_02-firstboot
+```
+
+If the restoration is disabled, or the parameter *archive* is not defined new jail is created if it does not exist yet.
+```
+bsd_ezjail_admin_restore: false
 ```
 
 my-jail-admin.sh
@@ -347,13 +360,23 @@ See [contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/
 Example 3. Ansible firstboot.sh
 -------------------------------
 ```
-#!/bin/sh
-env ASSUME_ALWAYS_YES=YES pkg install sudo
-env ASSUME_ALWAYS_YES=YES pkg install perl5
-env ASSUME_ALWAYS_YES=YES pkg install python36
-pw useradd -n admin -s /bin/sh -m
-chown -R admin:admin /home/admin
-echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
+#!/bin/sh                                                                                     
+# Install packages                                                                            
+env ASSUME_ALWAYS_YES=YES pkg install sudo                                                    
+env ASSUME_ALWAYS_YES=YES pkg install perl5                                                   
+env ASSUME_ALWAYS_YES=YES pkg install python36                                                
+env ASSUME_ALWAYS_YES=YES pkg install gtar                                                    
+# Create user admin                                                                           
+pw useradd -n admin -s /bin/sh -m                                                             
+chown -R admin:admin /home/admin                                                              
+chmod 0700 /home/admin/.ssh                                                                   
+chmod 0600 /home/admin/.ssh/authorized_keys                                                   
+# Configure sudoers                                                                           
+cp /usr/local/etc/sudoers.dist /usr/local/etc/sudoers                                         
+chown root:wheel /usr/local/etc/sudoers                                                       
+chmod 0440 /usr/local/etc/sudoers                                                             
+echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers                                
+# EOF 
 ```
 
 References
