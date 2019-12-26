@@ -7,9 +7,20 @@ freebsd_jail
 
 Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-jail/issues).
 
+Supported platforms
+-------------------
+
+This role has been developed and tested with [FreeBSD Supported
+Production Releases](https://www.freebsd.org/releases/).
+
+This differs from platforms in Ansible Galaxy which does not offer all
+released versions and would report an error. For example:
+`IMPORTER101: Invalid platform: "FreeBSD-11.3", skipping.`
+
 Requirements
 ------------
 
+- [vbotka.freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
 - Preconfigured network, firewall and NAT is required.
 - ZFS is recommended.
 
@@ -91,25 +102,26 @@ To remove a jail keep the entry in the variable, or in the file and set
 Workflow
 --------
 
-1) Change shell to /bin/sh.
+1) Change shell to /bin/sh
 
 ```
 # ansible server -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
-2) Install role.
+2) Install roles
 
 ```
 # ansible-galaxy install vbotka.freebsd_jail
+# ansible-galaxy install vbotka.freebsd_postinstall
 ```
 
-3) Fit variables.
+3) Fit variables
 
 ```
 # editor vbotka.freebsd_jail/vars/main.yml
 ```
 
-4) Create playbook and inventory.
+4) Create playbook and inventory
 
 ```
 # cat jail.yml
@@ -131,13 +143,13 @@ ansible_python_interpreter=/usr/local/bin/python3.6
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
-5) Install and configure ezjail.
+5) Install and configure ezjail
 
 ```
 # ansible-playbook jail.yml
 ```
 
-6) Test connection with the jail.
+6) Test connection with the jail
 ```
 # ansible test_01 -m setup | grep ansible_distribution_release
         "ansible_distribution_release": "12.0-RELEASE",
