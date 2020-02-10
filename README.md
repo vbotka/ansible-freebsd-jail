@@ -13,8 +13,8 @@ Supported platforms
 This role has been developed and tested with [FreeBSD Supported
 Production Releases](https://www.freebsd.org/releases/).
 
-This differs from platforms in Ansible Galaxy which does not offer all
-released versions and would report an error. For example:
+This may be different from the platforms in Ansible Galaxy which does not offer all
+released versions in time and would report an error. For example:
 `IMPORTER101: Invalid platform: "FreeBSD-11.3", skipping.`
 
 Requirements
