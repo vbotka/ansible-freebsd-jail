@@ -362,6 +362,8 @@ shell> tree -a /local/jails/flavours/ansible
 
 ## Example 3. Ansible firstboot.sh
 
+See [contrib/jail-flavours/firstboot.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/jail-flavours/firstboot.sh)
+
 ```
 #!/bin/sh                                                                                     
 # Install packages                                                                            
