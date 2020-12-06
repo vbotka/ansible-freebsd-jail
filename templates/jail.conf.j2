@@ -4,7 +4,7 @@
 {% endfor %}
 
 {% for item in bsd_jail_jails|sort(attribute='jailname') %}
-{% if item.present|default('true') %}
+{% if item.present|default(true) %}
 {{ item.jailname }} {
         host.hostname = {{ '"' }}{{ item.jailname }}{{ '"' }};
         ip4.addr = {{ item.interface|map(attribute='ip4')|join(',') }};
