@@ -4,14 +4,17 @@
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
-Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-jail/issues).
+Feel free to [share your feedback and report
+issues](https://github.com/vbotka/ansible-freebsd-jail/issues). Contributions are welcome.
 
 
 ## Supported platforms
 
 This role has been developed and tested with [FreeBSD Supported Production Releases](https://www.freebsd.org/releases/).
 
-This may be different from the platforms in Ansible Galaxy which does not offer all released versions in time and would report an error. For example: `IMPORTER101: Invalid platform: "FreeBSD-11.3", skipping.`
+This may be different from the platforms in Ansible Galaxy which does not offer all released
+versions in time and would report an error. For example: `IMPORTER101: Invalid platform:
+"FreeBSD-11.3", skipping.`
 
 
 ## Requirements
@@ -147,6 +150,7 @@ shell> ansible test_01 -m setup | grep ansible_distribution_release
         "ansible_distribution_release": "12.0-RELEASE",
 ```
 
+
 ## List jails
 
 ```
@@ -157,6 +161,7 @@ ZR  34   127.0.2.2       test_02                        /local/jails/test_02
     34   wlan0|10.1.0.52
 
 ```
+
 
 ## Archive jail
 
@@ -170,11 +175,13 @@ drwxr-x---  3 root  wheel        512 Mar  4 11:41 ../
 -rw-r--r--  1 root  wheel  114663346 Mar  4 17:05 test_02-201903041704.59.tar.gz
 ```
 
+
 ## Delete jail
 
 ```
 shell> ezjail-admin delete -wf test_02
 ```
+
 
 ## Restore and Start jail
 
@@ -192,6 +199,7 @@ STA JID  IP              Hostname                       Root Directory
 ZR  35   127.0.2.2       test_02                        /local/jails/test_02
     35   wlan0|10.1.0.52
 ```
+
 
 ## Restore and Start jail with Ansible
 
@@ -224,22 +232,29 @@ objects:
     ezjail_conf: []
 ```
 
-If the jail is restored from the archive a *jail-stamp* is created. This prevents the script in the parameter *firstboot* to run. For example
+If the jail is restored from the archive a *jail-stamp* is created. This prevents the script in the
+parameter *firstboot* to run. For example
 
 ```
 /var/db/jail-stamps/test_02-firstboot
 ```
 
-If the restoration is disabled, or the parameter *archive* is not defined new jail is created if it does not exist yet.
+If the restoration is disabled, or the parameter *archive* is not defined new jail is created if it
+does not exist yet.
 
 ```
 bsd_ezjail_admin_restore: false
 ```
 
+
 ## my-jail-admin.sh
 
-[my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh) is a script to facilitate the automation of jail's management. Once a jail has been created, configured and archived it's easier to use [my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh) to delete and restore the jail. my-jail-admin.sh is not installed by default and should be manually copied if needed.
-
+[my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh)
+is a script to facilitate the automation of jail's management. Once a jail has been created,
+configured and archived it's easier to use
+[my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh)
+to delete and restore the jail. my-jail-admin.sh is not installed by default and should be manually
+copied if needed.
 
 ```
 shell> my-jail-admin.sh delete test_01
@@ -262,6 +277,7 @@ Warning: Some services already seem to be listening on IP 127.0.2.1
 Starting jails: test_01.
 2019-03-20 12:25:33: test_01: restore: [OK]  jail: test_01 started
 ```
+
 
 ## Example 1. Variables of recommended roles
 
@@ -326,6 +342,7 @@ To manage ZFS inside the jail add the following states
   - { name: "security.jail.mount_zfs_allowed", value: "1" }
 ```
 
+
 ## Example 2. Ansible flavour tarball
 
 See [contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/master/contrib/jail-flavours)
@@ -360,6 +377,7 @@ shell> tree -a /local/jails/flavours/ansible
             └── sudoers
 ```
 
+
 ## Example 3. Ansible firstboot.sh
 
 See [contrib/jail-flavours/firstboot.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/jail-flavours/firstboot.sh)
@@ -384,6 +402,7 @@ chmod 0440 /usr/local/etc/sudoers
 echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers                                
 # EOF 
 ```
+
 
 ## References
 
