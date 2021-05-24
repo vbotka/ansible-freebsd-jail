@@ -18,4 +18,7 @@ galaxy_info:
     - jail
     - ezjail
 dependencies: []
+collections:
+  - ansible.posix
+  - community.general
 ...

@@ -4,29 +4,29 @@
 # ezjail
 
 - name: enable and start ezjail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: started
     enabled: true
 
 - name: disable and stop ezjail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: stopped
     enabled: false
 
 - name: start ezjail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: started
 
 - name: stop ezjail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: stopped
 
 - name: restart ezjail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: restarted
   when: bsd_ezjail_enable|bool
@@ -34,29 +34,29 @@
 # jail
 
 - name: enable and start jail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: started
     enabled: true
 
 - name: disable and stop jail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: stopped
     enabled: false
 
 - name: start jail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: started
 
 - name: stop jail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: stopped
 
 - name: restart jail
-  service:
+  ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: restarted
   when: bsd_jail_enable|bool

@@ -2,42 +2,48 @@
 
 # Interfaces
 - name: "assert: Debug interfaces"
-  debug:
-    msg: "{{ bsd_jail_jails | json_query('[].interface[].dev') }}"
+  ansible.builtin.debug:
+    msg: "{{ bsd_jail_jails|json_query('[].interface[].dev') }}"
   when: bsd_jail_debug|bool
 
 - name: "assert: Check existence of interfaces"
-  fail:
+  ansible.builtin.fail:
     msg: "ERROR: Interface {{ item }} does not exist. End of play."
-  loop: "{{ bsd_jail_jails | json_query('[].interface[].dev') }}"
-  when: item not in ansible_interfaces
+  loop: "{{ bsd_jail_jails|json_query('[].interface[].dev') }}"
+  when:
+    - item not in ansible_interfaces
+    - bsd_jail_assert_enable.interfaces
 
 # Jaildir
 - name: "assert: Check existence of storage {{ bsd_ezjail_jaildir }}"
   block:
     - name: "assert: Stat {{ bsd_ezjail_jaildir }}"
-      stat:
+      ansible.builtin.stat:
         path: "{{ bsd_ezjail_jaildir }}"
-      register: command_result
+      register: result
     - name: "assert: Storage {{ bsd_ezjail_jaildir }} does not exist."
-      fail:
+      ansible.builtin.fail:
         msg: "ERROR: Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
-      when: not command_result.stat.exists
-  when: bsd_ezjail_use_zfs|upper != "YES"
+      when: not result.stat.exists
+  when:
+    - bsd_ezjail_use_zfs|upper != "YES"
+    - bsd_jail_assert_enable.jaildir
 
 # ZFS
 - name: "assert: Check existence of storage {{ bsd_ezjail_jailzfs }}"
   block:
     - name: "assert: Collect zfs_facts"
-      zfs_facts:
+      community.general.zfs_facts:
         dataset: "{{ bsd_ezjail_jailzfs }}"
-      register: command_result
+      register: result
       ignore_errors: true
     - name: "assert: Storage {{ bsd_ezjail_jailzfs }} does not exist."
-      fail:
+      ansible.builtin.fail:
         msg: "ERROR: Storage {{ bsd_ezjail_jailzfs }} does not exist. End of play."
-      when: command_result.failed
-  when: bsd_ezjail_use_zfs|upper == "YES"
+      when: result.failed
+  when:
+    - bsd_ezjail_use_zfs|upper == "YES"
+    - bsd_jail_assert_enable.zfs
 
 # TODO
 # * Check network

@@ -1,7 +1,7 @@
 ---
 
 - name: "jail-conf: Configure {{ bsd_jail_conf_file }}"
-  template:
+  ansible.builtin.template:
     src: jail.conf.j2
     dest: "{{ bsd_jail_conf_file }}"
     owner: "{{ bsd_jail_conf_owner }}"

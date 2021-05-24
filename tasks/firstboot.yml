@@ -1,13 +1,15 @@
 ---
 
 - name: "firstboot: Create stamp dir {{ bsd_jail_stamp_dir }}"
-  file:
-    state: "directory"
+  ansible.builtin.file:
+    state: directory
     path: "{{ bsd_jail_stamp_dir }}"
 
 - name: "firstboot: Exec firstboot scripts in the jails"
   include_tasks: fn/firstboot-jail.yml
   loop: "{{ bsd_jail_jails }}"
+  loop_control:
+    label: "{{ item.jailname }}"
   when:
     - bsd_jail_enable|bool
     - item.present|default(true)

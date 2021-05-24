@@ -1,7 +1,7 @@
 ---
 
 - name: "ezjail-conf: Configure {{ bsd_ezjail_conf_file }}"
-  template:
+  ansible.builtin.template:
     src: ezjail.conf.j2
     dest: "{{ bsd_ezjail_conf_file }}"
     owner: "{{ bsd_ezjail_conf_owner }}"

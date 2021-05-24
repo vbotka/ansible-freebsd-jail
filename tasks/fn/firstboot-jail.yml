@@ -1,27 +1,30 @@
 ---
 
 - name: "firstboot-jail: Create path to stamp file for {{ item.jailname }}"
-  set_fact:
+  ansible.builtin.set_fact:
     stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
 
 - name: "firstboot-jail: chown firstboot script in {{ item.jailname }}"
-  command: "/usr/sbin/jexec {{ item.jailname }} chown
-            {{ item.firstboot_owner|default('root') }}:{{ item.firstboot_group|default('wheel') }}
-            {{ item.firstboot }}"
-  args:
+  command:
+    cmd: >
+      /usr/sbin/jexec {{ item.jailname }} chown
+      {{ item.firstboot_owner|default('root') }}:{{ item.firstboot_group|default('wheel') }}
+      {{ item.firstboot }}
     creates: "{{ stamp_file }}"
 
 - name: "firstboot-jail: chmod firstboot script in {{ item.jailname }}"
-  command: "/usr/sbin/jexec {{ item.jailname }} chmod
-            {{ item.firstboot_mode|default('0755') }}
-            {{ item.firstboot }}"
-  args:
+  command:
+    cmd: >
+      /usr/sbin/jexec {{ item.jailname }} chmod
+      {{ item.firstboot_mode|default('0755') }}
+      {{ item.firstboot }}
     creates: "{{ stamp_file }}"
 
 - name: "firstboot-jail: jexec firstboot script in {{ item.jailname }}"
-  shell: "/usr/sbin/jexec {{ item.jailname }} {{ item.firstboot }} &&
-          touch {{ stamp_file }}"
-  args:
+  shell:
+    cmd: >
+      /usr/sbin/jexec {{ item.jailname }} {{ item.firstboot }} &&
+      touch {{ stamp_file }}
     creates: "{{ stamp_file }}"
 
 # EOF

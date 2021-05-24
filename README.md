@@ -20,7 +20,17 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 
 ## Requirements
 
+### Roles
+
 - [vbotka.freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
+
+### Collections
+
+- ansible.posix
+- community.general
+
+### Other
+
 - Preconfigured network, firewall and NAT is required.
 - ZFS is recommended.
 
@@ -106,11 +116,11 @@ shell> ansible server -e 'ansible_shell_type=csh ansible_shell_executable=/bin/c
 2) Install roles
 
 ```
-shell> ansible-galaxy install vbotka.freebsd_jail
-shell> ansible-galaxy install vbotka.freebsd_postinstall
+shell> ansible-galaxy role install vbotka.freebsd_jail
+shell> ansible-galaxy role install vbotka.freebsd_postinstall
 ```
 
-3) Fit variables
+3) Fit variables, e.g. in vars/main.yml
 
 ```
 shell> editor vbotka.freebsd_jail/vars/main.yml
@@ -144,7 +154,7 @@ ansible_perl_interpreter=/usr/local/bin/perl
 shell> ansible-playbook jail.yml
 ```
 
-6) Test connection with the jail
+6) Test the connection
 
 ```
 shell> ansible test_01 -m setup | grep ansible_distribution_release
@@ -388,7 +398,7 @@ See [contrib/jail-flavours/firstboot.sh](https://github.com/vbotka/ansible-freeb
 # Install packages                                                                            
 env ASSUME_ALWAYS_YES=YES pkg install security/sudo
 env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.30
-env ASSUME_ALWAYS_YES=YES pkg install lang/python37shell
+env ASSUME_ALWAYS_YES=YES pkg install lang/python37
 env ASSUME_ALWAYS_YES=YES pkg install security/py-openssl
 env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
 # Create user admin                                                                           
