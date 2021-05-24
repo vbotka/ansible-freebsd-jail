@@ -1,53 +1,58 @@
 ---
 # defaults freebsd_jail
 
-bsd_jail_install: true
-bsd_jail_enable: false
 bsd_jail_debug: false
 bsd_jail_conf_backup: true
-bsd_jail_mount_iso: false
 
-# install method
+# mount ISO
+bsd_jail_mount_iso: true
+
+# assert
+bsd_jail_assert: true
+bsd_jail_assert_enable:
+  interfaces: true
+  jaildir: true
+  zfs: true
+
+# install
+bsd_jail_install: true
+bsd_jail_packages:
+  - sysutils/ezjail
+bsd_jail_packages_extra: []
 freebsd_install_method: packages
 freebsd_use_packages: true
 freebsd_install_retries: 10
 freebsd_install_delay: 5
 
-# packages
-bsd_jail_packages:
-  - sysutils/ezjail
-bsd_jail_packages_extra: []
-
-# service
+# jail
+bsd_jail: true
+bsd_jail_enable: true
 bsd_jail_service: jail
-
-# conf
 bsd_jail_conf_path: /etc
 bsd_jail_conf_file: "{{ bsd_jail_conf_path }}/jail.conf"
 bsd_jail_conf_owner: root
 bsd_jail_conf_group: wheel
 bsd_jail_conf_mode: "0644"
 bsd_jail_conf: []
-
-# jails
 bsd_jail_id_dir: /var/run
 bsd_jail_stamp_dir: /var/db/jail-stamps
 bsd_jail_fstab_dir: /etc/jail
 bsd_jail_jails_defaults:
-  - {key: "path", val: "{{ bsd_ezjail_jaildir }}/$name"}
-  - {key: "mount.fstab", val: "{{ bsd_jail_fstab_dir }}/fstab.${name}"}
-  - {key: "exec.start", val: "/bin/sh /etc/rc"}
-  - {key: "exec.stop", val: "/bin/sh /etc/rc.shutdown"}
-  - {key: "devfs_ruleset", val: "4"}
-  - {key: "exec.clean"}
-  - {key: "mount.devfs"}
-  - {key: "mount.fdescfs"}
-  - {key: "mount.procfs"}
+  - {key: path, val: "{{ bsd_ezjail_jaildir }}/$name"}
+  - {key: mount.fstab, val: "{{ bsd_jail_fstab_dir }}/fstab.${name}"}
+  - {key: exec.start, val: /bin/sh /etc/rc}
+  - {key: exec.stop, val: /bin/sh /etc/rc.shutdown}
+  - {key: devfs_ruleset, val: "4"}
+  - {key: exec.clean}
+  - {key: mount.devfs}
+  - {key: mount.fdescfs}
+  - {key: mount.procfs}
 bsd_jail_jails: []
 bsd_jail_objects_dir: "{{ role_path }}/files/jail-objects.d"
 bsd_jail_objects_dir_extension: conf
 
 # ezjail
+bsd_ezjail: true
 bsd_ezjail_enable: true
 bsd_ezjail_service: ezjail
 bsd_ezjail_conf_path: /usr/local/etc
@@ -56,12 +61,12 @@ bsd_ezjail_conf_owner: root
 bsd_ezjail_conf_group: wheel
 bsd_ezjail_conf_mode: "0644"
 bsd_ezjail_conf:
-  - "ezjail_use_zfs=\"{{ bsd_ezjail_use_zfs }}\""
-  - "ezjail_use_zfs_for_jails=\"{{ bsd_ezjail_use_zfs_for_jails }}\""
-  - "ezjail_jaildir={{ bsd_ezjail_jaildir }}"
-  - "ezjail_ftphost=http://ftp.freebsd.org"
-# - "ezjail_jailzfs={{ bsd_ezjail_jailzfs }}"
-# - "ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist"
+  - 'ezjail_use_zfs="{{ bsd_ezjail_use_zfs }}"'
+  - 'ezjail_use_zfs_for_jails="{{ bsd_ezjail_use_zfs_for_jails }}"'
+  - 'ezjail_jaildir={{ bsd_ezjail_jaildir }}'
+  - 'ezjail_ftphost=http://ftp.freebsd.org'
+# - 'ezjail_jailzfs={{ bsd_ezjail_jailzfs }}'
+# - 'ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist'
 bsd_ezjail_use_zfs: "NO"
 bsd_ezjail_use_zfs_for_jails: "NO"
 # bsd_ezjail_jaildir and bsd_jail_jailzfs
@@ -75,7 +80,7 @@ bsd_ezjail_flavours: []
 # ezjail-admin
 # bsd_ezjail_admin_force: True; run ezjail-admin even if basejail exists
 bsd_ezjail_admin_force: false
-bsd_ezjail_admin_command: "install"
+bsd_ezjail_admin_command: install
 # "install" function sub-command is normally run once in the life of
 # the ezjail environment. It allocates the directory structure used by
 # ezjail and populates the base jail using the minimal distribution
@@ -93,7 +98,13 @@ bsd_ezjail_restart_jails: []
 
 # misc
 command_result:
-  "failed": false
+  failed: false
+
+# start
+bsd_jail_start: true
+
+# firstboot
+bsd_jail_firstboot: true
 
 # EOF
 ...

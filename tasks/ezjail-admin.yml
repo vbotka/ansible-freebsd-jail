@@ -1,21 +1,23 @@
 ---
+
 - name: "ezjail-admin: Set ezjail-admin command"
-  set_fact:
+  ansible.builtin.set_fact:
     local_command: "ezjail-admin {{ bsd_ezjail_admin_command }}
                                  {{ bsd_ezjail_admin_options }}"
 
 - name: "ezjail-admin: Debug. ezjail-admin command"
-  debug:
+  ansible.builtin.debug:
     var: local_command
   when: bsd_jail_debug|bool
 
 - name: "ezjail-admin: Run {{ local_command }} when bsd_ezjail_admin_force"
-  command: "{{ local_command }}"
+  command:
+    cmd: "{{ local_command }}"
   when: bsd_ezjail_admin_force|bool
 
 - name: "ezjail-admin: Run {{ local_command }} when basejail does not exist"
-  command: "{{ local_command }}"
-  args:
+  command:
+    cmd: "{{ local_command }}"
     creates: "{{ bsd_ezjail_jaildir }}/basejail"
 
 # EOF

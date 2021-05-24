@@ -1,24 +1,22 @@
 ---
 
 - name: "ezjail-rcconf: Enable and start ezjail"
-  lineinfile:
-    dest: "/etc/rc.conf"
-    regexp: "^\\s*ezjail_enable\\s*="
-    line: "ezjail_enable=\"YES\""
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*ezjail_enable\s*=(.*)'
+    line: 'ezjail_enable="YES"'
     backup: "{{ bsd_jail_conf_backup }}"
   notify: enable and start ezjail
   when: bsd_ezjail_enable|bool
 
 - name: "ezjail-rcconf: Disable and stop ezjail"
-  lineinfile:
-    dest: "/etc/rc.conf"
-    regexp: "^\\s*ezjail_enable\\s*="
-    line: "ezjail_enable=\"NO\""
+  ansible.builtin.lineinfile:
+    dest: /etc/rc.conf
+    regexp: '^\s*ezjail_enable\s*=(.*)$'
+    line: 'ezjail_enable="NO"'
     backup: "{{ bsd_jail_conf_backup }}"
   notify: disable and stop ezjail
   when: not bsd_ezjail_enable|bool
-
-- meta: flush_handlers
 
 # EOF
 ...

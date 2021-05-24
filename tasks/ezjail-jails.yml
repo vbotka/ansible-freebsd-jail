@@ -4,39 +4,44 @@
 # more jails.
 
 - name: "ezjail-jails: Debug bsd_jail_jails"
-  debug:
+  ansible.builtin.debug:
     var: bsd_jail_jails
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Find object files in {{ bsd_jail_objects_dir }}"
-  find:
+  ansible.builtin.find:
     paths: "{{ bsd_jail_objects_dir }}"
     patterns: "*.{{ bsd_jail_objects_dir_extension }}"
   delegate_to: localhost
   register: result
 
 - name: "ezjail-jails: Debug list object files in {{ bsd_jail_objects_dir }}"
-  debug:
+  ansible.builtin.debug:
     msg: "{{ result|json_query('files[].path') }}"
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Read configuration from object files"
   include_tasks: fn/objects.yml
-  loop: "{{ result|json_query('files[].path') }}"
+  loop: "{{ result.skipped|default(false)|
+            ternary([], result|json_query('files[].path')) }}"
 
 - name: "ezjail-jails: Debug bsd_jail_jails"
-  debug:
+  ansible.builtin.debug:
     var: bsd_jail_jails
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Delete jails"
   include_tasks: fn/delete.yml
   loop: "{{ bsd_jail_jails }}"
+  loop_control:
+    label: "{{ item.jailname }}"
   when: not item.present|default(true)
 
 - name: "ezjail-jails: Create and configure jails"
   include_tasks: fn/create.yml
   loop: "{{ bsd_jail_jails }}"
+  loop_control:
+    label: "{{ item.jailname }}"
   when: item.present|default(true)
 
 # EOF

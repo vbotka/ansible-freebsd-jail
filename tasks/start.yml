@@ -1,27 +1,32 @@
 ---
 
 - name: "start: Stop jails"
-  command: "/etc/rc.d/jail stop {{ item.jailname }}"
-  args:
+  command:
+    cmd: "/etc/rc.d/jail stop {{ item.jailname }}"
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   loop: "{{ bsd_jail_jails }}"
+  loop_control:
+    label: "{{ item.jailname }}"
   when:
     - bsd_jail_enable|bool
     - item.present|default(true)
     - not item.start
 
 - name: "start: Start jails"
-  command: "/etc/rc.d/jail start {{ item.jailname }}"
-  args:
+  command:
+    cmd: "/etc/rc.d/jail start {{ item.jailname }}"
     creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   loop: "{{ bsd_jail_jails }}"
+  loop_control:
+    label: "{{ item.jailname }}"
   when:
     - bsd_jail_enable|bool
     - item.present|default(true)
     - item.start
 
 - name: "start: Restart jails with ezjail"
-  command: "/usr/local/etc/rc.d/ezjail restart {{ item }}"
+  command:
+    cmd: "/usr/local/etc/rc.d/ezjail restart {{ item }}"
   loop: "{{ bsd_ezjail_restart_jails }}"
   when: bsd_jail_enable|bool
 
