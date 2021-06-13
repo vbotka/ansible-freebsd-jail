@@ -10,6 +10,7 @@
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_jail_stamp_dir }}"
+    mode: "0755"
 
 - name: "ezjail-jails:create: Set command to restore jail from archive"
   ansible.builtin.set_fact:
@@ -36,7 +37,7 @@
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails:create: Create or Restore jail {{ item.jailname }}"
-  command:
+  ansible.builtin.command:
     cmd: "{{ local_command }}"
     creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
 
@@ -68,6 +69,7 @@
     line: 'export jail_{{ item.jailname }}_parameters="{{ local_parameters|trim }}"'
     backup: "{{ bsd_jail_conf_backup }}"
     create: true
+    mode: "0644"
   register: result
   when: not ansible_check_mode
 
@@ -79,7 +81,7 @@
 - name: "ezjail-jails:create: Create list of jails to be restarted by ezjail"
   ansible.builtin.set_fact:
     bsd_ezjail_restart_jails: "{{ bsd_ezjail_restart_jails + [ item.jailname ] }}"
-  when: result is changed
+  when: result is changed  # noqa no-handler
 
 - name: "ezjail-jails:create:
          Configure {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
@@ -89,6 +91,7 @@
     line: 'export jail_{{ item.jailname }}_{{ export.key }}="{{ export.val }}"'
     backup: "{{ bsd_jail_conf_backup }}"
     create: true
+    mode: "0644"
   loop: "{{ item.ezjail_conf|default([]) }}"
   loop_control:
     loop_var: export

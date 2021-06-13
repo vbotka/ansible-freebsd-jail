@@ -21,7 +21,7 @@
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Read configuration from object files"
-  include_tasks: fn/objects.yml
+  ansible.builtin.include_tasks: fn/objects.yml
   loop: "{{ result.skipped|default(false)|
             ternary([], result|json_query('files[].path')) }}"
 
@@ -31,14 +31,14 @@
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails: Delete jails"
-  include_tasks: fn/delete.yml
+  ansible.builtin.include_tasks: fn/delete.yml
   loop: "{{ bsd_jail_jails }}"
   loop_control:
     label: "{{ item.jailname }}"
   when: not item.present|default(true)
 
 - name: "ezjail-jails: Create and configure jails"
-  include_tasks: fn/create.yml
+  ansible.builtin.include_tasks: fn/create.yml
   loop: "{{ bsd_jail_jails }}"
   loop_control:
     label: "{{ item.jailname }}"

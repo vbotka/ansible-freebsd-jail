@@ -1,6 +1,6 @@
 ---
 
-- name: "FreeBSD Jail debug"
+- name: "FreeBSD Jail Debug"
   vars:
     msg: |-
          ansible_architecture [{{ ansible_architecture }}]

@@ -35,7 +35,7 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 - ZFS is recommended.
 
 
-## Recommended
+### Recommended
 
 - Configure Network [vbotka.freebsd_network](https://galaxy.ansible.com/vbotka/freebsd_network/)
 - Configure PF firewall [vbotka.freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
@@ -45,7 +45,7 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 
 ## Variables
 
-Review the defaults and examples in vars.
+See the defaults and examples in vars.
 
 Parameters of the jails are configured in the the variable *bsd_jail_jails*
 
@@ -68,7 +68,7 @@ bsd_jail_jails:
     ezjail_conf: []
 ```
 
-,or in the files from the directory *bsd_jail_objects_dir*
+,or in the files stored in the directory *bsd_jail_objects_dir*
 
 ```
 bsd_jail_objects_dir: "{{ playbook_dir }}/jail-objects.d"
