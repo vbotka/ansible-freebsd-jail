@@ -4,9 +4,10 @@
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_jail_stamp_dir }}"
+    mode: "0755"
 
 - name: "firstboot: Exec firstboot scripts in the jails"
-  include_tasks: fn/firstboot-jail.yml
+  ansible.builtin.include_tasks: fn/firstboot-jail.yml
   loop: "{{ bsd_jail_jails }}"
   loop_control:
     label: "{{ item.jailname }}"

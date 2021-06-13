@@ -14,13 +14,13 @@
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails:delete: Stop jail {{ item.jailname }}"
-  command:
+  ansible.builtin.command:
     cmd: "/etc/rc.d/jail stop {{ item.jailname }}"
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   when: bsd_jail_enable|bool
 
 - name: "ezjail-jails:delete: Delete jail {{ item.jailname }}"
-  command:
+  ansible.builtin.command:
     cmd: "ezjail-admin delete -wf {{ item.jailname }}"
     removes: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
 

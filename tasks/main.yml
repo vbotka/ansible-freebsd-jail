@@ -1,63 +1,77 @@
 ---
 # tasks freebsd_jail
 
-- import_tasks: debug.yml
+- name: Import debug.yml
+  ansible.builtin.import_tasks: debug.yml
   when: bsd_jail_debug|bool
   tags: [always, bsd_jail_debug]
 
 - name: Include vbotka.freebsd_postinstall mount-iso
-  include_role:
+  ansible.builtin.include_role:
     name: vbotka.freebsd_postinstall
     tasks_from: mount-iso.yml
   when: bsd_jail_mount_iso|bool
   tags: bsd_jail_mount_iso
 
-- import_tasks: assert.yml
+- name: Import assert.yml
+  ansible.builtin.import_tasks: assert.yml
   when: bsd_jail_assert|bool
   tags: bsd_jail_assert
 
-- import_tasks: packages.yml
+- name: Import packages.yml
+  ansible.builtin.import_tasks: packages.yml
   when: bsd_jail_install|bool
   tags: bsd_jail_packages
 
-- import_tasks: fstab.yml
+- name: Import fstab.yml
+  ansible.builtin.import_tasks: fstab.yml
   tags: bsd_jail_fstab
 
-- import_tasks: jail-conf.yml
+- name: Import jail-conf.yml
+  ansible.builtin.import_tasks: jail-conf.yml
   when: bsd_jail|bool
   tags: bsd_jail_jail_conf
 
-- import_tasks: jail-rcconf.yml
+- name: Import jail-rcconf.yml
+  ansible.builtin.import_tasks: jail-rcconf.yml
   when: bsd_jail|bool
   tags: bsd_jail_jail_rcconf
 
-- import_tasks: ezjail-flavours.yml
+- name: Import ezjail-flavours.yml
+  ansible.builtin.import_tasks: ezjail-flavours.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_flavours
 
-- import_tasks: ezjail-conf.yml
+- name: Import ezjail-conf.yml
+  ansible.builtin.import_tasks: ezjail-conf.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_conf
 
-- import_tasks: ezjail-jails.yml
+- name: Import ezjail-jails.yml
+  ansible.builtin.import_tasks: ezjail-jails.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_jails
 
-- import_tasks: ezjail-rcconf.yml
+- name: Import ezjail-rcconf.yml
+  ansible.builtin.import_tasks: ezjail-rcconf.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_rcconf
 
-- meta: flush_handlers
+- name: Meta flush_handlers
+  ansible.builtin.meta: flush_handlers
 
-- import_tasks: ezjail-admin.yml
+- name: Import ezjail-admin.yml
+  ansible.builtin.import_tasks: ezjail-admin.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_admin
 
-- import_tasks: start.yml
+- name: Import start.yml
+  ansible.builtin.import_tasks: start.yml
   when: bsd_jail_start|bool
   tags: bsd_jail_start
 
-- import_tasks: firstboot.yml
+- name: Import firstboot.yml
+  ansible.builtin.import_tasks: firstboot.yml
   when: bsd_jail_firstboot|bool
   tags: bsd_jail_firstboot
 

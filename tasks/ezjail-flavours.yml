@@ -4,6 +4,7 @@
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/etc/rc.d"
+    mode: "0755"
   loop: "{{ bsd_ezjail_flavours }}"
 
 - name: "flavours: Unarchive files"

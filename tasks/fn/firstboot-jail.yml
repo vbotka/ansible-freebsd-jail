@@ -5,7 +5,7 @@
     stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
 
 - name: "firstboot-jail: chown firstboot script in {{ item.jailname }}"
-  command:
+  ansible.builtin.command:
     cmd: >
       /usr/sbin/jexec {{ item.jailname }} chown
       {{ item.firstboot_owner|default('root') }}:{{ item.firstboot_group|default('wheel') }}
@@ -13,7 +13,7 @@
     creates: "{{ stamp_file }}"
 
 - name: "firstboot-jail: chmod firstboot script in {{ item.jailname }}"
-  command:
+  ansible.builtin.command:
     cmd: >
       /usr/sbin/jexec {{ item.jailname }} chmod
       {{ item.firstboot_mode|default('0755') }}
@@ -21,7 +21,7 @@
     creates: "{{ stamp_file }}"
 
 - name: "firstboot-jail: jexec firstboot script in {{ item.jailname }}"
-  shell:
+  ansible.builtin.shell:
     cmd: >
       /usr/sbin/jexec {{ item.jailname }} {{ item.firstboot }} &&
       touch {{ stamp_file }}

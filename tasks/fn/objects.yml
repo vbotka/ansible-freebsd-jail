@@ -1,7 +1,7 @@
 ---
 
 - name: "ezjail-jails:objects: Include vars from {{ item }}"
-  include_vars: "{{ item }}"
+  ansible.builtin.include_vars: "{{ item }}"
 
 - name: "ezjail-jails:objects: Add {{ item }} to bsd_jail_jails"
   ansible.builtin.set_fact:
