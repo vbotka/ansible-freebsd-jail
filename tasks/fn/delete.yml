@@ -10,7 +10,7 @@
          id_file [{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id]
          stamp_file [{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot]
   ansible.builtin.debug:
-    msg: "{{ msg.split('\n') }}"
+    msg: "{{ '{}'.format(msg) }}"
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails:delete: Stop jail {{ item.jailname }}"
