@@ -75,7 +75,7 @@
          bsd_jail_start [{{ bsd_jail_start }}]
          bsd_jail_firstboot [{{ bsd_jail_firstboot }}]
   ansible.builtin.debug:
-    msg: "{{ msg.split('\n') }}"
+    msg: "{{ '{}'.format(msg) }}"
 
 # EOF
 ...
