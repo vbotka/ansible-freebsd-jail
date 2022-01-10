@@ -3,26 +3,27 @@
 - name: "ezjail-jails:delete: Debug {{ item.jailname }}"
   vars:
     msg: |-
-         item.jailname [{{ item.jailname }}]
-         bsd_jail_id_dir [{{ bsd_jail_id_dir }}]
-         bsd_ezjail_jaildir [{{ bsd_ezjail_jaildir }}]
-         bsd_jail_stamp_dir [{{ bsd_jail_stamp_dir }}]
-         id_file [{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id]
-         stamp_file [{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot]
+         item.jailname: {{ item.jailname }}
+         bsd_jail_id_dir: {{ bsd_jail_id_dir }}
+         bsd_ezjail_jaildir: {{ bsd_ezjail_jaildir }}
+         bsd_jail_stamp_dir: {{ bsd_jail_stamp_dir }}
+         id_file: {{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id
+         stamp_file: {{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails:delete: Stop jail {{ item.jailname }}"
   ansible.builtin.command:
-    cmd: "/etc/rc.d/jail stop {{ item.jailname }}"
+    cmd: "/etc/rc.d/jail start {{ item.jailname }}"
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   when: bsd_jail_enable|bool
 
 - name: "ezjail-jails:delete: Delete jail {{ item.jailname }}"
   ansible.builtin.command:
     cmd: "ezjail-admin delete -wf {{ item.jailname }}"
-    removes: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+    removes: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+#   removes: "/etc/fstab.{{ item.jailname }}"
 
 - name: "ezjail-jails:delete: Delete stamp {{ stamp_file }}"
   ansible.builtin.file:

@@ -6,7 +6,7 @@
     path: "{{ bsd_jail_fstab_dir }}"
     mode: "0755"
 
-- name: "fstab: Delete fstab files"
+- name: "fstab: Delete fstab files in {{ bsd_jail_fstab_dir }}"
   ansible.builtin.file:
     state: absent
     path: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
@@ -15,7 +15,7 @@
     label: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
   when: not item.present|default(true)
 
-- name: "fstab: Create fstab files"
+- name: "fstab: Create fstab files in {{ bsd_jail_fstab_dir }}"
   ansible.builtin.template:
     src: fstab.j2
     dest: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"

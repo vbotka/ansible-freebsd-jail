@@ -3,13 +3,13 @@
 # Interfaces
 - name: "assert: Debug interfaces"
   ansible.builtin.debug:
-    msg: "{{ bsd_jail_jails|json_query('[].interface[].dev') }}"
+    msg: "{{ bsd_jail_jails|json_query('[].interface[].dev')|unique }}"
   when: bsd_jail_debug|bool
 
 - name: "assert: Check existence of interfaces"
   ansible.builtin.fail:
     msg: "ERROR: Interface {{ item }} does not exist. End of play."
-  loop: "{{ bsd_jail_jails|json_query('[].interface[].dev') }}"
+  loop: "{{ bsd_jail_jails|json_query('[].interface[].dev')|unique }}"
   when:
     - item not in ansible_interfaces
     - bsd_jail_assert_enable.interfaces

@@ -1,0 +1,32 @@
+---
+
+# The "object" in the following tasks is the configuration of one, or
+# more jails.
+
+- name: "vars: Debug bsd_jail_jails"
+  ansible.builtin.debug:
+    var: bsd_jail_jails
+  when: bsd_jail_debug|bool
+
+- name: "vars: Find object files in {{ bsd_jail_objects_dir }}"
+  ansible.builtin.find:
+    paths: "{{ bsd_jail_objects_dir }}"
+    patterns: "*.{{ bsd_jail_objects_dir_extension }}"
+  delegate_to: localhost
+  run_once: true
+  register: result
+
+- name: "vars: Debug list object files in {{ bsd_jail_objects_dir }}"
+  ansible.builtin.debug:
+    msg: "{{ result|json_query('files[].path') }}"
+  when: bsd_jail_debug|bool
+
+- name: "vars: Read configuration from object files"
+  ansible.builtin.include_tasks: fn/objects.yml
+  loop: "{{ result.skipped|default(false)|
+            ternary([], result|json_query('files[].path')) }}"
+
+- name: "vars: Debug bsd_jail_jails"
+  ansible.builtin.debug:
+    var: bsd_jail_jails
+  when: bsd_jail_debug|bool

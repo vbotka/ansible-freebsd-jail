@@ -5,12 +5,30 @@
     var: item
   when: bsd_jail_debug|bool
 
-# ezjail-admin create jailname or restore archive
 - name: "ezjail-jails:create: Create stamp dir {{ bsd_jail_stamp_dir }}"
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_jail_stamp_dir }}"
     mode: "0755"
+
+- name: "ezjail-jails:create: Stat {{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+  ansible.builtin.stat:
+    path: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+  register: jail_root
+
+- name: "ezjail-jails:create: Debug stat"
+  ansible.builtin.debug:
+    msg: |
+      jail_root.stat.exists: {{ jail_root.stat.exists }}
+      bsd_ezjail_admin_import_existing_root: {{ bsd_ezjail_admin_import_existing_root }}
+  when: bsd_jail_debug|bool
+
+- name: "ezjail-jails:create: Fail if jail root exists"
+  ansible.builtin.fail:
+    msg: "ERROR: Jail root {{ bsd_ezjail_jaildir }}/{{ item.jailname }} already exists. Import is not allowed."
+  when:
+    - jail_root.stat.exists
+    - not bsd_ezjail_admin_import_existing_root|bool
 
 - name: "ezjail-jails:create: Set command to restore jail from archive"
   ansible.builtin.set_fact:
@@ -23,6 +41,7 @@
   ansible.builtin.set_fact:
     local_command: >-
             ezjail-admin create
+            {% if jail_root.stat.exists %}-x {% endif %}
             -f {{ item.flavour }}
             -c {{ item.jailtype }}
             {{ item.jailname }}
@@ -39,7 +58,14 @@
 - name: "ezjail-jails:create: Create or Restore jail {{ item.jailname }}"
   ansible.builtin.command:
     cmd: "{{ local_command }}"
-    creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+    creates: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+#   creates: "/etc/fstab.{{ item.jailname }}"
+  register: result
+
+- name: "ezjail-jails:create: Debug result of ezjail-admin command"
+  ansible.builtin.debug:
+    var: result
+  when: bsd_jail_debug|bool
 
 # config ezjail/jailname
 - name: "ezjail-jails:create: Clear variable local_parameters"
