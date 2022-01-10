@@ -1,6 +1,6 @@
 # freebsd_jail
 
-[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)[![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-jail.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-jail)
+[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)[![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
@@ -397,8 +397,8 @@ See [contrib/jail-flavours/firstboot.sh](https://github.com/vbotka/ansible-freeb
 #!/bin/sh                                                                                     
 # Install packages                                                                            
 env ASSUME_ALWAYS_YES=YES pkg install security/sudo
-env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.30
-env ASSUME_ALWAYS_YES=YES pkg install lang/python37
+env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.32
+env ASSUME_ALWAYS_YES=YES pkg install lang/python38
 env ASSUME_ALWAYS_YES=YES pkg install security/py-openssl
 env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
 # Create user admin                                                                           
