@@ -1,6 +1,10 @@
 ---
 # tasks freebsd_jail
 
+- name: Import vars.yml
+  ansible.builtin.import_tasks: vars.yml
+  tags: [always, bsd_jail_vars]
+
 - name: Import debug.yml
   ansible.builtin.import_tasks: debug.yml
   when: bsd_jail_debug|bool

@@ -5,8 +5,8 @@ USERNAME="admin"
 
 # Install packages
 env ASSUME_ALWAYS_YES=YES pkg install security/sudo
-env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.30
-env ASSUME_ALWAYS_YES=YES pkg install lang/python37
+env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.32
+env ASSUME_ALWAYS_YES=YES pkg install lang/python38
 env ASSUME_ALWAYS_YES=YES pkg install security/py-openssl
 env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
 

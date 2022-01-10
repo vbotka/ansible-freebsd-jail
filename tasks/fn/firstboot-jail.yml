@@ -4,28 +4,66 @@
   ansible.builtin.set_fact:
     stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
 
-- name: "firstboot-jail: chown firstboot script in {{ item.jailname }}"
-  ansible.builtin.command:
-    cmd: >
-      /usr/sbin/jexec {{ item.jailname }} chown
-      {{ item.firstboot_owner|default('root') }}:{{ item.firstboot_group|default('wheel') }}
-      {{ item.firstboot }}
-    creates: "{{ stamp_file }}"
+- name: "firstboot-jail: Stat stamp file for {{ item.jailname }}"
+  ansible.builtin.stat:
+    path: "{{ stamp_file }}"
+  register: stamp_file_stat
 
-- name: "firstboot-jail: chmod firstboot script in {{ item.jailname }}"
-  ansible.builtin.command:
-    cmd: >
-      /usr/sbin/jexec {{ item.jailname }} chmod
-      {{ item.firstboot_mode|default('0755') }}
-      {{ item.firstboot }}
-    creates: "{{ stamp_file }}"
+- name: "firstboot-jail: Debug stat stamp file for {{ item.jailname }}"
+  ansible.builtin.debug:
+    msg: |
+      stamp_file_stat.stat.exists: {{ stamp_file_stat.stat.exists }}
+  when: bsd_jail_debug|bool
 
-- name: "firstboot-jail: jexec firstboot script in {{ item.jailname }}"
-  ansible.builtin.shell:
-    cmd: >
-      /usr/sbin/jexec {{ item.jailname }} {{ item.firstboot }} &&
-      touch {{ stamp_file }}
-    creates: "{{ stamp_file }}"
+- block:
+
+    - name: "firstboot-jail: chown firstboot script in {{ item.jailname }}"
+      ansible.builtin.command:
+        cmd: >
+          /usr/local/bin/ezjail-admin console -f -e
+          'chown
+          {{ item.firstboot_owner|default("root") }}:{{ item.firstboot_group|default("wheel") }}
+          {{ item.firstboot }}'
+          {{ item.jailname }}
+        creates: "{{ stamp_file }}"
+      register: result
+
+    - name: "firstboot-jail: Debug result chown firstboot {{ item.jailname }}"
+      ansible.builtin.debug:
+        var: result
+      when: bsd_jail_debug|bool
+
+    - name: "firstboot-jail: chmod firstboot script in {{ item.jailname }}"
+      ansible.builtin.command:
+        cmd: >
+          /usr/local/bin/ezjail-admin console -e
+          'chmod
+          {{ item.firstboot_mode|default("0755") }}
+          {{ item.firstboot }}'
+          {{ item.jailname }}
+        creates: "{{ stamp_file }}"
+      register: result
+
+    - name: "firstboot-jail: Debug result chmod firstboot {{ item.jailname }}"
+      ansible.builtin.debug:
+        var: result
+      when: bsd_jail_debug|bool
+
+    - name: "firstboot-jail: Execute firstboot script in {{ item.jailname }}"
+      ansible.builtin.shell:
+        cmd: >
+          /usr/local/bin/ezjail-admin console -e
+          {{ item.firstboot }} {{ item.jailname }} &&
+          touch {{ stamp_file }}
+        creates: "{{ stamp_file }}"
+      register: result
+
+    - name: "firstboot-jail: Debug result firstboot {{ item.jailname }}"
+      ansible.builtin.debug:
+        var: result
+      when: bsd_jail_debug|bool
+
+  when: not stamp_file_stat.stat.exists
 
 # EOF
 ...
