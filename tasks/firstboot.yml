@@ -14,7 +14,7 @@
   when:
     - bsd_jail_enable|bool
     - item.present|default(true)
-    - item.start
+    - item.start|default(true)
     - item.firstboot is defined
 
 # EOF

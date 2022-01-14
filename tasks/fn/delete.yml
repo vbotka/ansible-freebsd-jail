@@ -15,7 +15,7 @@
 
 - name: "ezjail-jails:delete: Stop jail {{ item.jailname }}"
   ansible.builtin.command:
-    cmd: "/etc/rc.d/jail start {{ item.jailname }}"
+    cmd: "/etc/rc.d/jail stop {{ item.jailname }}"
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
   when: bsd_jail_enable|bool
 

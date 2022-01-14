@@ -435,4 +435,4 @@ echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 
 ## Author Information
 
-[Vladimir Botka](https://botka.link)
+[Vladimir Botka](https://botka.info)
