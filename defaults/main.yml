@@ -91,8 +91,8 @@ bsd_ezjail_admin_command: install
 bsd_ezjail_admin_options: ""
 # bsd_ezjail_admin_restore: True; *restore* jail from archive if the
 # archive exists. False; *create* jail from scratch.
-bsd_ezjail_admin_restore: true
-bsd_ezjail_admin_import_existing_root: true
+bsd_ezjail_admin_restore: false
+bsd_ezjail_admin_restore_options: ""
 
 # List of the restored jails to be restarted by ezjail
 bsd_ezjail_restart_jails: []
@@ -106,6 +106,12 @@ bsd_jail_start: true
 
 # firstboot
 bsd_jail_firstboot: true
+
+# shutdown
+bsd_jail_shutdown: true
+
+# info
+bsd_jail_info: false
 
 # EOF
 ...
