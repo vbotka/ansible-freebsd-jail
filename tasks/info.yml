@@ -1,0 +1,28 @@
+---
+
+- name: "info: List jails"
+  ansible.builtin.command:
+    cmd: /usr/sbin/jls --libxo json
+  register: bsd_jail_jls_result
+  changed_when: false
+
+- name: "info: Set varaible bsd_jail_info"
+  ansible.builtin.set_fact:
+    bsd_jail_list: "{{ bsd_jail_jls_result.stdout }}"
+
+- name: "info: Set variable bsd_jail_id"
+  ansible.builtin.set_fact:
+    bsd_jail_id: "{{ bsd_jail_list['jail-information']['jail']|default([])|
+                     items2dict(key_name='hostname', value_name='jid') }}"
+
+- name: "info: Debug"
+  ansible.builtin.debug:
+    msg: |-
+      bsd_jail_list:
+        {{ bsd_jail_list|to_nice_yaml|indent(2) }}
+      bsd_jail_id:
+        {{ bsd_jail_id|to_nice_yaml|indent(2) }}
+  when: bsd_jail_debug|bool
+
+# EOF
+...
