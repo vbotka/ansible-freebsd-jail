@@ -1,20 +1,20 @@
 ---
 
-- name: "flavours: Create directories"
+- name: "ezjail-flavours: Create directories"
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/etc/rc.d"
     mode: "0755"
   loop: "{{ bsd_ezjail_flavours }}"
 
-- name: "flavours: Unarchive files"
+- name: "ezjail-flavours: Unarchive files"
   ansible.builtin.unarchive:
     src: "{{ item.archive }}"
     dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
   loop: "{{ bsd_ezjail_flavours }}"
   when: item.archive is defined
 
-- name: "flavours: Synchronize files"
+- name: "ezjail-flavours: Synchronize files"
   ansible.posix.synchronize:
     archive: false
     checksum: true

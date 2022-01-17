@@ -63,11 +63,13 @@
          bsd_ezjail_admin_options: {{ bsd_ezjail_admin_options }}
          bsd_ezjail_admin_force: {{ bsd_ezjail_admin_force }}
          bsd_ezjail_admin_restore: {{ bsd_ezjail_admin_restore }}
-         bsd_ezjail_admin_import_existing_root: {{ bsd_ezjail_admin_import_existing_root }}
+         bsd_ezjail_admin_restore_options: {{ bsd_ezjail_admin_restore_options }}
          bsd_ezjail_restart_jails:
            {{ bsd_ezjail_restart_jails|to_nice_yaml|indent(2) }}
          bsd_jail_start: {{ bsd_jail_start }}
          bsd_jail_firstboot: {{ bsd_jail_firstboot }}
+         bsd_jail_shutdown: {{ bsd_jail_shutdown }}
+         bsd_jail_info: {{ bsd_jail_info }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
 

@@ -8,7 +8,7 @@
 - name: Import debug.yml
   ansible.builtin.import_tasks: debug.yml
   when: bsd_jail_debug|bool
-  tags: [always, bsd_jail_debug]
+  tags: bsd_jail_debug
 
 - name: Include vbotka.freebsd_postinstall mount-iso
   ansible.builtin.include_role:
@@ -51,6 +51,11 @@
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_conf
 
+- name: Import info.yml
+  ansible.builtin.import_tasks: info.yml
+  when: bsd_ezjail|bool
+  tags: bsd_jail_ezjail_jails
+
 - name: Import ezjail-jails.yml
   ansible.builtin.import_tasks: ezjail-jails.yml
   when: bsd_ezjail|bool
@@ -78,6 +83,11 @@
   ansible.builtin.import_tasks: firstboot.yml
   when: bsd_jail_firstboot|bool
   tags: bsd_jail_firstboot
+
+- name: Import info.yml
+  ansible.builtin.import_tasks: info.yml
+  when: bsd_jail_info|bool
+  tags: bsd_jail_info
 
 # EOF
 ...

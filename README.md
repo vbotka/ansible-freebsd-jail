@@ -9,6 +9,12 @@ Feel free to [share your feedback and report issues](https://github.com/vbotka/a
 [Contributions are welcome](https://github.com/firstcontributions/first-contributions).
 
 
+## Synopsis
+
+This role uses *ezjail* to manage FreeBSD jails. In most cases it is more efficient to use
+*iocage*. See the Ansible module [iocage](https://github.com/vbotka/ansible-iocage).
+
+
 ## Supported platforms
 
 This role has been developed and tested with [FreeBSD Supported Production Releases](https://www.freebsd.org/releases/).
@@ -177,6 +183,7 @@ ZR  34   127.0.2.2       test_02                        /local/jails/test_02
 ## Archive jail
 
 ```
+shell> jexec 34 /etc/rc.shutdown
 shell> ezjail-admin stop test_02
 shell> ezjail-admin archive test_02
 shell> ll /export/archive/jails/ezjail_archives/
@@ -414,11 +421,38 @@ echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
 # EOF 
 ```
 
+## Known issues
+
+### 'Error: No archive for pattern __ can be found.'
+
+Restoration of a jail from an archive fails
+
+```
+TASK [vbotka.freebsd_jail : ezjail-jails:create: Debug ezjail-admin command] ***************************************
+ok: [srv.example.com] =>
+  local_command: ezjail-admin restore  test_13-202201162054.07.tar.gz && touch /var/db/jail-stamps/test_13-firstboot
+
+TASK [vbotka.freebsd_jail : ezjail-jails:create: Create or Restore jail test_13] ***********************************
+fatal: [srv.example.com]: FAILED! => changed=true
+  cmd:
+  - ezjail-admin
+  - restore
+  - test_13-202201162054.07.tar.gz
+  - '&&'
+  - touch
+  - /var/db/jail-stamps/test_13-firstboot
+  delta: '0:01:05.721641'
+  end: '2022-01-16 23:58:13.516263'
+  msg: non-zero return code
+  rc: 1
+  start: '2022-01-16 23:57:07.794622'
+  stderr: 'Error: No archive for pattern __ can be found.'
+```
 
 ## References
 
-- [FreeBSD Handbook - Chapter 14. Jails](https://www.freebsd.org/doc/handbook/jails.html)
-- [FreeBSD Handbook - 14.6. Managing Jails with ezjail](https://www.freebsd.org/doc/handbook/jails-ezjail.html)
+- [FreeBSD Handbook - Chapter 15. Jails](https://www.freebsd.org/doc/handbook/jails.html)
+- [FreeBSD Handbook - 15.6. Managing Jails with ezjail](https://www.freebsd.org/doc/handbook/jails-ezjail.html)
 - [erdgeist.org - ezjail - Jail administration framework](http://erdgeist.org/arts/software/ezjail/)
 - [FreeBSD man - jail - Manage system jails](https://www.freebsd.org/cgi/man.cgi?jail(8))
 - [FreeBSD Forums - Quick setup of jail on ZFS using ezjail with PF NAT](https://forums.freebsd.org/threads/howto-quick-setup-of-jail-on-zfs-using-ezjail-with-pf-nat.30063/)
