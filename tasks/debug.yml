@@ -59,9 +59,9 @@
          bsd_ezjail_jaildir: {{ bsd_ezjail_jaildir }}
          bsd_ezjail_flavours:
            {{ bsd_ezjail_flavours|to_nice_yaml|indent(2) }}
-         bsd_ezjail_admin_command: {{ bsd_ezjail_admin_command }}
-         bsd_ezjail_admin_options: {{ bsd_ezjail_admin_options }}
-         bsd_ezjail_admin_force: {{ bsd_ezjail_admin_force }}
+         bsd_ezjail_install_command: {{ bsd_ezjail_install_command }}
+         bsd_ezjail_install_options: {{ bsd_ezjail_install_options }}
+         bsd_ezjail_install_force: {{ bsd_ezjail_install_force }}
          bsd_ezjail_admin_restore: {{ bsd_ezjail_admin_restore }}
          bsd_ezjail_admin_restore_options: {{ bsd_ezjail_admin_restore_options }}
          bsd_ezjail_restart_jails:

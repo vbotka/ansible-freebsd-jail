@@ -40,6 +40,7 @@
       ansible.builtin.set_fact:
         local_command: >-
           ezjail-admin create
+          -r {{ bsd_ezjail_jaildir }}/{{ item.jailname }}
           -f {{ item.flavour }}
           -c {{ item.jailtype }}
           {{ item.jailname }}
@@ -56,7 +57,7 @@
     - name: "ezjail-jails:create: Create or Restore jail {{ item.jailname }}"
       ansible.builtin.command:
         cmd: "{{ local_command }}"
-        creates: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+        creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
       register: result
 
     - name: "ezjail-jails:create: Debug result of ezjail-admin command"

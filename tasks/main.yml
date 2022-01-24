@@ -14,6 +14,8 @@
   ansible.builtin.include_role:
     name: vbotka.freebsd_postinstall
     tasks_from: mount-iso.yml
+    apply:
+      tags: bsd_jail_mount_iso
   when: bsd_jail_mount_iso|bool
   tags: bsd_jail_mount_iso
 
@@ -41,15 +43,28 @@
   when: bsd_jail|bool
   tags: bsd_jail_jail_rcconf
 
-- name: Import ezjail-flavours.yml
-  ansible.builtin.import_tasks: ezjail-flavours.yml
-  when: bsd_ezjail|bool
-  tags: bsd_jail_flavours
-
 - name: Import ezjail-conf.yml
   ansible.builtin.import_tasks: ezjail-conf.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_conf
+
+- name: Import ezjail-rcconf.yml
+  ansible.builtin.import_tasks: ezjail-rcconf.yml
+  when: bsd_ezjail|bool
+  tags: bsd_jail_ezjail_rcconf
+
+- name: Meta flush_handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Import ezjail-install.yml
+  ansible.builtin.import_tasks: ezjail-install.yml
+  when: bsd_ezjail|bool
+  tags: bsd_jail_ezjail_install
+
+- name: Import ezjail-flavours.yml
+  ansible.builtin.import_tasks: ezjail-flavours.yml
+  when: bsd_ezjail|bool
+  tags: bsd_jail_ezjail_flavours
 
 - name: Import info.yml
   ansible.builtin.import_tasks: info.yml
@@ -60,19 +75,6 @@
   ansible.builtin.import_tasks: ezjail-jails.yml
   when: bsd_ezjail|bool
   tags: bsd_jail_ezjail_jails
-
-- name: Import ezjail-rcconf.yml
-  ansible.builtin.import_tasks: ezjail-rcconf.yml
-  when: bsd_ezjail|bool
-  tags: bsd_jail_ezjail_rcconf
-
-- name: Meta flush_handlers
-  ansible.builtin.meta: flush_handlers
-
-- name: Import ezjail-admin.yml
-  ansible.builtin.import_tasks: ezjail-admin.yml
-  when: bsd_ezjail|bool
-  tags: bsd_jail_ezjail_admin
 
 - name: Import start.yml
   ansible.builtin.import_tasks: start.yml
