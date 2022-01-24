@@ -9,10 +9,10 @@
         host.hostname = {{ '"' }}{{ item.jailname }}{{ '"' }};
         ip4.addr = {{ item.interface|map(attribute='ip4')|join(',') }};
 {% for conf in item.parameters %}
-	{{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+        {{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
 {% endfor %}
 {% for conf in item.jail_conf %}
-	{{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+        {{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
 {% endfor %}
 }
 {% endif %}

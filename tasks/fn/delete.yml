@@ -30,8 +30,11 @@
 - name: "ezjail-jails:delete: Delete jail {{ item.jailname }}"
   ansible.builtin.command:
     cmd: "ezjail-admin delete -wf {{ item.jailname }}"
-    removes: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
-#   removes: "/etc/fstab.{{ item.jailname }}"
+    removes: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+
+# TODO: make sure the files below are deleted
+# "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+# "/etc/fstab.{{ item.jailname }}"
 
 - name: "ezjail-jails:delete: Delete stamp {{ stamp_file }}"
   ansible.builtin.file:
