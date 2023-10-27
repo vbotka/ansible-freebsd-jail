@@ -21,7 +21,7 @@
         cmd: >
           /usr/local/bin/ezjail-admin console -f -e
           'chown
-          {{ item.firstboot_owner|default("root") }}:{{ item.firstboot_group|default("wheel") }}
+          {{ item.firstboot_owner|default('root') }}:{{ item.firstboot_group|default('wheel') }}
           {{ item.firstboot }}'
           {{ item.jailname }}
       register: result
@@ -36,7 +36,7 @@
         cmd: >
           /usr/local/bin/ezjail-admin console -e
           'chmod
-          {{ item.firstboot_mode|default("0755") }}
+          {{ item.firstboot_mode|default('0755') }}
           {{ item.firstboot }}'
           {{ item.jailname }}
       register: result

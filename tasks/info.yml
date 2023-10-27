@@ -19,9 +19,9 @@
   ansible.builtin.debug:
     msg: |-
       bsd_jail_list:
-        {{ bsd_jail_list|to_nice_yaml|indent(2) }}
+        {{ bsd_jail_list|to_nice_yaml(indent=2)|indent(2) }}
       bsd_jail_id:
-        {{ bsd_jail_id|to_nice_yaml|indent(2) }}
+        {{ bsd_jail_id|to_nice_yaml(indent=2)|indent(2) }}
   when: bsd_jail_debug|bool
 
 # EOF

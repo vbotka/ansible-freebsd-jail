@@ -7,7 +7,7 @@
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method|lower == "packages"
+  when: freebsd_install_method|lower == 'packages'
 
 - name: "packages: Install ports"
   community.general.portinstall:
@@ -18,7 +18,7 @@
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method|lower == "ports"
+  when: freebsd_install_method|lower == 'ports'
 
 - name: "packages: Install extra packages"
   community.general.pkgng:
@@ -27,7 +27,7 @@
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method|lower == "packages"
+  when: freebsd_install_method|lower == 'packages'
 
 - name: "packages: Install extra ports"
   community.general.portinstall:
@@ -38,7 +38,7 @@
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method|lower == "ports"
+  when: freebsd_install_method|lower == 'ports'
 
 # EOF
 ...

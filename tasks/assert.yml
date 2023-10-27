@@ -26,7 +26,7 @@
         msg: "ERROR: Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
       when: not result.stat.exists
   when:
-    - bsd_ezjail_use_zfs|upper != "YES"
+    - bsd_ezjail_use_zfs|upper != 'YES'
     - bsd_jail_assert_enable.jaildir
 
 # ZFS
@@ -42,7 +42,7 @@
         msg: "ERROR: Storage {{ bsd_ezjail_jailzfs }} does not exist. End of play."
       when: result.failed
   when:
-    - bsd_ezjail_use_zfs|upper == "YES"
+    - bsd_ezjail_use_zfs|upper == 'YES'
     - bsd_jail_assert_enable.zfs
 
 # TODO

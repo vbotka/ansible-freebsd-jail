@@ -1,18 +1,18 @@
 # {{ ansible_managed }}
 {% for conf in bsd_jail_jails_defaults %}
-{{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+{{ conf.key }} = "{{ conf.val|default('true') }}";
 {% endfor %}
 
 {% for item in bsd_jail_jails|sort(attribute='jailname') %}
 {% if item.present|default(true) %}
 {{ item.jailname }} {
-        host.hostname = {{ '"' }}{{ item.jailname }}{{ '"' }};
+        host.hostname = "{{ item.jailname }}";
         ip4.addr = {{ item.interface|map(attribute='ip4')|join(',') }};
 {% for conf in item.parameters %}
-        {{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+        {{ conf.key }} = "{{ conf.val|default('true') }}";
 {% endfor %}
 {% for conf in item.jail_conf %}
-        {{ conf.key }} = {{ '"' }}{{ conf.val|default('true') }}{{ '"' }};
+        {{ conf.key }} = "{{ conf.val|default('true') }}";
 {% endfor %}
 }
 {% endif %}
