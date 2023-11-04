@@ -5,7 +5,7 @@
 
 - name: "vars: Debug bsd_jail_jails"
   ansible.builtin.debug:
-    var: bsd_jail_jails
+    var: bsd_jail_jails|to_yaml
   when: bsd_jail_debug|bool
 
 - name: "vars: Find object files in {{ bsd_jail_objects_dir }}"
@@ -28,5 +28,5 @@
 
 - name: "vars: Debug bsd_jail_jails"
   ansible.builtin.debug:
-    var: bsd_jail_jails
+    var: bsd_jail_jails|to_yaml
   when: bsd_jail_debug|bool
