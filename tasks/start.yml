@@ -5,7 +5,7 @@
     - name: "start: Stop jails"
       ansible.builtin.command:
         cmd: "/usr/local/bin/ezjail-admin stop {{ item.jailname }}"
-        removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
+        removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}.id"
       loop: "{{ bsd_jail_jails }}"
       loop_control:
         label: "{{ item.jailname }}"
@@ -16,7 +16,7 @@
     - name: "start: Start jails"
       ansible.builtin.command:
         cmd: "/usr/local/bin/ezjail-admin start {{ item.jailname }}"
-        creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
+        creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}.id"
       loop: "{{ bsd_jail_jails }}"
       loop_control:
         label: "{{ item.jailname }}"

@@ -8,7 +8,7 @@
 
 - name: "assert: Check existence of interfaces"
   ansible.builtin.fail:
-    msg: "ERROR: Interface {{ item }} does not exist. End of play."
+    msg: "[ERR] Interface {{ item }} does not exist. End of play."
   loop: "{{ bsd_jail_jails|json_query('[].interface[].dev')|unique }}"
   when:
     - item not in ansible_interfaces
@@ -23,7 +23,7 @@
       register: result
     - name: "assert: Storage {{ bsd_ezjail_jaildir }} does not exist."
       ansible.builtin.fail:
-        msg: "ERROR: Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
+        msg: "[ERR] Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
       when: not result.stat.exists
   when:
     - bsd_ezjail_use_zfs|upper != 'YES'
@@ -39,7 +39,7 @@
       ignore_errors: true
     - name: "assert: Storage {{ bsd_ezjail_jailzfs }} does not exist."
       ansible.builtin.fail:
-        msg: "ERROR: Storage {{ bsd_ezjail_jailzfs }} does not exist. End of play."
+        msg: "[ERR] Storage {{ bsd_ezjail_jailzfs }} does not exist. End of play."
       when: result.failed
   when:
     - bsd_ezjail_use_zfs|upper == 'YES'

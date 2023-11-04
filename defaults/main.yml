@@ -8,13 +8,13 @@ bsd_jail_conf_backup: true
 bsd_jail_mount_iso: true
 
 # assert
-bsd_jail_assert: true
+bsd_jail_assert: true  # import tasks
 bsd_jail_assert_enable:
   interfaces: true
   jaildir: true
   zfs: true
 
-# install
+# Install packages (import tasks)
 bsd_jail_install: true
 bsd_jail_packages:
   - sysutils/ezjail
@@ -25,14 +25,19 @@ freebsd_install_retries: 10
 freebsd_install_delay: 5
 
 # jail
+# Configure /etc/rc.conf and /etc/jail.conf
 bsd_jail: true
+# Enable service jail
 bsd_jail_enable: true
+# Service jail
 bsd_jail_service: jail
+# File jail.conf
 bsd_jail_conf_path: /etc
 bsd_jail_conf_file: "{{ bsd_jail_conf_path }}/jail.conf"
 bsd_jail_conf_owner: root
 bsd_jail_conf_group: wheel
 bsd_jail_conf_mode: '0644'
+#
 bsd_jail_conf: []
 bsd_jail_id_dir: /var/run
 bsd_jail_stamp_dir: /var/db/jail-stamps
@@ -52,14 +57,20 @@ bsd_jail_objects_dir: "{{ role_path }}/files/jail-objects.d"
 bsd_jail_objects_dir_extension: conf
 
 # ezjail
+# Configure /etc/rc.conf and /usr/local/etc/ezjail.conf
+# Import: install, flavours, info, jails
 bsd_ezjail: true
+# Enable service ezjail
 bsd_ezjail_enable: true
+# Service ezjail
 bsd_ezjail_service: ezjail
+# File ezjail.conf
 bsd_ezjail_conf_path: /usr/local/etc
 bsd_ezjail_conf_file: "{{ bsd_ezjail_conf_path }}/ezjail.conf"
 bsd_ezjail_conf_owner: root
 bsd_ezjail_conf_group: wheel
 bsd_ezjail_conf_mode: '0644'
+#
 bsd_ezjail_conf:
   - 'ezjail_use_zfs="{{ bsd_ezjail_use_zfs }}"'
   - 'ezjail_use_zfs_for_jails="{{ bsd_ezjail_use_zfs_for_jails }}"'
