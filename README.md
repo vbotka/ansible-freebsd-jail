@@ -116,6 +116,17 @@ To remove a jail keep the entry in the variable, or in the file and set
     present: false
 ```
 
+## Portsnap cron (optional)
+
+See the chapter *The basejail* from the [ezjail – Jail administration
+framework](https://erdgeist.org/arts/software/ezjail/). The command
+*ezjail-admin install* may ask *portsnap* to (-p) fetch and extract a
+FreeBSD ports tree (see *man ezjail-admin*). This may take a while. You
+might want to speedup the excution of the role and fetch the ports tree by
+cron (see the *cron* command in *man portsnap*). Optionally, use the role
+[vbotka.ansible-freebsd-ports](https://github.com/vbotka/ansible-freebsd-ports/tree/master)
+to configure *portsnap cron*.
+
 
 ## Workflow
 
