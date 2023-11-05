@@ -2,7 +2,11 @@
 
 Create ezjail flavours. In ezjail, a set of files to copy, packages to
 install and scripts to execute is called "flavour". See the chapter
-Flavours in [ezjail](https://erdgeist.org/arts/software/ezjail/)
+Flavours in [ezjail](https://erdgeist.org/arts/software/ezjail/).
+
+To preserve the permissions and ownership create the flavours in
+FreeBSD. Put the flavors into archives if you want to use other system
+then FreeBSD in the Ansible controller.
 
 
 ## Directories
@@ -21,13 +25,16 @@ ansible
 │   └── admin
 │       └── .ssh
 │           └── authorized_keys
-└── root
-    └── firstboot.sh
+├── root
+│   └── firstboot.sh
+└── usr
+    └── local
+            └── etc
+                └── sudoers
 ```
 
 Fit the content to your needs. To speedup testing, take these files
-from a working jail. Make your life easier, test firstboot.sh in a
-working jail first.
+from a working jail and test firstboot.sh in a working jail too.
 
 
 ## Archives
@@ -44,17 +51,17 @@ etc/rc.conf
 etc/rc.d/ezjail.flavour.default
 ```
 
-and create the tar file. In FreeBSD, use gtar
+and create the tar file. Use gtar for compatibility with Linux
 
 ```yaml
 shell> cat ansible-tar.sh
 #!/bin/sh
 # FreeBSD
-# gtar -cpf ansible.tar -C ansible -T ansible-list.txt
-# gtar -tvf ansible.tar
+gtar -cpf ansible.tar -C ansible -T ansible-list.txt
+gtar -tvf ansible.tar
 # Linux
-tar -cpf ansible.tar -C ansible -T ansible-list.txt
-tar -tvf ansible.tar
+# tar -cpf ansible.tar -C ansible -T ansible-list.txt
+# tar -tvf ansible.tar
 ```
 
 
