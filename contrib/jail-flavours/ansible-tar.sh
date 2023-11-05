@@ -1,4 +1,9 @@
 #!/bin/sh
-cd /root
-gtar -cpf ansible.tar -T ansible-list.txt 
-gtar -tvf ansible.tar
+
+# FreeBSD
+# gtar -cpf ansible.tar -C ansible -T ansible-list.txt 
+# gtar -tvf ansible.tar
+
+# Linux
+tar -cpf ansible.tar -C ansible -T ansible-list.txt 
+tar -tvf ansible.tar

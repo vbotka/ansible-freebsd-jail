@@ -121,13 +121,27 @@ See
 playbook and template to create the YAML files with the descriptions
 of the jail objects.
 
+
+## Flavours
+
+See the chapter *Flavours* from the [ezjail – Jail administration
+framework](https://erdgeist.org/arts/software/ezjail/)
+
+> A set of files to copy, packages to install and scripts to execute
+   is called "flavour".
+
+See
+[contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/devel/contrib/jail-falvours)
+on how to create and configure ezjail flavours.
+
+
 ## Portsnap cron (optional)
 
 See the chapter *The basejail* from the [ezjail – Jail administration
 framework](https://erdgeist.org/arts/software/ezjail/). The command
 *ezjail-admin install* may ask *portsnap* to (-p) fetch and extract a
 FreeBSD ports tree (see *man ezjail-admin*). This may take a while. You
-might want to speedup the excution of the role and fetch the ports tree by
+might want to speedup the execution of the role and fetch the ports tree by
 cron (see the *cron* command in *man portsnap*). Optionally, use the role
 [vbotka.ansible-freebsd-ports](https://github.com/vbotka/ansible-freebsd-ports/tree/master)
 to configure *portsnap cron*.
@@ -205,7 +219,7 @@ shell> ansible-playbook jail.yml -t bsd_jail_ezjail_flavours -e bsd_ezjail=true
 Dry-run the play and show the changes
 
 ```bash
-shell> ansible-playbook jail.yml --check --dif
+shell> ansible-playbook jail.yml --check --diff
 ```
 
 Run the play

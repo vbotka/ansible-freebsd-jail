@@ -12,16 +12,21 @@
     src: "{{ item.archive }}"
     dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
   loop: "{{ bsd_ezjail_flavours }}"
+  register: result
   when: item.archive is defined
 
 - name: "ezjail-flavours: Synchronize files"
   ansible.posix.synchronize:
-    archive: false
-    checksum: true
     src: "{{ item.dir }}/"
-    dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
+    dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/"
   loop: "{{ bsd_ezjail_flavours }}"
+  register: result
   when: item.dir is defined
+
+- name: "ezjail-flavours: Debug result"
+  ansible.builtin.debug:
+    var: result
+  when: bsd_jail_debug|bool
 
 # EOF
 ...
