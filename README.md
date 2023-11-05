@@ -500,15 +500,15 @@ fatal: [srv.example.com]: FAILED! => changed=true
 
 ## References
 
-- [FreeBSD Handbook - Chapter 15. Jails](https://www.freebsd.org/doc/handbook/jails.html)
-- [FreeBSD Handbook - 15.6. Managing Jails with ezjail](https://www.freebsd.org/doc/handbook/jails-ezjail.html)
-- [erdgeist.org - ezjail - Jail administration framework](http://erdgeist.org/arts/software/ezjail/)
-- [FreeBSD man - jail - Manage system jails](https://www.freebsd.org/cgi/man.cgi?jail(8))
-- [FreeBSD Forums - Quick setup of jail on ZFS using ezjail with PF NAT](https://forums.freebsd.org/threads/howto-quick-setup-of-jail-on-zfs-using-ezjail-with-pf-nat.30063/)
-- [FreeBSD Forums - Trying to understand jail networking](https://forums.freebsd.org/threads/trying-to-understand-jail-networking.54046/)
-- [FreeBSD Forums - How to create a ZFS dataset within a jail?](https://forums.freebsd.org/threads/how-to-create-a-zfs-dataset-within-a-jail.62198/)
-- [FreeBSD Forums - Best practice: jails](https://forums.freebsd.org/threads/best-practice-jails.44596/)
-- [FreeNAS Forums - Can't get iocage jail to have internet connectivity(ping: ssend socket: Operation not permitted)](https://forums.freenas.org/index.php?threads/cant-get-iocage-jail-to-have-internet-connectivity.62905/)
+- [Jails - FreeBSD Handbook](https://www.freebsd.org/doc/handbook/jails.html)
+- [ezjail Jail administration framework - erdgeist.org](http://erdgeist.org/arts/software/ezjail/)
+- [jail - FreeBSD man](https://www.freebsd.org/cgi/man.cgi?jail(8))
+- [Quick setup of jail on ZFS using ezjail with PF NAT - FreeBSD Forums](https://forums.freebsd.org/threads/howto-quick-setup-of-jail-on-zfs-using-ezjail-with-pf-nat.30063/)
+- [Trying to understand jail networking - FreeBSD Forums](https://forums.freebsd.org/threads/trying-to-understand-jail-networking.54046/)
+- [How to create a ZFS dataset within a jail? - FreeBSD Forums](https://forums.freebsd.org/threads/how-to-create-a-zfs-dataset-within-a-jail.62198/)
+- [Best practice: jails - FreeBSD Forums](https://forums.freebsd.org/threads/best-practice-jails.44596/)
+- [Can't get iocage jail to have internet connectivity - FreeNAS Forums](https://forums.freenas.org/index.php?threads/cant-get-iocage-jail-to-have-internet-connectivity.62905/)
+- [FreeBSD Mastery: Jails, Michael W. Lucas](https://mwl.io/nonfiction/os#fmjail)
 
 
 ## License
