@@ -1,0 +1,31 @@
+# Jail objects
+
+The playbook *Makefile.yml* creates descriprions of jail objects.
+
+## Template
+
+See the default template *jail.yml.j2*
+
+## Variables
+
+Edit *Makefile.yml* and fit the variables to your needs.
+
+## Validate the content
+
+Run the playbook and review the variables
+
+```
+shell> ansible-playbook Makefile.yml -e debug1=true
+```
+
+Run the playbook and review the variables
+
+```
+shell> ansible-playbook Makefile.yml -e debug2=true
+```
+
+## Create the configuration files
+
+```
+shell> ansible-playbook Makefile.yml -e create_obj=true
+```
