@@ -7,7 +7,7 @@ Flavours in [ezjail](https://erdgeist.org/arts/software/ezjail/)
 
 ## Directories
 
-Create a directory with the "flavours". For example, ansible
+Create a directory with the flavour. For example,
 
 ```bash
 shell> tree -a ansible
@@ -25,9 +25,9 @@ ansible
     └── firstboot.sh
 ```
 
-Fit the content to your needs to your needs. To speedup testing, take
-these files from a working jail. Make your life easier, test
-firstboot.sh in a working jail first.
+Fit the content to your needs. To speedup testing, take these files
+from a working jail. Make your life easier, test firstboot.sh in a
+working jail first.
 
 
 ## Archives
@@ -60,7 +60,7 @@ tar -tvf ansible.tar
 
 ## Variable bsd_ezjail_flavours
 
-Either use the directories,
+Either use directories,
 
 ```yaml
 bsd_ezjail_flavours:
@@ -68,7 +68,7 @@ bsd_ezjail_flavours:
     dir: "{{ playbook_dir }}/jails/flavours/ansible"
 ```
 
-, or the archive
+, or archives
 
 
 ```yaml
