@@ -110,17 +110,17 @@ bsd_ezjail_admin_restore_options: ''
 # List of the restored jails to be restarted by ezjail
 bsd_ezjail_restart_jails: []
 
-# misc
+# Misc default
 command_result:
   failed: false
 
-# start
+# Start or stop jail by ezjail-admin star or stop
 bsd_jail_start: true
 
-# firstboot
+# Execute firstboot script by ezjail-admin console -e
 bsd_jail_firstboot: true
 
-# shutdown
+# Set executable /etc/rc.shutdown
 bsd_jail_shutdown: true
 
 # info
