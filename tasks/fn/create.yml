@@ -2,7 +2,7 @@
 
 - name: "ezjail-jails:create: Debug {{ item.jailname }}"
   ansible.builtin.debug:
-    var: item
+    var: item|to_yaml
   when: bsd_jail_debug|bool
 
 - name: "ezjail-jails:create: Create stamp dir {{ bsd_jail_stamp_dir }}"
