@@ -131,7 +131,7 @@ framework](https://erdgeist.org/arts/software/ezjail/)
    is called "flavour".
 
 See
-[contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/devel/contrib/jail-falvours)
+[contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/devel/contrib/jail-flavours)
 on how to create and configure ezjail flavours.
 
 
