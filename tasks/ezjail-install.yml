@@ -2,8 +2,7 @@
 
 - name: "ezjail-install: Set ezjail-admin install command"
   ansible.builtin.set_fact:
-    install_command: "ezjail-admin {{ bsd_ezjail_install_command }}
-                                 {{ bsd_ezjail_install_options }}"
+    install_command: "ezjail-admin {{ bsd_ezjail_install_command }} {{ bsd_ezjail_install_options }}"
 
 - name: "ezjail-install: Debug. ezjail-admin install command"
   ansible.builtin.debug:
