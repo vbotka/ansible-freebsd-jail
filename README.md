@@ -116,6 +116,11 @@ To remove a jail keep the entry in the variable, or in the file and set
     present: false
 ```
 
+See
+[contrib/jail-objects](https://github.com/vbotka/ansible-freebsd-jail/tree/devel/contrib/jail-objects)
+playbook and template to create the YAML files with the descriptions
+of the jail objects.
+
 ## Portsnap cron (optional)
 
 See the chapter *The basejail* from the [ezjail – Jail administration
