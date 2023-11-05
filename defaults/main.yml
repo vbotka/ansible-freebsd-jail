@@ -52,6 +52,8 @@ bsd_jail_jails_defaults:
   - {key: mount.devfs}
   - {key: mount.fdescfs}
   - {key: mount.procfs}
+# See contrib/jail-objects on how to create jail objects
+# See tasks/vars.yml on how the list bsd_jail_jails is created
 bsd_jail_jails: []
 bsd_jail_objects_dir: "{{ role_path }}/files/jail-objects.d"
 bsd_jail_objects_dir_extension: conf
@@ -86,6 +88,7 @@ bsd_ezjail_use_zfs_for_jails: 'NO'
 # - existence will be checked
 bsd_ezjail_jailzfs: zroot/jails
 bsd_ezjail_jaildir: /local/jails     # $jailroot
+# See contrib/jail-flavours
 bsd_ezjail_flavours: []
 
 # ezjail-admin install
