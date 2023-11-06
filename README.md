@@ -64,7 +64,7 @@ bsd_jail_jails:
     flavour: ansible
     interface:
       - {dev: lo1, ip4: 127.0.2.1}
-      - {dev: wlan0, ip4: 10.1.0.51}
+      - {dev: em0, ip4: 10.1.0.51}
     parameters:
       - {key: allow.raw_sockets, val: "true"}
       - {key: allow.set_hostname, val: "true"}
@@ -80,7 +80,7 @@ bsd_jail_jails:
 ,or in the files stored in the directory *bsd_jail_objects_dir*
 
 ```yaml
-bsd_jail_objects_dir: "{{ playbook_dir }}/jail-objects.d"
+bsd_jail_objects_dir: "{{ playbook_dir }}/jails/jail.d"
 ```
 
 See the example of the configuration file below
@@ -96,7 +96,7 @@ objects:
     flavour: ansible
     interface:
       - {dev: lo1, ip4: 127.0.2.2}
-      - {dev: wlan0, ip4: 10.1.0.52}
+      - {dev: em0, ip4: 10.1.0.52}
     parameters:
       - {key: allow.raw_sockets, val: "true"}
       - {key: allow.set_hostname, val: "true"}
@@ -112,8 +112,11 @@ objects:
 To remove a jail keep the entry in the variable, or in the file and set
 
 ```yaml
+objects:
+  - jailname: test_02
     start: false
     present: false
+    ...
 ```
 
 See
@@ -125,7 +128,7 @@ of the jail objects.
 ## Flavours
 
 See the chapter *Flavours* from the [ezjail – Jail administration
-framework](https://erdgeist.org/arts/software/ezjail/)
+framework](https://erdgeist.org/arts/software/ezjail/). Quoting:
 
 > A set of files to copy, packages to install and scripts to execute
    is called "flavour".
@@ -152,7 +155,7 @@ to configure *portsnap cron*.
 1) Change shell to /bin/sh
 
 ```bash
-shell> ansible server -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
+shell> ansible server -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod admin -s /bin/sh'
 ```
 
 2) Install roles
@@ -228,7 +231,24 @@ Run the play
 shell> ansible-playbook jail.yml
 ```
 
-6) Test the connection
+6) Create inventory and test the connection
+
+```yaml
+shell> cat hosts
+[test]
+test_01
+test_02
+test_03
+
+[test:vars]
+ansible_connection=ssh
+ansible_user=admin
+ansible_become=yes
+ansible_become_user=root
+ansible_become_method=sudo
+ansible_python_interpreter=/usr/local/bin/python3.8
+ansible_perl_interpreter=/usr/local/bin/perl
+```
 
 ```yaml
 shell> ansible test_01 -m setup | grep ansible_distribution_release
@@ -242,23 +262,26 @@ shell> ansible test_01 -m setup | grep ansible_distribution_release
 shell> ezjail-admin list
 STA JID  IP              Hostname                       Root Directory
 --- ---- --------------- ------------------------------ ------------------------
-ZR  34   127.0.2.2       test_02                        /local/jails/test_02
-    34   wlan0|10.1.0.52
-
+ZR  13   127.0.2.3       test_03                        /local/jails/test_03
+    13   em0|10.1.0.53
+ZR  12   127.0.2.2       test_02                        /local/jails/test_02
+    12   em0|10.1.0.52
+ZR  11   127.0.2.1       test_01                        /local/jails/test_01
+    11   em0|10.1.0.51
 ```
 
 
 ## Archive jail
 
 ```bash
-shell> jexec 34 /etc/rc.shutdown
-shell> ezjail-admin stop test_02
-shell> ezjail-admin archive test_02
-shell> ll /export/archive/jails/ezjail_archives/
-total 224008
-drwxr-x---  2 root  wheel        512 Mar  4 17:05 ./
-drwxr-x---  3 root  wheel        512 Mar  4 11:41 ../
--rw-r--r--  1 root  wheel  114663346 Mar  4 17:05 test_02-201903041704.59.tar.gz
+shell> jexec 11 /etc/rc.shutdown
+shell> ezjail-admin stop test_01
+  ...
+shell> ezjail-admin archive -A
+shell> ls -1 /export/archive/jails/ezjail_archives/
+test_01-202311060342.38.tar.gz
+test_02-202311060342.18.tar.gz
+test_03-202311060341.58.tar.gz
 ```
 
 
