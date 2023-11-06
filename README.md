@@ -64,23 +64,23 @@ Parameters of the jails are configured in the the variable *bsd_jail_jails*
 ```yaml
 bsd_jail_jails:
   - jailname: test_01
-    present: true                  # optional (default=true)
-    start: true                    # optional (default=true)
+    present: true                               # default=true
+    start: true                                 # default=true
     jailtype: zfs
-    flavour: ansible               # optional
+    flavour: ansible                            # optional
     interface:
       - {dev: lo1, ip4: 127.0.2.1}
       - {dev: em0, ip4: 10.1.0.51}
-    parameters:
+    parameters:                                 # default([])
       - {key: allow.raw_sockets, val: "true"}
       - {key: allow.set_hostname, val: "true"}
-    jail_conf:
+    jail_conf:                                  # default([])
       - {key: mount.devfs}
-    ezjail_conf: []
-    firstboot: /root/firstboot.sh  # optional
-    firstboot_owner: root          # optional (default=root)
-    firstboot_group: wheel         # optional (default=wheel)
-    firstboot_mode: '0750'         # optional (default='0755')
+    ezjail_conf: []                             # default([])
+    firstboot: /root/firstboot.sh               # optional
+    firstboot_owner: root                       # default=root
+    firstboot_group: wheel                      # default=wheel
+    firstboot_mode: '0750'                      # default='0755'
 ```
 
 ,or in the files stored in the directory *bsd_jail_objects_dir*
