@@ -31,7 +31,7 @@ bsd_jail: true
 bsd_jail_enable: true
 # Service jail
 bsd_jail_service: jail
-# File jail.conf
+# /etc/jail.conf
 bsd_jail_conf_path: /etc
 bsd_jail_conf_file: "{{ bsd_jail_conf_path }}/jail.conf"
 bsd_jail_conf_owner: root
@@ -52,6 +52,10 @@ bsd_jail_jails_defaults:
   - {key: mount.devfs}
   - {key: mount.fdescfs}
   - {key: mount.procfs}
+# /etc/jail.conf.d
+# Configure jails in jail.conf.d instead of jail.conf
+bsd_jail_confd: false
+bsd_jail_confd_dir: "{{ bsd_jail_conf_path }}/jail.conf.d"
 # See contrib/jail-objects on how to create jail objects
 # See tasks/vars.yml on how the list bsd_jail_jails is created
 bsd_jail_jails: []

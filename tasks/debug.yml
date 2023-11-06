@@ -43,6 +43,8 @@
          bsd_jail_objects_dir_extension: {{ bsd_jail_objects_dir_extension }}
          bsd_jail_jails_defaults:
            {{ bsd_jail_jails_defaults|to_yaml(indent=2)|indent(2) }}
+         bsd_jail_confd: {{ bsd_jail_confd }}
+         bsd_jail_confd_dir: {{ bsd_jail_confd_dir }}
          bsd_jail_jails:
            {{ bsd_jail_jails|to_yaml(indent=2)|indent(2) }}
          bsd_ezjail: {{ bsd_ezjail }}
