@@ -24,12 +24,15 @@
   loop: "{{ bsd_ezjail_flavours }}"
   register: result
   when: item.dir is defined
+  tags: bsd_jail_ezjail_flavours_dir
 
 - name: "ezjail-flavours: Debug result"
   ansible.builtin.debug:
     var: result
   when: bsd_jail_debug|bool
-  tags: bsd_jail_ezjail_flavours_dir
+  tags:
+    - bsd_jail_ezjail_flavours_archive
+    - bsd_jail_ezjail_flavours_dir
 
 # EOF
 ...
