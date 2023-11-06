@@ -19,6 +19,7 @@ This role uses *ezjail* to manage FreeBSD jails. In most cases it is more effici
 
 This role has been developed and tested with [FreeBSD Supported Production Releases](https://www.freebsd.org/releases/).
 
+
 This may be different from the platforms in Ansible Galaxy which does not offer all released
 versions in time and would report an error. For example: `IMPORTER101: Invalid platform:
 "FreeBSD-11.3", skipping.`
@@ -35,10 +36,10 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 - ansible.posix
 - community.general
 
+
 ### Other
 
-- Preconfigured network, firewall and NAT is required.
-- ZFS is recommended.
+- Preconfigured network, ZFS, firewall and NAT is required
 
 
 ### Recommended
@@ -47,6 +48,11 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 - Configure PF firewall [vbotka.freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
 - Configure ZFS [vbotka.freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs/)
 - Configure Poudriere [vbotka.freebsd_poudriere](https://galaxy.ansible.com/vbotka/freebsd_poudriere/)
+
+
+## Jail type
+
+The role is tested with jailtype zfs only.
 
 
 ## Variables
@@ -58,10 +64,10 @@ Parameters of the jails are configured in the the variable *bsd_jail_jails*
 ```yaml
 bsd_jail_jails:
   - jailname: test_01
-    present: true
-    start: true
+    present: true        # optional (default=true)
+    start: true          # optional (default=true)
     jailtype: zfs
-    flavour: ansible
+    flavour: ansible     # optional
     interface:
       - {dev: lo1, ip4: 127.0.2.1}
       - {dev: em0, ip4: 10.1.0.51}

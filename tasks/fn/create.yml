@@ -41,7 +41,9 @@
         local_command: >-
           ezjail-admin create
           -r {{ bsd_ezjail_jaildir }}/{{ item.jailname }}
+          {% if item.flavour is defined %}
           -f {{ item.flavour }}
+          {% endif %}
           -c {{ item.jailtype }}
           {{ item.jailname }}
           '{% for ifc in item.interface %}{{
