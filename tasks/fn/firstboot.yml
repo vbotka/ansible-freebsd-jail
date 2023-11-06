@@ -19,8 +19,10 @@
     - name: "firstboot: chown firstboot script in {{ item.jailname }}"
       ansible.builtin.command:
         cmd: >
-          /usr/local/bin/ezjail-admin console -f -e
-          'chown
+          /usr/local/bin/ezjail-admin
+          console
+          -f
+          -e 'chown
           {{ item.firstboot_owner|default('root') }}:{{ item.firstboot_group|default('wheel') }}
           {{ item.firstboot }}'
           {{ item.jailname }}
@@ -34,8 +36,9 @@
     - name: "firstboot: chmod firstboot script in {{ item.jailname }}"
       ansible.builtin.command:
         cmd: >
-          /usr/local/bin/ezjail-admin console -e
-          'chmod
+          /usr/local/bin/ezjail-admin
+          console
+          -e 'chmod
           {{ item.firstboot_mode|default('0755') }}
           {{ item.firstboot }}'
           {{ item.jailname }}
@@ -49,9 +52,10 @@
     - name: "firstboot: Execute firstboot script in {{ item.jailname }}"
       ansible.builtin.shell:
         cmd: >
-          /usr/local/bin/ezjail-admin console -e
-          {{ item.firstboot }} {{ item.jailname }} &&
-          touch {{ stamp_file }}
+          /usr/local/bin/ezjail-admin
+          console
+          -e {{ item.firstboot }} {{ item.jailname }} &&
+          /usr/bin/touch {{ stamp_file }}
       register: result
 
     - name: "firstboot: Debug result firstboot {{ item.jailname }}"
