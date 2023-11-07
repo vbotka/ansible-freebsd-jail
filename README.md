@@ -36,13 +36,12 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 - ansible.posix
 - community.general
 
-
 ### Other
 
-- Preconfigured network, ZFS, firewall and NAT is required
+- Preconfigured network, ZFS, firewall and NAT is required.
 
 
-### Recommended
+## Recommended roles
 
 - Configure Network [vbotka.freebsd_network](https://galaxy.ansible.com/vbotka/freebsd_network/)
 - Configure PF firewall [vbotka.freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
@@ -52,7 +51,7 @@ versions in time and would report an error. For example: `IMPORTER101: Invalid p
 
 ## Jail type
 
-The role is tested with jailtype zfs only.
+This role is tested with jailtype zfs only.
 
 
 ## Variables
@@ -83,7 +82,8 @@ bsd_jail_jails:
     firstboot_mode: '0750'                      # default='0755'
 ```
 
-,or in the files stored in the directory *bsd_jail_objects_dir*
+,or in the files stored in the directory *bsd_jail_objects_dir*. For
+example,
 
 ```yaml
 bsd_jail_objects_dir: "{{ playbook_dir }}/jails/jail.d"
@@ -92,7 +92,7 @@ bsd_jail_objects_dir: "{{ playbook_dir }}/jails/jail.d"
 See the example of the configuration file below
 
 ```yaml
-shell> cat test-02.conf
+shell> cat test_02.yml
 ---
 objects:
   - jailname: test_02
@@ -127,8 +127,7 @@ objects:
 
 See
 [contrib/jail-objects](https://github.com/vbotka/ansible-freebsd-jail/tree/devel/contrib/jail-objects)
-playbook and template to create the YAML files with the descriptions
-of the jail objects.
+playbook and template to create the YAML files with the jail objects.
 
 
 ## Flavours
@@ -181,7 +180,6 @@ shell> editor vbotka.freebsd_jail/vars/main.yml
 
 ```yaml
 shell> cat jail.yml
-
 - hosts: server
   roles:
     - vbotka.freebsd_jail
@@ -190,8 +188,8 @@ shell> cat jail.yml
 ```ini
 # cat hosts
 [server]
-<SERVER1-IP-OR-FQDN>
-<SERVER2-IP-OR-FQDN>
+<server1_ip-or-fqdn>
+<server2_ip-or-fqdn>
 [server:vars]
 ansible_connection=ssh
 ansible_user=admin
@@ -237,9 +235,9 @@ Run the play
 shell> ansible-playbook jail.yml
 ```
 
-6) Create inventory and test the connection
+6) Create inventory and test the connection to the jails
 
-```yaml
+```ini
 shell> cat hosts
 [test]
 test_01
@@ -256,7 +254,7 @@ ansible_python_interpreter=/usr/local/bin/python3.8
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
-```yaml
+```bash
 shell> ansible test_01 -m setup | grep ansible_distribution_release
         "ansible_distribution_release": "13.2-RELEASE",
 ```
@@ -291,75 +289,121 @@ test_03-202311060341.58.tar.gz
 ```
 
 
-## Delete jail
+## Stop and delete jail
 
 ```bash
+shell> jexec 12 /etc/rc.shutdown
+ Stopping sshd.
+ Waiting for PIDS: 6759.
+ Stopping cron.
+ Waiting for PIDS: 6769.
+ .
+ Terminated
+ ```
+ ```bash
 shell> ezjail-admin delete -wf test_02
+Stopping jails:/etc/rc.d/jail: WARNING: /var/run/jail.test_02.conf is created and used for jail test_02.
+ test_02.
 ```
-
+```bash
+# ezjail-admin list
+STA JID  IP              Hostname                       Root Directory
+--- ---- --------------- ------------------------------ ------------------------
+ZR  13   127.0.2.3       test_03                        /local/jails/test_03
+    13   em0|10.1.0.53
+ZR  11   127.0.2.1       test_01                        /local/jails/test_01
+    11   em0|10.1.0.51
+```
 
 ## Restore and Start jail
 
 ```bash
-shell> ezjail-admin restore test_02-201903041704.59.tar.gz
+shell> ezjail-admin restore test_02-202311060342.18.tar.gz
+```
+```bash
+shell> ezjail-admin start test_02
+```
+```
 shell> ezjail-admin list
 STA JID  IP              Hostname                       Root Directory
 --- ---- --------------- ------------------------------ ------------------------
-ZS  N/A  127.0.2.2       test_02                        /local/jails/test_02
-    N/A  wlan0|10.1.0.52
-# ezjail-admin start test_02
-# ezjail-admin list
-STA JID  IP              Hostname                       Root Directory
---- ---- --------------- ------------------------------ ------------------------
-ZR  35   127.0.2.2       test_02                        /local/jails/test_02
-    35   wlan0|10.1.0.52
+ZR  13   127.0.2.3       test_03                        /local/jails/test_03
+    13   em0|10.1.0.53
+ZR  14   127.0.2.2       test_02                        /local/jails/test_02
+    14   em0|10.1.0.52
+ZR  11   127.0.2.1       test_01                        /local/jails/test_01
+    11   em0|10.1.0.51
 ```
 
 
-## Restore and Start jail with Ansible
+## Restore a jail with Ansible
 
-If the jail does not exist the jail is restored by default from the archive if the parameter archive is defined.
-
-```yaml
-bsd_ezjail_admin_restore: true
-```
-
-To restore a jail from an archive set the parameter *archive* to the filename of the archive. For example
+Set the attribute *archive*. For example,
 
 ```yaml
-shell> cat test-02.conf
+shell> cat test_02.conf
 ---
 objects:
   - jailname: test_02
     present: true
     start: true
-    archive: test_02-201903041704.59.tar.gz
+    archive: test_02-202311060342.18.tar.gz
     jailtype: zfs
     flavour: ansible
     interface:
       - {dev: lo1, ip4: 127.0.2.2}
-      - {dev: wlan0, ip4: 10.1.0.52}
+      - {dev: em0, ip4: 10.1.0.52}
     parameters:
       - {key: allow.raw_sockets, val: "true"}
+      - {key: allow.set_hostname, val: "true"}
     jail_conf:
       - {key: mount.devfs}
     ezjail_conf: []
     firstboot: /root/firstboot.sh
+    firstboot_owner: root
+    firstboot_group: wheel
+    firstboot_mode: '0750'
 ```
 
-If the jail is restored from the archive a *jail-stamp* is created. This prevents the script in the
-parameter *firstboot* to run. For example,
+If the jail does not exist it will be restored from the archive if the
+parameter *bsd_ezjail_admin_restore* is set *true*
+(*default=false*). Speedup the play by selecting the tag
+*bsd_jail_ezjail_jails*
 
 ```bash
-/var/db/jail-stamps/test_02-firstboot
+ansible-playbook jail.yml -e bsd_ezjail_admin_restore=true -t bsd_jail_ezjail_jails
 ```
 
-If the restoration is disabled, or the parameter *archive* is not defined new jail is created if it
-does not exist yet.
+If the jail is restored from the archive a *jail-stamp* is
+created. This prevents the play from running the script in the
+attribute *firstboot*. See the stamps
 
-```yaml
-bsd_ezjail_admin_restore: false
+```bash
+shell> ls -1 /var/db/jail-stamps/
+test_01-firstboot
+test_02-firstboot
+test_03-firstboot
 ```
+
+Start the jail
+
+```bash
+shell> ezjail-admin start test_02
+```
+```bash
+# ezjail-admin list
+STA JID  IP              Hostname                       Root Directory
+--- ---- --------------- ------------------------------ ------------------------
+ZR  13   127.0.2.3       test_03                        /local/jails/test_03
+    13   em0|10.1.0.53
+ZR  17   127.0.2.2       test_02                        /local/jails/test_02
+    17   em0|10.1.0.52
+ZR  11   127.0.2.1       test_01                        /local/jails/test_01
+    11   em0|10.1.0.51
+```
+
+If the restoration is disabled or the attribute *archive* is not
+defined new jail will be created.
 
 
 ## my-jail-admin.sh
@@ -370,6 +414,8 @@ configured and archived it's easier to use
 [my-jail-admin.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/bin/my-jail-admin.sh)
 to delete and restore the jail. my-jail-admin.sh is not installed by default and should be manually
 copied if needed.
+
+### Examples
 
 ```bash
 shell> my-jail-admin.sh delete test_01
@@ -396,27 +442,35 @@ Starting jails: test_01.
 
 ## Example 1. Variables of recommended roles
 
-[freebsd_network](https://galaxy.ansible.com/vbotka/freebsd_network)
+* [freebsd_network](https://galaxy.ansible.com/vbotka/freebsd_network)
 
 ```yaml
-fn_cloned_interfaces:
-  - interface: lo1
-    options: []
+fn_gateway_enable: true
+fn_defaultrouter: 10.1.0.10
+
+fn_interfaces:
+  - {interface: em0, options: "inet 10.1.0.75 netmask 255.255.255.0"}
+
 fn_aliases:
-  - interface: wlan0
+  - interface: em0
     aliases:
-      - {alias: alias1, options: "inet 10.1.0.51  netmask 255.255.255.255", state: present}
-      - {alias: alias2, options: "inet 10.1.0.52  netmask 255.255.255.255"}
+      - {alias: alias1, options: "inet 10.1.0.51 netmask 255.255.255.255"}
+      - {alias: alias2, options: "inet 10.1.0.52 netmask 255.255.255.255"}
+      - {alias: alias3, options: "inet 10.1.0.53 netmask 255.255.255.255"}
+
+fn_cloned_interfaces:
+  - {interface: lo1, state: present}
 ```
 
-[freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs)
+* [freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs)
 
 ```yaml
+fzfs_enable: true
 fzfs_manage:
   - name: zroot/jails
     state: present
     extra_zfs_properties:
-      compression: on
+      compression: 'on'
       mountpoint: /local/jails
 fzfs_mountpoints:
   - mountpoint: /local/jails
@@ -425,7 +479,7 @@ fzfs_mountpoints:
     mode: "0700"
 ```
 
-[freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
+* [freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
 
 ```yaml
 pf_rules_nat:
@@ -435,26 +489,26 @@ pf_rules_rdr:
   - rdr pass on $ext_if proto tcp from any to 10.1.0.52 port { 80 443 } -> 127.0.2.2
 ```
 
-[freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
+* [freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
 
 ```yaml
 fp_sysctl:
-  - {name: "net.inet.ip.forwarding", value: "1"}
-  - {name: "security.jail.set_hostname_allowed", value: "1"}
-  - {name: "security.jail.socket_unixiproute_only", value: "1"}
-  - {name: "security.jail.sysvipc_allowed", value: "0"}
-  - {name: "security.jail.allow_raw_sockets", value: "0"}
-  - {name: "security.jail.chflags_allowed", value: "0"}
-  - {name: "security.jail.jailed", value: "0"}
-  - {name: "security.jail.enforce_statfs", value: "2"}
+  - {name: net.inet.ip.forwarding, value: '1'}
+  - {name: security.jail.set_hostname_allowed, value: '1'}
+  - {name: security.jail.socket_unixiproute_only, value: '1'}
+  - {name: security.jail.sysvipc_allowed, value: '0'}
+  - {name: security.jail.allow_raw_sockets, value: '0'}
+  - {name: security.jail.chflags_allowed, value: '0'}
+  - {name: security.jail.jailed, value: '0'}
+  - {name: security.jail.enforce_statfs, value: '2'}
 ```
 
 To manage ZFS inside the jail add the following states
 
 ```yaml
-  - {name: "security.jail.mount_allowed", value: "1"}
-  - {name: "security.jail.mount_devfs_allowed", value: "1"}
-  - {name: "security.jail.mount_zfs_allowed", value: "1"}
+  - {name: security.jail.mount_allowed, value: '1'}
+  - {name: security.jail.mount_devfs_allowed, value: '1'}
+  - {name: security.jail.mount_zfs_allowed, value: '1'}
 ```
 
 
@@ -464,12 +518,12 @@ See [contrib/jail-flavours](https://github.com/vbotka/ansible-freebsd-jail/tree/
 
 ```bash
 shell> tar tvf ansible.tar 
--rwxr-xr-x root/wheel      274 2019-02-27 16:06 root/firstboot.sh
--rw-r--r-- root/wheel       39 2019-02-17 08:47 etc/resolv.conf
--rwxr-xr-x root/wheel     1821 2019-02-17 08:47 etc/rc.d/ezjail.flavour.default
--rw------- admin/admin     738 2019-03-10 21:04 home/admin/.ssh/authorized_keys
--r--r----- admin/admin    3712 2019-03-10 21:05 usr/local/etc/sudoers
--rw-rw-r-- admin/admin      39 2019-03-10 21:05 etc/rc.conf
+-rw------- admin/admin    1475 2023-11-04 14:52 home/admin/.ssh/authorized_keys
+-rwxr-x--- root/wheel      855 2023-11-04 14:52 root/firstboot.sh
+-r--r----- root/wheel     3978 2023-11-04 14:54 usr/local/etc/sudoers
+-rw-r--r-- root/wheel       39 2023-11-04 14:52 etc/resolv.conf
+-rw-r--r-- root/wheel       39 2023-11-04 14:52 etc/rc.conf
+-rwxr-xr-x root/wheel     1821 2023-11-04 14:52 etc/rc.d/ezjail.flavour.default
 ```
 
 ```bash
@@ -495,27 +549,35 @@ shell> tree -a /local/jails/flavours/ansible
 
 ## Example 3. Ansible firstboot.sh
 
-See [contrib/jail-flavours/firstboot.sh](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/jail-flavours/firstboot.sh)
+See [contrib/jail-flavours/firstboot-1.0.1](https://github.com/vbotka/ansible-freebsd-jail/blob/master/contrib/jail-flavours/firstboot-1.0.1)
 
 ```bash
-#!/bin/sh                                                                                     
-# Install packages                                                                            
-env ASSUME_ALWAYS_YES=YES pkg install security/sudo
-env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.32
-env ASSUME_ALWAYS_YES=YES pkg install lang/python38
-env ASSUME_ALWAYS_YES=YES pkg install security/py-openssl
-env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
-# Create user admin                                                                           
-pw useradd -n admin -s /bin/sh -m                                                             
-chown -R admin:admin /home/admin                                                              
-chmod 0700 /home/admin/.ssh                                                                   
-chmod 0600 /home/admin/.ssh/authorized_keys                                                   
-# Configure sudoers                                                                           
-cp /usr/local/etc/sudoers.dist /usr/local/etc/sudoers                                         
-chown root:wheel /usr/local/etc/sudoers                                                       
-chmod 0440 /usr/local/etc/sudoers                                                             
-echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers                                
-# EOF 
+#!/bin/sh
+# Install packages
+env ASSUME_ALWAYS_YES=YES pkg install sudo
+env ASSUME_ALWAYS_YES=YES pkg install perl5
+env ASSUME_ALWAYS_YES=YES pkg install python38
+env ASSUME_ALWAYS_YES=YES pkg install gtar
+# Create user admin
+pw useradd -n admin -s /bin/sh -m
+chown -R admin:admin /home/admin
+chmod 0700 /home/admin/.ssh
+chmod 0600 /home/admin/.ssh/authorized_keys
+# Configure sudoers
+cp /usr/local/etc/sudoers.dist /usr/local/etc/sudoers
+chown root:wheel /usr/local/etc/sudoers
+chmod 0440 /usr/local/etc/sudoers
+echo "admin ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
+# Configure root
+chown root:wheel root/firstboot.sh
+# Configure etc
+chown root:wheel etc/rc.conf
+chmod 0644 etc/rc.conf
+chown root:wheel etc/resolv.conf
+chmod 0644 etc/resolv.conf
+chown root:wheel etc/rc.d/ezjail.flavour.default
+chmod 0755 etc/rc.d/ezjail.flavour.default
+# EOF
 ```
 
 ## Known issues
@@ -545,6 +607,7 @@ fatal: [srv.example.com]: FAILED! => changed=true
   start: '2022-01-16 23:57:07.794622'
   stderr: 'Error: No archive for pattern __ can be found.'
 ```
+
 
 ## References
 

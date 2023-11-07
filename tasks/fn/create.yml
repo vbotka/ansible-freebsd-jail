@@ -61,6 +61,9 @@
         cmd: "{{ local_command }}"
         creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
       register: result
+      failed_when: result.rc > rc_ok|int  # See README: Known issues
+      vars:
+        rc_ok: "{{ bsd_ezjail_admin_restore|ternary(1, 0) }}"
 
     - name: "ezjail-jails:create: Debug result of ezjail-admin command"
       ansible.builtin.debug:
