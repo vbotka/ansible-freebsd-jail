@@ -95,7 +95,7 @@
     line: 'export jail_{{ item.jailname }}_parameters="{{ local_parameters|trim }}"'
     # backup: "{{ bsd_jail_conf_backup }}"  # 'ezjail-admin list' reports empty lines
     create: true
-    mode: "0644"
+    mode: '0644'
   register: result
   when: not ansible_check_mode
 
@@ -113,7 +113,7 @@
          Configure {{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
   ansible.builtin.lineinfile:
     path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
-    regexp: '^\s*export\s+jail_{{ item.jailname }}_{{ export.key }}\s*=(.*)'
+    regexp: '^\s*export\s+jail_{{ item.jailname }}_{{ export.key }}\s*=(.*)$'
     line: 'export jail_{{ item.jailname }}_{{ export.key }}="{{ export.val }}"'
     backup: "{{ bsd_jail_conf_backup }}"
     create: true
