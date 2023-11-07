@@ -8,25 +8,48 @@
     var: bsd_jail_jails|to_yaml
   when: bsd_jail_debug|bool
 
-- name: "vars: Find object files in {{ bsd_jail_objects_dir }}"
-  ansible.builtin.find:
-    paths: "{{ bsd_jail_objects_dir }}"
-    patterns: "*.{{ bsd_jail_objects_dir_extension }}"
+- block:
+
+    - name: "vars: Find object files in {{ bsd_jail_objects_dir }}"
+      ansible.builtin.find:
+        paths: "{{ bsd_jail_objects_dir }}"
+        patterns: "*.{{ bsd_jail_objects_dir_extension }}"
+      register: result
+
+    - name: "vars: Read objects"
+      set_fact:
+        objects: |
+          {% filter flatten %}
+          {% filter from_yaml %}
+          {% for file in files %}
+          - {{ (lookup('file', file)|from_yaml).objects }}
+          {% endfor %}
+          {% endfilter %}
+          {% endfilter %}
+      vars:
+        files: "{{ result.files|map(attribute='path') }}"
+
+    - name: "vars: Debug objects"
+      ansible.builtin.debug:
+        var: objects
+      when: bsd_jail_debug|bool
+
   delegate_to: localhost
   run_once: true
-  register: result
 
-- name: "vars: Debug list object files in {{ bsd_jail_objects_dir }}"
-  ansible.builtin.debug:
-    msg: "{{ result|json_query('files[].path') }}"
-  when: bsd_jail_debug|bool
-
-- name: "vars: Read configuration from object files"
-  ansible.builtin.include_tasks: fn/objects.yml
-  loop: "{{ result.skipped|default(false)|
-            ternary([], result|json_query('files[].path')) }}"
+- name: "vars: Add objects to bsd_jail_jails"
+  set_fact:
+    bsd_jail_jails: "{{ bsd_jail_jails + objects }}"
 
 - name: "vars: Debug bsd_jail_jails"
   ansible.builtin.debug:
-    var: bsd_jail_jails|to_yaml
+    msg: |
+      bsd_jail_jails:
+        {{ bsd_jail_jails|to_yaml(indent=2)|indent(2) }}
+      bsd_jail_jails_present_names:
+        {{ bsd_jail_jails_present_names }}
+      bsd_jail_jails_absent_names:
+        {{ bsd_jail_jails_absent_names }}
+      bsd_jail_jails_absent:
+        {{ bsd_jail_jails_absent|to_yaml(indent=2)|indent(2) }}
   when: bsd_jail_debug|bool

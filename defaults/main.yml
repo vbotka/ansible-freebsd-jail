@@ -24,7 +24,7 @@ freebsd_use_packages: true
 freebsd_install_retries: 10
 freebsd_install_delay: 5
 
-# jail
+# Service jail
 # Configure /etc/rc.conf and /etc/jail.conf
 bsd_jail: true
 # Enable service jail
@@ -56,13 +56,20 @@ bsd_jail_jails_defaults:
 # Configure jails in jail.conf.d instead of jail.conf
 bsd_jail_confd: false
 bsd_jail_confd_dir: "{{ bsd_jail_conf_path }}/jail.conf.d"
+
+# Jails
 # See contrib/jail-objects on how to create jail objects
 # See tasks/vars.yml on how the list bsd_jail_jails is created
 bsd_jail_jails: []
 bsd_jail_objects_dir: "{{ role_path }}/files/jail-objects.d"
 bsd_jail_objects_dir_extension: conf
+bsd_jail_jails_absent_names: "{{ bsd_jail_jails|json_query('[? !present].jailname') }}"
+bsd_jail_jails_present_names: "{{ bsd_jail_jails|map(attribute='jailname')|
+                                                 difference(bsd_jail_jails_absent_names) }}"
+bsd_jail_jails_absent: "{{ bsd_jail_jails|selectattr('jailname', 'in', bsd_jail_jails_absent_names) }}"
+bsd_jail_jails_present: "{{ bsd_jail_jails|selectattr('jailname', 'in', bsd_jail_jails_present_names) }}"
 
-# ezjail
+# Service ezjail
 # Configure /etc/rc.conf and /usr/local/etc/ezjail.conf
 # Import: install, flavours, info, jails
 bsd_ezjail: true
