@@ -39,6 +39,7 @@ Minor Changes
 * Add configuration in jail.conf.d (experimental). Add variable
   bsd_jail_confd (default:false).
 * README; update examples, add sections: jail-objects
+* README; add example PF configuration
 * Formatting of ezjail-jails:create debug, install_command
 
 Breaking Changes / Porting Guide
