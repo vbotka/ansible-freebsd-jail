@@ -22,7 +22,7 @@ This role has been developed and tested with [FreeBSD Supported Production Relea
 
 This may be different from the platforms in Ansible Galaxy which does not offer all released
 versions in time and would report an error. For example: `IMPORTER101: Invalid platform:
-"FreeBSD-11.3", skipping.`
+"FreeBSD-14.0", skipping.`
 
 
 ## Requirements
@@ -461,6 +461,9 @@ fn_aliases:
 fn_cloned_interfaces:
   - {interface: lo1, state: present}
 ```
+```bash
+shell> ansible-playbook freebsd-network.yml
+```
 
 * [freebsd_zfs](https://galaxy.ansible.com/vbotka/freebsd_zfs)
 
@@ -476,7 +479,10 @@ fzfs_mountpoints:
   - mountpoint: /local/jails
     owner: root
     group: wheel
-    mode: "0700"
+    mode: '0700'
+```
+```
+shell> ansible-playbook freebsd-zfs.yml
 ```
 
 * [freebsd_pf](https://galaxy.ansible.com/vbotka/freebsd_pf)
@@ -488,19 +494,23 @@ pf_rules_rdr:
   - rdr pass on $ext_if proto tcp from any to 10.1.0.51 port { 80 443 } -> 127.0.2.1
   - rdr pass on $ext_if proto tcp from any to 10.1.0.52 port { 80 443 } -> 127.0.2.2
 ```
+```
+shell> ansible-playbook freebsd-pf.yml
+```
 
 * [freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
 
 ```yaml
 fp_sysctl:
-  - {name: net.inet.ip.forwarding, value: '1'}
-  - {name: security.jail.set_hostname_allowed, value: '1'}
-  - {name: security.jail.socket_unixiproute_only, value: '1'}
-  - {name: security.jail.sysvipc_allowed, value: '0'}
-  - {name: security.jail.allow_raw_sockets, value: '0'}
-  - {name: security.jail.chflags_allowed, value: '0'}
-  - {name: security.jail.jailed, value: '0'}
-  - {name: security.jail.enforce_statfs, value: '2'}
+  - {name: net.inet.ip.forwarding, value: 1}
+  - {name: vfs.zfs.prefetch.disable, value: 0}
+  - {name: security.jail.set_hostname_allowed, value: 1}
+  - {name: security.jail.socket_unixiproute_only, value: 1}
+  - {name: security.jail.sysvipc_allowed, value: 0}
+  - {name: security.jail.allow_raw_sockets, value: 0}
+  - {name: security.jail.chflags_allowed, value: 0}
+  - {name: security.jail.jailed, value: 0}
+  - {name: security.jail.enforce_statfs, value: 2}
 ```
 
 To manage ZFS inside the jail add the following states
@@ -510,7 +520,9 @@ To manage ZFS inside the jail add the following states
   - {name: security.jail.mount_devfs_allowed, value: '1'}
   - {name: security.jail.mount_zfs_allowed, value: '1'}
 ```
-
+```bash
+shell> ansible-playbook freebsd-postinstall.yml -t fp_sysctl
+```
 
 ## Example 2. Ansible flavour tarball
 
