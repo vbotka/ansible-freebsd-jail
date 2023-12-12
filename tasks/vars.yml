@@ -5,51 +5,30 @@
 
 - name: "vars: Debug bsd_jail_jails"
   ansible.builtin.debug:
-    var: bsd_jail_jails|to_yaml
+    msg: |
+      bsd_jail_objects_dir: {{ bsd_jail_objects_dir }}
+      bsd_jail_objects_dir_extension: {{ bsd_jail_objects_dir_extension }}
+      bsd_jail_jails:
+        {{ bsd_jail_jails|to_yaml(indent=2)|indent(2) }}
   when: bsd_jail_debug|bool
 
-- block:
-
-    - name: "vars: Find object files in {{ bsd_jail_objects_dir }}"
-      ansible.builtin.find:
-        paths: "{{ bsd_jail_objects_dir }}"
-        patterns: "*.{{ bsd_jail_objects_dir_extension }}"
-      register: result
-
-    - name: "vars: Read objects"
-      set_fact:
-        objects: |
-          {% filter flatten %}
-          {% filter from_yaml %}
-          {% for file in files %}
-          - {{ (lookup('file', file)|from_yaml).objects }}
-          {% endfor %}
-          {% endfilter %}
-          {% endfilter %}
-      vars:
-        files: "{{ result.files|map(attribute='path') }}"
-
-    - name: "vars: Debug objects"
-      ansible.builtin.debug:
-        var: objects
-      when: bsd_jail_debug|bool
-
+- name: "vars: Read objects"
+  ansible.builtin.include_vars:
+    file: "{{ item }}"
+    name: "{{ name }}"
+  loop: "{{ q('ansible.builtin.fileglob', pattern) }}"
+  loop_control:
+    label: "{{ name }}"
   delegate_to: localhost
   run_once: true
+  vars:
+    pattern: "{{ bsd_jail_objects_dir }}/*.{{ bsd_jail_objects_dir_extension }}"
+    name: "__objects_{{ item|basename|splitext|first }}"
 
 - name: "vars: Add objects to bsd_jail_jails"
   set_fact:
     bsd_jail_jails: "{{ bsd_jail_jails + objects }}"
-
-- name: "vars: Debug bsd_jail_jails"
-  ansible.builtin.debug:
-    msg: |
-      bsd_jail_jails:
-        {{ bsd_jail_jails|to_yaml(indent=2)|indent(2) }}
-      bsd_jail_jails_present_names:
-        {{ bsd_jail_jails_present_names }}
-      bsd_jail_jails_absent_names:
-        {{ bsd_jail_jails_absent_names }}
-      bsd_jail_jails_absent:
-        {{ bsd_jail_jails_absent|to_yaml(indent=2)|indent(2) }}
-  when: bsd_jail_debug|bool
+  vars:
+    objects: "{{ lookup('community.general.merge_variables',
+                        '__objects_',
+                        pattern_type='prefix').objects }}"
