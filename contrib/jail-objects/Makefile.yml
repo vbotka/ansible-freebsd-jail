@@ -1,0 +1,57 @@
+- name: Create jail objects
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+
+    jname: test
+    idx_format: '%02i'
+    idx_start: 1
+    idx_end: 10
+    jrange: "{{ range(idx_start|int, idx_end|int + 1) }}"
+    jloop_ifc: lo1
+    jloop: 127.0.2.0
+    jext_ifc: em0
+    jext: 10.1.0.50
+
+  tasks:
+
+    - debug:
+        msg: |
+          item: {{ item }}
+          name: {{ jname }}_{{ idx_format % (item) }}
+          loop_ip: {{ jloop|ansible.netcommon.ipmath(item) }}
+          ext_ip: {{ jext|ansible.netcommon.ipmath(item) }}
+          archive: test_{{ idx_format % (item) }}-firstboot
+      loop: "{{ jrange }}"
+      when: debug1|d(false)|bool
+
+    - debug:
+        msg: |
+          {{ lookup('template', 'jail.yml.j2') }}
+      loop: "{{ jrange }}"
+      vars:
+        name: "test_{{ idx_format % (item) }}"
+        loop_ip: "{{ jloop|ansible.netcommon.ipmath(item) }}"
+        ext_ip: "{{ jext|ansible.netcommon.ipmath(item) }}"
+        archive: "test_{{ idx_format % (item) }}-firstboot"
+      when: debug2|d(false)|bool
+
+    - block:
+
+        - file:
+            state: directory
+            path: jail.all
+
+        - template:
+            src: jail.yml.j2
+            dest: "jail.all/{{ name }}.yml"
+          loop: "{{ jrange }}"
+          vars:
+            name: "test_{{ idx_format % (item) }}"
+            loop_ip: "{{ jloop|ansible.netcommon.ipmath(item) }}"
+            ext_ip: "{{ jext|ansible.netcommon.ipmath(item) }}"
+            archive: "test_{{ idx_format % (item) }}-firstboot"
+
+      when: create_obj|d(false)|bool

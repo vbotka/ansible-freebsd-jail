@@ -55,6 +55,7 @@
 
 - name: Meta flush_handlers
   ansible.builtin.meta: flush_handlers
+  tags: always
 
 - name: Import ezjail-install.yml
   ansible.builtin.import_tasks: ezjail-install.yml

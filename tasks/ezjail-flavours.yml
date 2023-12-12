@@ -4,24 +4,35 @@
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/etc/rc.d"
-    mode: "0755"
+    mode: '0755'
   loop: "{{ bsd_ezjail_flavours }}"
+  tags: bsd_jail_ezjail_flavours_create_dirs
 
 - name: "ezjail-flavours: Unarchive files"
   ansible.builtin.unarchive:
     src: "{{ item.archive }}"
     dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
   loop: "{{ bsd_ezjail_flavours }}"
+  register: result
   when: item.archive is defined
+  tags: bsd_jail_ezjail_flavours_archive
 
 - name: "ezjail-flavours: Synchronize files"
   ansible.posix.synchronize:
-    archive: false
-    checksum: true
     src: "{{ item.dir }}/"
-    dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
+    dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/"
   loop: "{{ bsd_ezjail_flavours }}"
+  register: result
   when: item.dir is defined
+  tags: bsd_jail_ezjail_flavours_dir
+
+- name: "ezjail-flavours: Debug result"
+  ansible.builtin.debug:
+    var: result
+  when: bsd_jail_debug|bool
+  tags:
+    - bsd_jail_ezjail_flavours_archive
+    - bsd_jail_ezjail_flavours_dir
 
 # EOF
 ...

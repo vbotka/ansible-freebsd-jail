@@ -20,7 +20,7 @@
 # bsd_ezjail_admin_restore: true
 # bsd_ezjail_admin_force: false
 # bsd_ezjail_admin_command: install
-# bsd_ezjail_admin_options: "-m -s -p"
+# bsd_ezjail_admin_options: '-m -s -p'
 
 # JAIL.CONF(5) FreeBSD File Formats Manual
 # https://www.freebsd.org/cgi/man.cgi?query=jail.conf
@@ -43,15 +43,15 @@
 #     firstboot: /root/firstboot.sh                # optional
 #     firstboot_owner: root
 #     firstboot_group: wheel
-#     firstboot_mode: "0775"
+#     firstboot_mode: '0775'
 
 # bsd_jail_objects_dir: "{{ playbook_dir }}/jails/jail.d"
 # bsd_jail_objects_dir_extension: yml
 
 # bsd_ezjail
 #
-# bsd_ezjail_use_zfs: "YES"
-# bsd_ezjail_use_zfs_for_jails: "YES"
+# bsd_ezjail_use_zfs: 'YES'
+# bsd_ezjail_use_zfs_for_jails: 'YES'
 # bsd_ezjail_jailzfs: zroot/jails
 # bsd_ezjail_jaildir: /local/jails
 # bsd_ezjail_archivedir: /export/archive/jails/ezjail_archives

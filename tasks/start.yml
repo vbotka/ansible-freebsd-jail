@@ -5,24 +5,20 @@
     - name: "start: Stop jails"
       ansible.builtin.command:
         cmd: "/usr/local/bin/ezjail-admin stop {{ item.jailname }}"
-        removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
-      loop: "{{ bsd_jail_jails }}"
+        removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}.id"
+      loop: "{{ bsd_jail_jails_present }}"
       loop_control:
         label: "{{ item.jailname }}"
-      when:
-        - item.present|default(true)
-        - not item.start|default(true)
+      when: not item.start|default(true)
 
     - name: "start: Start jails"
       ansible.builtin.command:
         cmd: "/usr/local/bin/ezjail-admin start {{ item.jailname }}"
-        creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
-      loop: "{{ bsd_jail_jails }}"
+        creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}.id"
+      loop: "{{ bsd_jail_jails_present }}"
       loop_control:
         label: "{{ item.jailname }}"
-      when:
-        - item.present|default(true)
-        - item.start|default(true)
+      when: item.start|default(true)
 
 # TODO: Restart restored jails
 #    - name: "start: Restart jails with ezjail"

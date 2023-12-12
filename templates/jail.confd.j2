@@ -1,11 +1,4 @@
 # {{ ansible_managed }}
-{% for conf in bsd_jail_jails_defaults %}
-{{ conf.key }} = "{{ conf.val|default('true') }}";
-{% endfor %}
-
-{% if not bsd_jail_confd %}
-{% for item in bsd_jail_jails|sort(attribute='jailname') %}
-{% if item.present|default(true) %}
 {{ item.jailname }} {
         host.hostname = "{{ item.jailname }}";
         ip4.addr = {{ item.interface|map(attribute='ip4')|join(',') }};
@@ -16,8 +9,5 @@
         {{ conf.key }} = "{{ conf.val|default('true') }}";
 {% endfor %}
 }
-{% endif %}
-{% endfor %}
-{% endif %}
 
 # EOF

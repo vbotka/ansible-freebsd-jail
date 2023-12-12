@@ -1,2 +1,2 @@
-/etc/resolv.conf
-/etc/rc.d/ezjail.flavour.default
+etc/resolv.conf
+etc/rc.d/ezjail.flavour.default

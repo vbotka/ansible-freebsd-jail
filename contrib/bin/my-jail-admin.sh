@@ -1,13 +1,17 @@
 #!/bin/sh
-#set -x
-#set -v
+# set -x
+# set -v
 
-version="0.1.0"
+version="0.1.1"
 
-usage="Usage: $0 command jailname [archive]
+usage="usage: $0 command jailname [archive]
+
 where:
+
   command: config|ezconfig|delete|restore|status|version
+
 examples:
+
   my-jail-admin.sh version .................. print version
   my-jail-admin.sh status jail_01 ........... print status
   my-jail-admin.sh config jail_01 ........... print config
@@ -56,34 +60,34 @@ log() {
     fi
 }
 
-jail-rcd() {
+jail_rcd() {
     if out=`/etc/rc.d/jail $1 $2 2>&1`; then
-	message="[OK]  jail-rcd:\n$out\n"; log
+	message="[OK]  jail_rcd:\n$out\n"; log
     else
-	message="[ERR] jail-rcd:\n$out\n"; log
+	message="[ERR] jail_rcd:\n$out\n"; log
 	exit 1
     fi
 }
 
-ezjail-rcd() {
+ezjail_rcd() {
     if out=`/usr/local/etc/rc.d/ezjail $1 $2 2>&1`; then
-	message="[OK]  ezjail-rcd:\n$out \n"; log
+	message="[OK]  ezjail_rcd:\n$out \n"; log
     else
-	message="[ERR]  ezjail-rcd:\n$out \n"; log
+	message="[ERR]  ezjail_rcd:\n$out \n"; log
 	exit 1
     fi
 }
 
-ezjail-admin() {
+ezjail_admin() {
     if out=`/usr/local/bin/ezjail-admin $1 $2 2>&1`; then
-	message="[OK]  ezjail-admin:\n$out \n"; log
+	message="[OK]  ezjail_admin:\n$out \n"; log
     else
-	message="[ERR] ezjail-admin:\n$out \n"; log
+	message="[ERR] ezjail_admin:\n$out \n"; log
 	exit 1
     fi
 }
 
-ezjail-config() {
+ezjail_config() {
     if out=$(cat ${localconfdir}/ezjail/${jailname} 2>&1); then
 	message="[OK]  \n${localconfdir}/ezjail/${jailname}\n${out}\n"; log
     else
@@ -92,7 +96,7 @@ ezjail-config() {
     fi
 }
 
-jail-config() {
+jail_config() {
     if out=$(sed -n "/$jailname {/,/}/p" ${confdir}/jail.conf 2>&1); then
 	message="[OK]  \n${confdir}/jail.conf\n${out}\n"; log
     else
@@ -101,26 +105,26 @@ jail-config() {
     fi
 }
 
-jail-status() {
+jail_status() {
     # PID file
     if [ -e "${iddir}/jail_${jailname}.id" ]; then
 	message="[OK]  pid: ${iddir}/jail_${jailname}.id\n"; log
     else
 	message="[WRN] pid: ${iddir}/jail_${jailname}.id does not exist\n"; log
     fi
-    # Jail conf generated
+    # jail conf generated
     if [ -e "${iddir}/jail.${jailname}.conf" ]; then
 	message="[OK]  conf: ${iddir}/jail.${jailname}.conf\n"; log
     else
 	message="[WRN] conf: ${iddir}/jail.${jailname}.conf does not exist\n"; log
     fi
-    # JAIL directory
+    # jail directory
     if [ -e "${jaildir}/${jailname}" ]; then
 	message="[OK]  jail: ${jaildir}/${jailname}\n"; log
     else
 	message="[WRN] jail: ${jaildir}/${jailname} does not exist\n"; log
     fi
-    # FIRSRBOOT lockfile
+    # firsrboot lockfile
     if [ -e "${stampdir}/${jailname}-firstboot" ]; then
 	message="[OK]  lock: ${stampdir}/${jailname}-firstboot\n"; log
     else
@@ -151,14 +155,14 @@ jail-status() {
 	message="[WRN] conf: ${localconfdir}/ezjail/${jailname} does not exist\n"; log
     fi
     # status and list
-    jail-rcd "status"
+    jail_rcd "status"
     # ezjail-admin "list"
 }
 
-jail-restore() {
+jail_restore() {
     # test archive
     # TODO: get ezjail_archivedir from /usr/local/etc/ezjail.conf
-    # restore JAIL
+    # restore jail
     if [ ! -e "${jaildir}/${jailname}" ]; then
 	if ezjail-admin "restore" $archive; then
 	    message="[OK]  jail: ${jailname} restored from ${archive}\n"; log
@@ -169,7 +173,7 @@ jail-restore() {
     else
 	message="[OK] jail: ${jaildir}/${jailname} exists\n"; log
     fi
-    # touch FIRSRBOOT lockfile (no firstboot.sh when restored)
+    # touch firsrboot lockfile (no firstboot.sh when restored)
     if [ ! -e "${stampdir}/${jailname}-firstboot" ]; then
 	if touch ${stampdir}/${jailname}-firstboot; then
 	    message="[OK]  lock: ${stampdir}/${jailname}-firstboot created\n"; log
@@ -178,9 +182,9 @@ jail-restore() {
 	    exit 1
 	fi
     else
-	message="[OK] lock: ${stampdir}/${jailname}-firstboot exists\n"; log
+	message="[OK]  lock: ${stampdir}/${jailname}-firstboot exists\n"; log
     fi
-    # start JAIL
+    # start jail
     if [ ! -e "${iddir}/jail_${jailname}.id" ]; then
         if jail-rcd start $jailname; then
 	    message="[OK]  jail: ${jailname} started\n"; log
@@ -189,9 +193,9 @@ jail-restore() {
 	    exit 1
 	fi
     else
-	message="[OK] pid: ${iddir}/jail_${jailname}.id exists. Not started\n"; log
+	message="[OK]  pid: ${iddir}/jail_${jailname}.id exists. Not started\n"; log
     fi
-    # restart JAIL with ezjail
+    # restart jail with ezjail
     # if [ -e "${iddir}/jail_${jailname}.id" ]; then
     #     if ezjail-rcd restart $jailname; then
     #         message="[OK]  jail: ${jailname} restarted with ezjail\n"; log
@@ -200,23 +204,23 @@ jail-restore() {
     #         exit 1
     #     fi
     # else
-    #     message="[OK] pid: ${iddir}/jail_${jailname}.id does not exist\n"; log
+    #     message="[OK]  pid: ${iddir}/jail_${jailname}.id does not exist\n"; log
     # fi
 }
 
-jail-delete() {
-    # stop JAIL
+jail_delete() {
+    # stop jail
     if [ -e "${iddir}/jail_${jailname}.id" ]; then
-        if jail-rcd stop $jailname; then
+        if jail_rcd stop $jailname; then
 	    message="[OK]  jail: ${jailname} stopped\n"; log
 	else
 	    message="[ERR] jail: ${jailname} not stopped\n"; log
 	    exit 1
 	fi
     else
-	message="[OK] pid: ${iddir}/jail_${jailname}.id does not exist\n"; log
+	message="[OK]  pid: ${iddir}/jail_${jailname}.id does not exist\n"; log
     fi
-    # delete JAIL
+    # delete jail
     if [ -e "${jaildir}/${jailname}" ]; then
 	if ezjail-admin "delete -wf" $jailname; then
 	    message="[OK]  jail: ${jailname} deleted\n"; log
@@ -225,9 +229,9 @@ jail-delete() {
 	    exit 1
 	fi
     else
-	message="[OK] jail: ${jaildir}/${jailname} does not exist\n"; log
+	message="[OK]  jail: ${jaildir}/${jailname} does not exist\n"; log
     fi
-    # delete FIRSRBOOT lockfile
+    # delete firsrboot lockfile
     if [ -e "${stampdir}/${jailname}-firstboot" ]; then
 	if rm ${stampdir}/${jailname}-firstboot; then
 	    message="[OK]  lock: ${stampdir}/${jailname}-firstboot removed\n"; log
@@ -236,25 +240,25 @@ jail-delete() {
 	    exit 1
 	fi
     else
-	message="[OK] lock: ${stampdir}/${jailname}-firstboot does not exist\n"; log
+	message="[OK]  lock: ${stampdir}/${jailname}-firstboot does not exist\n"; log
     fi
 }
 
 case $cmd in
     config)
-	jail-config
+	jail_config
         ;;
     ezconfig)
-	ezjail-config
+	ezjail_config
         ;;
     delete)
-	jail-delete
+	jail_delete
         ;;
     restore)
-	jail-restore
+	jail_restore
         ;;
     status)
-	jail-status
+	jail_status
         ;;
     *)
 	message="[ERR] Unknown command\n"; log

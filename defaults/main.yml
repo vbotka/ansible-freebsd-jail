@@ -8,13 +8,13 @@ bsd_jail_conf_backup: true
 bsd_jail_mount_iso: true
 
 # assert
-bsd_jail_assert: true
+bsd_jail_assert: true  # import tasks
 bsd_jail_assert_enable:
   interfaces: true
   jaildir: true
   zfs: true
 
-# install
+# Install packages (import tasks)
 bsd_jail_install: true
 bsd_jail_packages:
   - sysutils/ezjail
@@ -24,15 +24,20 @@ freebsd_use_packages: true
 freebsd_install_retries: 10
 freebsd_install_delay: 5
 
-# jail
+# Service jail
+# Configure /etc/rc.conf and /etc/jail.conf
 bsd_jail: true
+# Enable service jail
 bsd_jail_enable: true
+# Service jail
 bsd_jail_service: jail
+# /etc/jail.conf
 bsd_jail_conf_path: /etc
 bsd_jail_conf_file: "{{ bsd_jail_conf_path }}/jail.conf"
 bsd_jail_conf_owner: root
 bsd_jail_conf_group: wheel
-bsd_jail_conf_mode: "0644"
+bsd_jail_conf_mode: '0644'
+#
 bsd_jail_conf: []
 bsd_jail_id_dir: /var/run
 bsd_jail_stamp_dir: /var/db/jail-stamps
@@ -42,24 +47,43 @@ bsd_jail_jails_defaults:
   - {key: mount.fstab, val: "{{ bsd_jail_fstab_dir }}/fstab.${name}"}
   - {key: exec.start, val: /bin/sh /etc/rc}
   - {key: exec.stop, val: /bin/sh /etc/rc.shutdown}
-  - {key: devfs_ruleset, val: "4"}
+  - {key: devfs_ruleset, val: '4'}
   - {key: exec.clean}
   - {key: mount.devfs}
   - {key: mount.fdescfs}
   - {key: mount.procfs}
+# /etc/jail.conf.d
+# Configure jails in jail.conf.d instead of jail.conf
+bsd_jail_confd: false
+bsd_jail_confd_dir: "{{ bsd_jail_conf_path }}/jail.conf.d"
+
+# Jails
+# See contrib/jail-objects on how to create jail objects
+# See tasks/vars.yml on how the list bsd_jail_jails is created
 bsd_jail_jails: []
 bsd_jail_objects_dir: "{{ role_path }}/files/jail-objects.d"
 bsd_jail_objects_dir_extension: conf
+bsd_jail_jails_absent_names: "{{ bsd_jail_jails|json_query('[? !present].jailname') }}"
+bsd_jail_jails_present_names: "{{ bsd_jail_jails|map(attribute='jailname')|
+                                                 difference(bsd_jail_jails_absent_names) }}"
+bsd_jail_jails_absent: "{{ bsd_jail_jails|selectattr('jailname', 'in', bsd_jail_jails_absent_names) }}"
+bsd_jail_jails_present: "{{ bsd_jail_jails|selectattr('jailname', 'in', bsd_jail_jails_present_names) }}"
 
-# ezjail
+# Service ezjail
+# Configure /etc/rc.conf and /usr/local/etc/ezjail.conf
+# Import: install, flavours, info, jails
 bsd_ezjail: true
+# Enable service ezjail
 bsd_ezjail_enable: true
+# Service ezjail
 bsd_ezjail_service: ezjail
+# File ezjail.conf
 bsd_ezjail_conf_path: /usr/local/etc
 bsd_ezjail_conf_file: "{{ bsd_ezjail_conf_path }}/ezjail.conf"
 bsd_ezjail_conf_owner: root
 bsd_ezjail_conf_group: wheel
-bsd_ezjail_conf_mode: "0644"
+bsd_ezjail_conf_mode: '0644'
+#
 bsd_ezjail_conf:
   - 'ezjail_use_zfs="{{ bsd_ezjail_use_zfs }}"'
   - 'ezjail_use_zfs_for_jails="{{ bsd_ezjail_use_zfs_for_jails }}"'
@@ -67,49 +91,56 @@ bsd_ezjail_conf:
   - 'ezjail_ftphost=http://ftp.freebsd.org'
 # - 'ezjail_jailzfs={{ bsd_ezjail_jailzfs }}'
 # - 'ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist'
-bsd_ezjail_use_zfs: "NO"
-bsd_ezjail_use_zfs_for_jails: "NO"
+bsd_ezjail_use_zfs: 'NO'
+bsd_ezjail_use_zfs_for_jails: 'NO'
 # bsd_ezjail_jaildir and bsd_jail_jailzfs
 # - will not be created by this role
 # - shall be created before running this role
 # - existence will be checked
 bsd_ezjail_jailzfs: zroot/jails
 bsd_ezjail_jaildir: /local/jails     # $jailroot
+# See contrib/jail-flavours
 bsd_ezjail_flavours: []
 
 # ezjail-admin install
-# bsd_ezjail_admin_force: True; run ezjail-admin install even if basejail exists
+# bsd_ezjail_admin_force: True; run 'ezjail-admin install' even if basejail exists
 bsd_ezjail_install_force: false
-bsd_ezjail_install_command: install
-# "install" function sub-command is normally run once in the life of
+# (See man ezjail-admin)
+# 'install' function sub-command is normally run once in the life of
 # the ezjail environment. It allocates the directory structure used by
 # ezjail and populates the base jail using the minimal distribution
 # set from a FreeBSD FTP server.
 # See also ezjail-admin "update" to install the base jail from source,
 # as well as a method to update the base jail using freebsd-update(8).
-# (man ezjail-admin)
-bsd_ezjail_install_options: ""
+bsd_ezjail_install_command: install
+# (See man ezjail-admin)
+# -m Fetch and install man pages (ca. 10MB)
+# -s Fetch and install sources (ca. 450MB)
+# -p Invoke the portsnap(8) utility to fetch and extract a FreeBSD
+#    ports tree
+bsd_ezjail_install_options: ''
 
 # ezjail-admin restore
-# bsd_ezjail_admin_restore: True; *restore* jail from archive if the
-# archive exists. False; *create* jail from scratch.
+# bsd_ezjail_admin_restore: true; restore jail from archive if the
+# archive exists. False; create jail from scratch.
 bsd_ezjail_admin_restore: false
-bsd_ezjail_admin_restore_options: ""
+# (See man ezjail-admin)
+bsd_ezjail_admin_restore_options: ''
 
 # List of the restored jails to be restarted by ezjail
 bsd_ezjail_restart_jails: []
 
-# misc
+# Misc default
 command_result:
   failed: false
 
-# start
+# Start or stop jail by ezjail-admin star or stop
 bsd_jail_start: true
 
-# firstboot
+# Execute firstboot script by ezjail-admin console -e
 bsd_jail_firstboot: true
 
-# shutdown
+# Set executable /etc/rc.shutdown
 bsd_jail_shutdown: true
 
 # info

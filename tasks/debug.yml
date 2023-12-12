@@ -1,6 +1,6 @@
 ---
 
-- name: "FreeBSD Jail Debug"
+- name: FreeBSD Jail Debug
   vars:
     msg: |-
          ansible_architecture: {{ ansible_architecture }}
@@ -9,6 +9,7 @@
          ansible_distribution_major_version: {{ ansible_distribution_major_version }}
          ansible_distribution_version: {{ ansible_distribution_version }}
          ansible_distribution_release: {{ ansible_distribution_release }}
+         ansible_python_version: {{ ansible_python_version }}
          ansible_interfaces: {{ ansible_interfaces|to_yaml }}
          bsd_jail_conf_backup: {{ bsd_jail_conf_backup }}
          bsd_jail_install: {{ bsd_jail_install }}
@@ -17,13 +18,13 @@
          freebsd_install_retries: {{ freebsd_install_retries }}
          freebsd_install_delay: {{ freebsd_install_delay }}
          bsd_jail_packages:
-           {{ bsd_jail_packages|to_nice_yaml|indent(2) }}
+           {{ bsd_jail_packages|to_nice_yaml(indent=2)|indent(2) }}
          bsd_jail_packages_extra:
-           {{ bsd_jail_packages_extra|to_nice_yaml|indent(2) }}
+           {{ bsd_jail_packages_extra|to_nice_yaml(indent=2)|indent(2) }}
          bsd_jail_mount_iso: {{ bsd_jail_mount_iso }}
          bsd_jail_assert: {{ bsd_jail_assert }}
          bsd_jail_assert_enable:
-           {{ bsd_jail_assert_enable|to_nice_yaml|indent(2) }}
+           {{ bsd_jail_assert_enable|to_nice_yaml(indent=2)|indent(2) }}
          bsd_jail: {{ bsd_jail }}
          bsd_jail_enable: {{ bsd_jail_enable }}
          bsd_jail_service: {{ bsd_jail_service }}
@@ -33,17 +34,26 @@
          bsd_jail_conf_group: {{ bsd_jail_conf_group }}
          bsd_jail_conf_mode: {{ bsd_jail_conf_mode }}
          bsd_jail_conf:
-           {{ bsd_jail_conf|to_nice_yaml|indent(2) }}
+           {{ bsd_jail_conf|to_nice_yaml(indent=2)|indent(2) }}
          bsd_jail_id_dir: {{ bsd_jail_id_dir }}
          bsd_jail_stamp_dir: {{ bsd_jail_stamp_dir }}
          bsd_jail_fstab_dir: {{ bsd_jail_fstab_dir }}
          bsd_jail_mount_iso: {{ bsd_jail_mount_iso }}
+         bsd_jail_jails_defaults:
+           {{ bsd_jail_jails_defaults|to_yaml(indent=2)|indent(2) }}
+         bsd_jail_confd: {{ bsd_jail_confd }}
+         bsd_jail_confd_dir: {{ bsd_jail_confd_dir }}
+
          bsd_jail_objects_dir: {{ bsd_jail_objects_dir }}
          bsd_jail_objects_dir_extension: {{ bsd_jail_objects_dir_extension }}
-         bsd_jail_jails_defaults:
-           {{ bsd_jail_jails_defaults|to_nice_yaml|indent(2) }}
-         bsd_jail_jails:
-           {{ bsd_jail_jails|to_nice_yaml|indent(2) }}
+         bsd_jail_jails_present_names:
+           {{ bsd_jail_jails_present_names|to_yaml }}
+         bsd_jail_jails_absent_names:
+           {{ bsd_jail_jails_absent_names|to_yaml }}
+         bsd_jail_jails_present:
+           {{ bsd_jail_jails_present|to_yaml(indent=2)|indent(2) }}
+         bsd_jail_jails_absent:
+           {{ bsd_jail_jails_absent|to_yaml(indent=2)|indent(2) }}
          bsd_ezjail: {{ bsd_ezjail }}
          bsd_ezjail_enable: {{ bsd_ezjail_enable }}
          bsd_ezjail_service: {{ bsd_ezjail_service }}
@@ -53,19 +63,19 @@
          bsd_ezjail_conf_group: {{ bsd_ezjail_conf_group }}
          bsd_ezjail_conf_mode: {{ bsd_ezjail_conf_mode }}
          bsd_ezjail_conf:
-           {{ bsd_ezjail_conf|to_nice_yaml|indent(2) }}
+           {{ bsd_ezjail_conf|to_nice_yaml(indent=2)|indent(2) }}
          bsd_ezjail_use_zfs: {{ bsd_ezjail_use_zfs }}
          bsd_ezjail_jailzfs: {{ bsd_ezjail_jailzfs }}
          bsd_ezjail_jaildir: {{ bsd_ezjail_jaildir }}
          bsd_ezjail_flavours:
-           {{ bsd_ezjail_flavours|to_nice_yaml|indent(2) }}
+           {{ bsd_ezjail_flavours|to_nice_yaml(indent=2)|indent(2) }}
          bsd_ezjail_install_command: {{ bsd_ezjail_install_command }}
          bsd_ezjail_install_options: {{ bsd_ezjail_install_options }}
          bsd_ezjail_install_force: {{ bsd_ezjail_install_force }}
          bsd_ezjail_admin_restore: {{ bsd_ezjail_admin_restore }}
          bsd_ezjail_admin_restore_options: {{ bsd_ezjail_admin_restore_options }}
          bsd_ezjail_restart_jails:
-           {{ bsd_ezjail_restart_jails|to_nice_yaml|indent(2) }}
+           {{ bsd_ezjail_restart_jails|to_nice_yaml(indent=2)|indent(2) }}
          bsd_jail_start: {{ bsd_jail_start }}
          bsd_jail_firstboot: {{ bsd_jail_firstboot }}
          bsd_jail_shutdown: {{ bsd_jail_shutdown }}

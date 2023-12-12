@@ -4,7 +4,7 @@
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_jail_fstab_dir }}"
-    mode: "0755"
+    mode: '0755'
 
 - name: "fstab: Delete fstab files in {{ bsd_jail_fstab_dir }}"
   ansible.builtin.file:

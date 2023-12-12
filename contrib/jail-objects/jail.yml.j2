@@ -1,0 +1,25 @@
+---
+
+objects:
+  - jailname: {{ name }}
+    present: true
+    start: true
+    jailtype: zfs
+    flavour: ansible
+    interface:
+      - {dev: {{ jloop_ifc }}, ip4: {{ loop_ip }}}
+      - {dev: {{ jext_ifc }}, ip4: {{ ext_ip }}}
+    parameters:
+      - {key: allow.raw_sockets, val: 'true'}
+      - {key: allow.set_hostname, val: 'true'}
+    jail_conf:
+      - {key: mount.devfs}
+    ezjail_conf: []
+#   archive: {{ name }}-firstboot
+    firstboot: /root/firstboot.sh
+    firstboot_owner: root
+    firstboot_group: wheel
+    firstboot_mode: '0750'
+
+# EOF
+...
