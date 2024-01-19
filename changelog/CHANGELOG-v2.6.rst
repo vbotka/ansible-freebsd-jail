@@ -14,7 +14,9 @@ Update to Ansible 2.16. Support 12.4, 13.2, and 14.0
 
 Major Changes
 -------------
-* Update meta.
+* Update meta
+* Update README
+* Add ports-mgmt/portsnap to bsd_jail_packages
 
 Minor Changes
 -------------

@@ -18,6 +18,7 @@ bsd_jail_assert_enable:
 bsd_jail_install: true
 bsd_jail_packages:
   - sysutils/ezjail
+  - ports-mgmt/portsnap
 bsd_jail_packages_extra: []
 freebsd_install_method: packages
 freebsd_use_packages: true

@@ -20,11 +20,6 @@ This role uses *ezjail* to manage FreeBSD jails. In most cases it is more effici
 This role has been developed and tested with [FreeBSD Supported Production Releases](https://www.freebsd.org/releases/).
 
 
-This may be different from the platforms in Ansible Galaxy which does not offer all released
-versions in time and would report an error. For example: `IMPORTER101: Invalid platform:
-"FreeBSD-14.0", skipping.`
-
-
 ## Requirements
 
 ### Roles
@@ -157,7 +152,7 @@ to configure *portsnap cron*.
 
 ## Workflow
 
-1) Change shell to /bin/sh
+1) Change shell to /bin/sh if necessary
 
 ```bash
 shell> ansible server -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod admin -s /bin/sh'
@@ -170,7 +165,7 @@ shell> ansible-galaxy role install vbotka.freebsd_jail
 shell> ansible-galaxy role install vbotka.freebsd_postinstall
 ```
 
-3) Fit variables, e.g. in vars/main.yml
+3) Fit variables. For example, in vars/main.yml
 
 ```bash
 shell> editor vbotka.freebsd_jail/vars/main.yml
