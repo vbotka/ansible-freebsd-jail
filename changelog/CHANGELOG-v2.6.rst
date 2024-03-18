@@ -20,6 +20,8 @@ Major Changes
 
 Minor Changes
 -------------
+* Update contrib/jail-flavours to Python 3.9 and Perl 5.36
+
 
 Breaking Changes / Porting Guide
 --------------------------------

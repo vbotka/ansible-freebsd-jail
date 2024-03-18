@@ -2,7 +2,7 @@
 # Install packages
 env ASSUME_ALWAYS_YES=YES pkg install sudo
 env ASSUME_ALWAYS_YES=YES pkg install perl5
-env ASSUME_ALWAYS_YES=YES pkg install python38
+env ASSUME_ALWAYS_YES=YES pkg install python39
 env ASSUME_ALWAYS_YES=YES pkg install gtar
 # Create user admin
 pw useradd -n admin -s /bin/sh -m
