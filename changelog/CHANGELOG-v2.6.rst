@@ -10,7 +10,7 @@ vbotka.freebsd_jail 2.6 Release Notes
 
 Release Summary
 ---------------
-Update to Ansible 2.16. Support 12.4, 13.2, and 14.0
+Update to Ansible 2.16. Support 12.4, 13.3, and 14.0
 
 Major Changes
 -------------
