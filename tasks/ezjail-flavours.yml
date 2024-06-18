@@ -18,10 +18,9 @@
       ansible.builtin.unarchive:
         src: "{{ item.archive }}"
         dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
-      loop: "{{ bsd_ezjail_flavours }}"
+      loop: "{{ bsd_ezjail_flavours | selectattr('archive', 'defined') }}"
       loop_control:
-        label: "{{ item.archive | d('UNDEF') }}"
-      when: item.archive is defined
+        label: "{{ item.archive }}"
       register: result
 
     - name: "ezjail-flavours: Debug result"
@@ -37,10 +36,9 @@
       ansible.posix.synchronize:
         src: "{{ item.dir }}/"
         dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/"
-      loop: "{{ bsd_ezjail_flavours }}"
+      loop: "{{ bsd_ezjail_flavours | selectattr('dir', 'defined') }}"
       loop_control:
-        label: "{{ item.dir | d('UNDEF') }}"
-      when: item.dir is defined
+        label: "{{ item.dir }}"
       register: result
 
     - name: "ezjail-flavours: Debug result"
