@@ -15,7 +15,8 @@ Ansible 2.17 update
 Major Changes
 -------------
 * Support 13.3, 14.0, 14.1
-* Update README
+* Update README.
+* Update ansible-lint config.
 
 Minor Changes
 -------------
