@@ -150,6 +150,22 @@ cron (see the *cron* command in *man portsnap*). Optionally, use the role
 [vbotka.ansible-freebsd-ports](https://github.com/vbotka/ansible-freebsd-ports/tree/master)
 to configure *portsnap cron*.
 
+## Upgrade configuration to a new release
+
+Change version of ftphost in *bsd_ezjail_conf*
+
+```
+ezjail_ftphost="file:///export/distro/FreeBSD-14.1-RELEASE-amd64-dvd1.iso/usr/freebsd-dist"
+```
+
+Change firstboot.sh in flavours/ansible/root/firstboot.sh
+
+```ini
+env ASSUME_ALWAYS_YES=YES pkg install security/sudo
+env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.36
+env ASSUME_ALWAYS_YES=YES pkg install lang/python39
+env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
+```
 
 ## Workflow
 
