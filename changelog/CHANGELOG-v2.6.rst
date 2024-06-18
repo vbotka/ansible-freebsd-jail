@@ -20,6 +20,7 @@ Major Changes
 
 Minor Changes
 -------------
+* Update ezjail-flavours in blocks.
 
 Bufixes
 -------
