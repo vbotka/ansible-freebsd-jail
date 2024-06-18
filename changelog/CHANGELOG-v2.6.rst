@@ -5,6 +5,28 @@ vbotka.freebsd_jail 2.6 Release Notes
 .. contents:: Topics
 
 
+2.6.1
+=====
+
+Release Summary
+---------------
+Ansible 2.17 update
+
+Major Changes
+-------------
+* Support 13.3, 14.0, 14.1
+* Update README
+
+Minor Changes
+-------------
+
+Bufixes
+-------
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+
 2.6.0
 =====
 
@@ -22,9 +44,8 @@ Minor Changes
 -------------
 * Update contrib/jail-flavours to Python 3.9 and Perl 5.36
 
+Bufixes
+-------
 
 Breaking Changes / Porting Guide
 --------------------------------
-
-Bufixes
--------

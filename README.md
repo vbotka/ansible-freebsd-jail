@@ -1,6 +1,7 @@
 # freebsd_jail
 
-[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)[![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
+[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)
+[![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
