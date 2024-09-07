@@ -21,6 +21,7 @@ Minor Changes
 -------------
 * Update ezjail-flavours in blocks. selectattr in loops.
 * Update README. Upgrade configuration to a new release.
+* Update tests/test.yml playbook
 
 Bufixes
 -------
