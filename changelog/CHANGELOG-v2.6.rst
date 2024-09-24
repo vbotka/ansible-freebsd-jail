@@ -3,6 +3,29 @@ vbotka.freebsd_jail 2.6 Release Notes
 =====================================
 
 .. contents:: Topics
+# BEGIN Commits 2.6.1
+- Format meta/main.yml
+- Update tests/test.yml playbook
+- selectattr in loops.
+- Update README. Upgrade configuration to a new release.
+- Update ezjail-flavours in blocks.
+- Update ansible-lint config.
+- Start devel 2.6.1
+# END Commits 2.6.1
+# BEGIN Release notes 2.6.1
+2.6.1
+=====
+Release Summary
+---------------
+Major Changes
+-------------
+Minor Changes
+-------------
+Bugfixes
+--------
+Breaking Changes / Porting Guide
+--------------------------------
+# END Release notes 2.6.1
 
 
 2.6.1
