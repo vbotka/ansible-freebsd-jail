@@ -4,6 +4,7 @@ vbotka.freebsd_jail 2.6 Release Notes
 
 .. contents:: Topics
 # BEGIN Commits 2.6.1
+- Update python 3.11 in .travis.yml
 - Format meta/main.yml
 - Update tests/test.yml playbook
 - selectattr in loops.
@@ -21,6 +22,15 @@ Major Changes
 -------------
 Minor Changes
 -------------
+- Update python 3.11 in .travis.yml
+- Format meta/main.yml
+- Update tests/test.yml playbook
+- selectattr in loops.
+- Update README. Upgrade configuration to a new release.
+- Update ezjail-flavours in blocks.
+- Update ansible-lint config.
+- Start devel 2.6.1
+
 Bugfixes
 --------
 Breaking Changes / Porting Guide
