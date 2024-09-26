@@ -1,6 +1,7 @@
 # freebsd_jail
 
-[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)[![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
+[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)
+[![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
@@ -149,6 +150,22 @@ cron (see the *cron* command in *man portsnap*). Optionally, use the role
 [vbotka.ansible-freebsd-ports](https://github.com/vbotka/ansible-freebsd-ports/tree/master)
 to configure *portsnap cron*.
 
+## Upgrade configuration to a new release
+
+Change version of ftphost in *bsd_ezjail_conf*
+
+```
+ezjail_ftphost="file:///export/distro/FreeBSD-14.1-RELEASE-amd64-dvd1.iso/usr/freebsd-dist"
+```
+
+Change firstboot.sh in flavours/ansible/root/firstboot.sh
+
+```ini
+env ASSUME_ALWAYS_YES=YES pkg install security/sudo
+env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.36
+env ASSUME_ALWAYS_YES=YES pkg install lang/python39
+env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
+```
 
 ## Workflow
 
@@ -679,6 +696,17 @@ fatal: [srv.example.com]: FAILED! => changed=true
   rc: 1
   start: '2022-01-16 23:57:07.794622'
   stderr: 'Error: No archive for pattern __ can be found.'
+```
+
+
+## Ansible lint
+
+Use the configuration file *.ansible-lint.local* when running
+*ansible-lint*. Some rules might be disabled and some warnings might
+be ignored. See the notes in the configuration file.
+
+```bash
+shell> ansible-lint -c .ansible-lint.local
 ```
 
 

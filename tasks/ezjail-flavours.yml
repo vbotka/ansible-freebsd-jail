@@ -6,33 +6,45 @@
     path: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/etc/rc.d"
     mode: '0755'
   loop: "{{ bsd_ezjail_flavours }}"
+  loop_control:
+    label: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
   tags: bsd_jail_ezjail_flavours_create_dirs
 
-- name: "ezjail-flavours: Unarchive files"
-  ansible.builtin.unarchive:
-    src: "{{ item.archive }}"
-    dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
-  loop: "{{ bsd_ezjail_flavours }}"
-  register: result
-  when: item.archive is defined
+- name: Unarchive files
   tags: bsd_jail_ezjail_flavours_archive
+  block:
 
-- name: "ezjail-flavours: Synchronize files"
-  ansible.posix.synchronize:
-    src: "{{ item.dir }}/"
-    dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/"
-  loop: "{{ bsd_ezjail_flavours }}"
-  register: result
-  when: item.dir is defined
+    - name: "ezjail-flavours: Unarchive files"
+      ansible.builtin.unarchive:
+        src: "{{ item.archive }}"
+        dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
+      loop: "{{ bsd_ezjail_flavours | selectattr('archive', 'defined') }}"
+      loop_control:
+        label: "{{ item.archive }}"
+      register: result
+
+    - name: "ezjail-flavours: Debug result"
+      ansible.builtin.debug:
+        var: result
+      when: bsd_jail_debug | bool
+
+- name: Synchronize files
   tags: bsd_jail_ezjail_flavours_dir
+  block:
 
-- name: "ezjail-flavours: Debug result"
-  ansible.builtin.debug:
-    var: result
-  when: bsd_jail_debug|bool
-  tags:
-    - bsd_jail_ezjail_flavours_archive
-    - bsd_jail_ezjail_flavours_dir
+    - name: "ezjail-flavours: Synchronize files"
+      ansible.posix.synchronize:
+        src: "{{ item.dir }}/"
+        dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/"
+      loop: "{{ bsd_ezjail_flavours | selectattr('dir', 'defined') }}"
+      loop_control:
+        label: "{{ item.dir }}"
+      register: result
+
+    - name: "ezjail-flavours: Debug result"
+      ansible.builtin.debug:
+        var: result
+      when: bsd_jail_debug | bool
 
 # EOF
 ...
