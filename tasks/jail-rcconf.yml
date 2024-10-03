@@ -1,22 +1,20 @@
 ---
-
-- name: "jail-rcconf: Enable and start jail service"
+- name: "Jail-rcconf: Enable and start jail service"
   ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    regexp: '^\s*jail_enable\s*=(.*)'
-    line: 'jail_enable="YES"'
+    regexp: ^\s*jail_enable\s*=(.*)
+    line: jail_enable="YES"
     backup: "{{ bsd_jail_conf_backup }}"
   notify: enable and start jail
-  when: bsd_jail_enable|bool
+  when: bsd_jail_enable | bool
 
-- name: "jail-rcconf: Disable and stop jail service"
+- name: "Jail-rcconf: Disable and stop jail service"
   ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    regexp: '^\s*jail_enable\s*=(.*)'
-    line: 'jail_enable="NO"'
+    regexp: ^\s*jail_enable\s*=(.*)
+    line: jail_enable="NO"
     backup: "{{ bsd_jail_conf_backup }}"
   notify: disable and stop jail
-  when: not bsd_jail_enable|bool
+  when: not bsd_jail_enable | bool
 
 # EOF
-...

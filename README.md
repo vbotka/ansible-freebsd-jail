@@ -163,7 +163,7 @@ Change firstboot.sh in flavours/ansible/root/firstboot.sh
 ```ini
 env ASSUME_ALWAYS_YES=YES pkg install security/sudo
 env ASSUME_ALWAYS_YES=YES pkg install lang/perl5.36
-env ASSUME_ALWAYS_YES=YES pkg install lang/python39
+env ASSUME_ALWAYS_YES=YES pkg install lang/python311
 env ASSUME_ALWAYS_YES=YES pkg install archivers/gtar
 ```
 
@@ -182,13 +182,32 @@ shell> ansible-galaxy role install vbotka.freebsd_jail
 shell> ansible-galaxy role install vbotka.freebsd_postinstall
 ```
 
-3) Fit variables. For example, in vars/main.yml
+3) Fit variables to your needs. For example,
 
-```bash
-shell> editor vbotka.freebsd_jail/vars/main.yml
+```yaml
+bsd_ezjail_install_options: '-p'
+bsd_jail_objects_dir: "{{ playbook_dir }}/jails/jail.d"
+bsd_jail_objects_dir_extension: yml
+bsd_ezjail_use_zfs: 'YES'
+bsd_ezjail_use_zfs_for_jails: 'YES'
+bsd_ezjail_jailzfs: zroot/jails
+bsd_ezjail_jaildir: /local/jails
+bsd_ezjail_archivedir: /export/archive/jails/ezjail_archives
+bsd_ezjail_conf:
+  - 'ezjail_use_zfs="{{ bsd_ezjail_use_zfs }}"'
+  - 'ezjail_use_zfs_for_jails="{{ bsd_ezjail_use_zfs_for_jails }}"'
+  - 'ezjail_jailzfs="{{ bsd_ezjail_jailzfs }}"'
+  - 'ezjail_jaildir="{{ bsd_ezjail_jaildir }}"'
+  - 'ezjail_archivedir="{{ bsd_ezjail_archivedir }}"'
+  - 'ezjail_ftphost="file:///export/distro/FreeBSD-14.1-RELEASE-amd64-dvd1.iso/usr/freebsd-dist"'
+bsd_ezjail_flavours:
+  - flavour: default
+    archive: "{{ playbook_dir }}/jails/flavours/default.tar"
+  - flavour: ansible
+    archive: "{{ playbook_dir }}/jails/flavours/ansible.tar"
 ```
 
-4) Create playbook and inventory
+4) Create a playbook and inventory
 
 ```yaml
 shell> cat jail.yml
@@ -205,7 +224,7 @@ shell> cat jail.yml
 [server:vars]
 ansible_connection=ssh
 ansible_user=admin
-ansible_python_interpreter=/usr/local/bin/python3.9
+ansible_python_interpreter=/usr/local/bin/python3.11
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
@@ -214,7 +233,7 @@ ansible_perl_interpreter=/usr/local/bin/perl
 Check syntax
 
 ```bash
-shell> ansible-playbook freebsd-jail.yml --syntax-check
+shell> ansible-playbook jail.yml --syntax-check
 ```
 
 Take a look at the variables
@@ -226,7 +245,7 @@ shell> ansible-playbook jail.yml -t bsd_jail_debug -e bsd_jail_debug=true
 Install packages
 
 ```bash
-shell> ansible-playbook jail.yml -t bsd_jail_packages -e bsd_jail_install=true
+shell> ansible-playbook jail.yml -t bsd_jail_pkg -e bsd_jail_install=true
 ```
 
 Create directory flavours and unarchive files
@@ -262,13 +281,13 @@ ansible_user=admin
 ansible_become=yes
 ansible_become_user=root
 ansible_become_method=sudo
-ansible_python_interpreter=/usr/local/bin/python3.8
+ansible_python_interpreter=/usr/local/bin/python3.11
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
 ```bash
 shell> ansible test_01 -m setup | grep ansible_distribution_release
-        "ansible_distribution_release": "13.2-RELEASE",
+        "ansible_distribution_release": "14.1-RELEASE",
 ```
 
 
@@ -295,11 +314,10 @@ shell> ezjail-admin stop test_01
   ...
 shell> ezjail-admin archive -A
 shell> ls -1 /export/archive/jails/ezjail_archives/
-test_01-202311060342.38.tar.gz
-test_02-202311060342.18.tar.gz
-test_03-202311060341.58.tar.gz
+test_01-202410031453.25.tar.gz
+test_02-202410031453.03.tar.gz
+test_03-202410031452.41.tar.gz
 ```
-
 
 ## Stop and delete jail
 
@@ -330,8 +348,9 @@ ZR  11   127.0.2.1       test_01                        /local/jails/test_01
 ## Restore and Start jail
 
 ```bash
-shell> ezjail-admin restore test_02-202311060342.18.tar.gz
+shell> ezjail-admin restore test_02-202410031453.03.tar.gz
 ```
+
 ```bash
 shell> ezjail-admin start test_02
 ```
@@ -397,11 +416,20 @@ test_02-firstboot
 test_03-firstboot
 ```
 
-Start the jail
+Start the jail from the command line
 
 ```bash
 shell> ezjail-admin start test_02
 ```
+
+or from the playbook
+
+```bash
+shell> ansible-playbook jail.yml -t bsd_jail_ezjail_info,bsd_jail_start
+```
+
+Take a look the the jails list
+
 ```bash
 # ezjail-admin list
 STA JID  IP              Hostname                       Root Directory
@@ -461,18 +489,19 @@ fn_gateway_enable: true
 fn_defaultrouter: 10.1.0.10
 
 fn_interfaces:
-  - {interface: em0, options: "inet 10.1.0.75 netmask 255.255.255.0"}
+  - {interface: em0, options: inet 10.1.0.73 netmask 255.255.255.0}
 
 fn_aliases:
   - interface: em0
     aliases:
-      - {alias: alias1, options: "inet 10.1.0.51 netmask 255.255.255.255"}
-      - {alias: alias2, options: "inet 10.1.0.52 netmask 255.255.255.255"}
-      - {alias: alias3, options: "inet 10.1.0.53 netmask 255.255.255.255"}
+      - {alias: alias0, options: inet 10.1.0.51 netmask 255.255.255.255}
+      - {alias: alias1, options: inet 10.1.0.52 netmask 255.255.255.255}
+      - {alias: alias2, options: inet 10.1.0.53 netmask 255.255.255.255}
 
 fn_cloned_interfaces:
   - {interface: lo1, state: present}
 ```
+
 ```bash
 shell> ansible-playbook freebsd-network.yml
 ```
@@ -493,6 +522,7 @@ fzfs_mountpoints:
     group: wheel
     mode: '0700'
 ```
+
 ```
 shell> ansible-playbook freebsd-zfs.yml
 ```
@@ -526,26 +556,16 @@ pf_blacklistd_rcconf:
 pf_type: default
 
 pf_ext_if: em0
-pf_logall_blocked: log
+pf_log_all_blocked: log
 pf_pass_icmp_types: [echoreq, unreach]
 pf_pass_icmp6_types: [echoreq, unreach]
 pf_jails_net: 10.1.0.0/24
-pf_rules_rdr:
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.51 port { 80 443 8080 8081 } -> 127.0.2.1  # test_01
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.52 port { 80 443 } -> 127.0.2.2            # test_02
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.53 port { 80 443 } -> 127.0.2.3            # test_03
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.54 port { 80 443 } -> 127.0.2.4            # test_04
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.55 port { 80 443 } -> 127.0.2.5            # test_05
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.56 port { 80 443 } -> 127.0.2.6            # test_06
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.57 port { 80 443 } -> 127.0.2.7            # test_07
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.58 port { 80 443 } -> 127.0.2.8            # test_08
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.59 port { 80 443 } -> 127.0.2.9            # test_09
-  - rdr pass on $ext_if proto tcp from any to 10.1.0.60 port { 80 443 } -> 127.0.2.10           # test_10
+pf_rules_rdr: []
 
 pf_macros:
   ext_if: "{{ pf_ext_if }}"
   localnet: "{{ pf_jails_net }}"
-  logall: "{{ pf_logall_blocked }}"
+  logall: "{{ pf_log_all_blocked }}"
   icmp_types: "{{ pf_pass_icmp_types }}"
   icmp6_types: "{{ pf_pass_icmp6_types }}"
 
@@ -572,14 +592,49 @@ pf_filtering:
   - pass inet6 proto icmp6 all icmp6-type $icmp6_types
   - pass from { self, $localnet } to any keep state
 ```
-```
+
+```bash
 shell> ansible-playbook freebsd-pf.yml
+```
+
+``` ini
+shell> cat cat /etc/pf.conf
+# Ansible managed
+# template: default-pf.conf.j2
+
+# MACROS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ext_if = "em0"
+localnet = "10.1.0.0/24"
+logall = "log"
+icmp_types = "{ echoreq, unreach }"
+icmp6_types = "{ echoreq, unreach }"
+
+# TABLES  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+table <sshabuse> persist
+# OPTIONS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+set skip on lo0
+set block-policy return
+set loginterface $ext_if
+# NORMALIZATION - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+scrub in on $ext_if all fragment reassemble
+# QUEUING  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# TRANSLATION - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+nat on $ext_if from $localnet to any -> ($ext_if)
+# FILTERING - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+antispoof for $ext_if
+anchor "blacklistd/*" in on $ext_if
+anchor "f2b/*"
+block $logall all
+pass inet proto icmp all icmp-type $icmp_types
+pass inet6 proto icmp6 all icmp6-type $icmp6_types
+pass from { self, $localnet } to any keep state
 ```
 
 * [freebsd_postinstall](https://galaxy.ansible.com/vbotka/freebsd_postinstall)
 
 ```yaml
-fp_sysctl:
+fp_sysctl: true
+fp_sysctl_conf:
   - {name: net.inet.ip.forwarding, value: 1}
   - {name: vfs.zfs.prefetch.disable, value: 0}
   - {name: security.jail.set_hostname_allowed, value: 1}
@@ -598,6 +653,7 @@ To manage ZFS inside the jail add the following states
   - {name: security.jail.mount_devfs_allowed, value: '1'}
   - {name: security.jail.mount_zfs_allowed, value: '1'}
 ```
+
 ```bash
 shell> ansible-playbook freebsd-postinstall.yml -t fp_sysctl
 ```
@@ -646,7 +702,7 @@ See [contrib/jail-flavours/firstboot-1.0.1](https://github.com/vbotka/ansible-fr
 # Install packages
 env ASSUME_ALWAYS_YES=YES pkg install sudo
 env ASSUME_ALWAYS_YES=YES pkg install perl5
-env ASSUME_ALWAYS_YES=YES pkg install python38
+env ASSUME_ALWAYS_YES=YES pkg install python311
 env ASSUME_ALWAYS_YES=YES pkg install gtar
 # Create user admin
 pw useradd -n admin -s /bin/sh -m

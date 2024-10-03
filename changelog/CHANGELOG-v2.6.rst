@@ -17,6 +17,9 @@ Major Changes
 
 Minor Changes
 -------------
+* Update README
+* Fix lint errors
+* Handlers listen to lowercase labels
 
 
 2.6.1

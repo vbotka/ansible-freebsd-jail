@@ -3,63 +3,72 @@
 
 # ezjail
 
-- name: enable and start ezjail
+- name: Enable and start ezjail
+  listen: enable and start ezjail
   ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: started
     enabled: true
 
-- name: disable and stop ezjail
+- name: Disable and stop ezjail
+  listen: disable and stop ezjail
   ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: stopped
     enabled: false
 
-- name: start ezjail
+- name: Start ezjail
+  listen: start ezjail
   ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: started
 
-- name: stop ezjail
+- name: Stop ezjail
+  listen: stop ezjail
   ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: stopped
 
-- name: restart ezjail
+- name: Restart ezjail
+  listen: restart ezjail
   ansible.builtin.service:
     name: "{{ bsd_ezjail_service }}"
     state: restarted
-  when: bsd_ezjail_enable|bool
+  when: bsd_ezjail_enable | bool
 
 # jail
 
-- name: enable and start jail
+- name: Enable and start jail
+  listen: enable and start jail
   ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: started
     enabled: true
 
-- name: disable and stop jail
+- name: Disable and stop jail
+  listen: disable and stop jail
   ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: stopped
     enabled: false
 
-- name: start jail
+- name: Start jail
+  listen: start jail
   ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: started
 
-- name: stop jail
+- name: Stop jail
+  listen: stop jail
   ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: stopped
 
-- name: restart jail
+- name: Restart jail
+  listen: restart jail
   ansible.builtin.service:
     name: "{{ bsd_jail_service }}"
     state: restarted
-  when: bsd_jail_enable|bool
+  when: bsd_jail_enable | bool
 
 # EOF
-...
