@@ -1,7 +1,7 @@
 ---
 
 objects:
-  - jailname: {{ name }}
+  - jailname: {{ jname }}
     present: true
     start: true
     jailtype: zfs
@@ -15,7 +15,7 @@ objects:
     jail_conf:
       - {key: mount.devfs}
     ezjail_conf: []
-#   archive: {{ name }}-firstboot
+#   archive: {{ jname }}-firstboot
     firstboot: /root/firstboot.sh
     firstboot_owner: root
     firstboot_group: wheel

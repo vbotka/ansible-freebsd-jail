@@ -1,24 +1,32 @@
 ---
+- name: "Start: Assert bsd_jail_id is defined"
+  ansible.builtin.assert:
+    that: bsd_jail_id is defined
+    fail_msg: The variable bsd_jail_id is missing. Run tag bsd_jail_ezjail_info.
 
-- block:
+- name: Start/Stop jails
+  when: bsd_ezjail_enable | bool
+  block:
 
-    - name: "start: Stop jails"
+    - name: "Start: Stop jails"
       ansible.builtin.command:
-        cmd: "/usr/local/bin/ezjail-admin stop {{ item.jailname }}"
+        cmd: /usr/local/bin/ezjail-admin stop {{ item.jailname }}
         removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}.id"
       loop: "{{ bsd_jail_jails_present }}"
       loop_control:
         label: "{{ item.jailname }}"
-      when: not item.start|default(true)
+      when: not item.start | d(true)
 
-    - name: "start: Start jails"
+    - name: "Start: Start jails"
       ansible.builtin.command:
-        cmd: "/usr/local/bin/ezjail-admin start {{ item.jailname }}"
+        cmd: /usr/local/bin/ezjail-admin start {{ item.jailname }}
         creates: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}.id"
       loop: "{{ bsd_jail_jails_present }}"
       loop_control:
         label: "{{ item.jailname }}"
-      when: item.start|default(true)
+      when:
+        - item.start | d(true)
+        - item.jailname not in bsd_jail_id
 
 # TODO: Restart restored jails
 #    - name: "start: Restart jails with ezjail"
@@ -26,7 +34,4 @@
 #        cmd: "/usr/local/bin/ezjail-admin restart {{ item }}"
 #      loop: "{{ bsd_ezjail_restart_jails }}"
 
-  when: bsd_ezjail_enable|bool
-
 # EOF
-...

@@ -1,21 +1,20 @@
 ---
-
-- name: "fstab: Create directory {{ bsd_jail_fstab_dir }}"
+- name: "Fstab: Create directory {{ bsd_jail_fstab_dir }}"
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_jail_fstab_dir }}"
-    mode: '0755'
+    mode: "0755"
 
-- name: "fstab: Delete fstab files in {{ bsd_jail_fstab_dir }}"
+- name: "Fstab: Delete fstab files in {{ bsd_jail_fstab_dir }}"
   ansible.builtin.file:
     state: absent
     path: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
   loop: "{{ bsd_jail_jails }}"
   loop_control:
     label: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
-  when: not item.present|default(true)
+  when: not item.present | d(true)
 
-- name: "fstab: Create fstab files in {{ bsd_jail_fstab_dir }}"
+- name: "Fstab: Create fstab files in {{ bsd_jail_fstab_dir }}"
   ansible.builtin.template:
     src: fstab.j2
     dest: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
@@ -25,7 +24,6 @@
   loop: "{{ bsd_jail_jails }}"
   loop_control:
     label: "{{ bsd_jail_fstab_dir }}/fstab.{{ item.jailname }}"
-  when: item.present|default(true)
+  when: item.present | d(true)
 
 # EOF
-...

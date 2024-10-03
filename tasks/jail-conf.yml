@@ -1,6 +1,5 @@
 ---
-
-- name: "jail-conf: Configure {{ bsd_jail_conf_file }}"
+- name: "Jail-conf: Configure {{ bsd_jail_conf_file }}"
   ansible.builtin.template:
     src: jail.conf.j2
     dest: "{{ bsd_jail_conf_file }}"
@@ -10,7 +9,7 @@
     backup: "{{ bsd_jail_conf_backup }}"
   notify: restart jail
 
-- name: "jail-conf: Configure jails in jail.conf.d"
+- name: "Jail-conf: Configure jails in jail.conf.d"
   ansible.builtin.template:
     src: jail.confd.j2
     dest: "{{ bsd_jail_confd_dir }}/{{ item.jailname }}.conf"
@@ -18,13 +17,12 @@
     group: "{{ bsd_jail_conf_group }}"
     mode: "{{ bsd_jail_conf_mode }}"
     backup: "{{ bsd_jail_conf_backup }}"
-  loop: "{{ bsd_jail_jails|sort(attribute='jailname') }}"
+  loop: "{{ bsd_jail_jails | sort(attribute='jailname') }}"
   loop_control:
     label: "{{ item.jailname }}"
   when:
-    - bsd_jail_confd|bool
-    - item.present|default(true)
+    - bsd_jail_confd | bool
+    - item.present | d(true)
   notify: restart jail
 
 # EOF
-...

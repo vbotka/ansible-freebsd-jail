@@ -1,23 +1,21 @@
 ---
-
-- name: "ezjail-install: Set ezjail-admin install command"
+- name: "Ezjail-install: Set ezjail-admin install command"
   ansible.builtin.set_fact:
-    install_command: "ezjail-admin {{ bsd_ezjail_install_command }} {{ bsd_ezjail_install_options }}"
+    install_command: ezjail-admin {{ bsd_ezjail_install_command }} {{ bsd_ezjail_install_options }}
 
-- name: "ezjail-install: Debug. ezjail-admin install command"
+- name: "Ezjail-install: Debug. ezjail-admin install command bsd_jail_debug={{ bsd_jail_debug }}"
   ansible.builtin.debug:
     var: install_command
-  when: bsd_jail_debug|bool
+  when: bsd_jail_debug | bool
 
-- name: "ezjail-install: Run '{{ install_command }}' when bsd_ezjail_install_force"
-  ansible.builtin.command:
+- name: "Ezjail-install: Run when bsd_ezjail_install_force '{{ install_command }}'"
+  ansible.builtin.command: # noqa: no-changed-when
     cmd: "{{ install_command }}"
-  when: bsd_ezjail_install_force|bool
+  when: bsd_ezjail_install_force | bool
 
-- name: "ezjail-install: Run '{{ install_command }}' when basejail does not exist"
+- name: "Ezjail-install: Run when basejail does not exist '{{ install_command }}'"
   ansible.builtin.command:
     cmd: "{{ install_command }}"
     creates: "{{ bsd_ezjail_jaildir }}/basejail"
 
 # EOF
-...

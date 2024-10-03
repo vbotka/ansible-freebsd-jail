@@ -3,11 +3,11 @@
 
 - name: Import vars.yml
   ansible.builtin.import_tasks: vars.yml
-  tags: [always, bsd_jail_vars]
+  tags: [bsd_jail_vars, always]
 
 - name: Import debug.yml
   ansible.builtin.import_tasks: debug.yml
-  when: bsd_jail_debug|bool
+  when: bsd_jail_debug | bool
   tags: bsd_jail_debug
 
 - name: Include vbotka.freebsd_postinstall mount-iso
@@ -16,18 +16,18 @@
     tasks_from: mount-iso.yml
     apply:
       tags: bsd_jail_mount_iso
-  when: bsd_jail_mount_iso|bool
+  when: bsd_jail_mount_iso | bool
   tags: bsd_jail_mount_iso
 
 - name: Import assert.yml
   ansible.builtin.import_tasks: assert.yml
-  when: bsd_jail_assert|bool
+  when: bsd_jail_assert | bool
   tags: bsd_jail_assert
 
-- name: Import packages.yml
-  ansible.builtin.import_tasks: packages.yml
-  when: bsd_jail_install|bool
-  tags: bsd_jail_packages
+- name: Import pkg.yml
+  ansible.builtin.import_tasks: pkg.yml
+  when: bsd_jail_install | bool
+  tags: bsd_jail_pkg
 
 - name: Import fstab.yml
   ansible.builtin.import_tasks: fstab.yml
@@ -35,22 +35,22 @@
 
 - name: Import jail-conf.yml
   ansible.builtin.import_tasks: jail-conf.yml
-  when: bsd_jail|bool
+  when: bsd_jail | bool
   tags: bsd_jail_jail_conf
 
 - name: Import jail-rcconf.yml
   ansible.builtin.import_tasks: jail-rcconf.yml
-  when: bsd_jail|bool
+  when: bsd_jail | bool
   tags: bsd_jail_jail_rcconf
 
 - name: Import ezjail-conf.yml
   ansible.builtin.import_tasks: ezjail-conf.yml
-  when: bsd_ezjail|bool
+  when: bsd_ezjail | bool
   tags: bsd_jail_ezjail_conf
 
 - name: Import ezjail-rcconf.yml
   ansible.builtin.import_tasks: ezjail-rcconf.yml
-  when: bsd_ezjail|bool
+  when: bsd_ezjail | bool
   tags: bsd_jail_ezjail_rcconf
 
 - name: Meta flush_handlers
@@ -59,38 +59,37 @@
 
 - name: Import ezjail-install.yml
   ansible.builtin.import_tasks: ezjail-install.yml
-  when: bsd_ezjail|bool
+  when: bsd_ezjail | bool
   tags: bsd_jail_ezjail_install
 
 - name: Import ezjail-flavours.yml
   ansible.builtin.import_tasks: ezjail-flavours.yml
-  when: bsd_ezjail|bool
+  when: bsd_ezjail | bool
   tags: bsd_jail_ezjail_flavours
 
 - name: Import info.yml
   ansible.builtin.import_tasks: info.yml
-  when: bsd_ezjail|bool
-  tags: bsd_jail_ezjail_jails
+  when: bsd_ezjail | bool
+  tags: bsd_jail_ezjail_info
 
 - name: Import ezjail-jails.yml
   ansible.builtin.import_tasks: ezjail-jails.yml
-  when: bsd_ezjail|bool
+  when: bsd_ezjail | bool
   tags: bsd_jail_ezjail_jails
 
 - name: Import start.yml
   ansible.builtin.import_tasks: start.yml
-  when: bsd_jail_start|bool
+  when: bsd_jail_start | bool
   tags: bsd_jail_start
 
 - name: Import firstboot.yml
   ansible.builtin.import_tasks: firstboot.yml
-  when: bsd_jail_firstboot|bool
+  when: bsd_jail_firstboot | bool
   tags: bsd_jail_firstboot
 
 - name: Import info.yml
   ansible.builtin.import_tasks: info.yml
-  when: bsd_jail_info|bool
+  when: bsd_jail_info | bool
   tags: bsd_jail_info
 
 # EOF
-...

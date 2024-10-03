@@ -1,67 +1,69 @@
 ---
-
 # Interfaces
-- name: "assert: Debug interfaces"
+- name: "Assert: Debug interfaces"
   ansible.builtin.debug:
-    msg: "{{ bsd_jail_jails|json_query('[].interface[].dev')|unique }}"
-  when: bsd_jail_debug|bool
+    msg: "{{ bsd_jail_jails | json_query('[].interface[].dev') | unique }}"
+  when: bsd_jail_debug | bool
 
-- name: "assert: Check existence of interfaces"
+- name: "Assert: Check existence of interfaces"
   ansible.builtin.fail:
     msg: "[ERR] Interface {{ item }} does not exist. End of play."
-  loop: "{{ bsd_jail_jails|json_query('[].interface[].dev')|unique }}"
+  loop: "{{ bsd_jail_jails | json_query('[].interface[].dev') | unique }}"
   when:
     - item not in ansible_interfaces
     - bsd_jail_assert_enable.interfaces
 
 # Jaildir
-- name: "assert: Check existence of storage {{ bsd_ezjail_jaildir }}"
-  block:
-    - name: "assert: Stat {{ bsd_ezjail_jaildir }}"
-      ansible.builtin.stat:
-        path: "{{ bsd_ezjail_jaildir }}"
-      register: result
-    - name: "assert: Storage {{ bsd_ezjail_jaildir }} does not exist."
-      ansible.builtin.fail:
-        msg: "[ERR] Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
-      when: not result.stat.exists
+- name: "Assert: Check existence of storage {{ bsd_ezjail_jaildir }}"
   when:
     - bsd_ezjail_use_zfs|upper != 'YES'
     - bsd_jail_assert_enable.jaildir
-
-# ZFS
-- name: "assert: Check existence of storage {{ bsd_ezjail_jailzfs }}"
   block:
-    - name: "assert: Collect zfs_facts"
+
+    - name: "Assert: Stat {{ bsd_ezjail_jaildir }}"
+      ansible.builtin.stat:
+        path: "{{ bsd_ezjail_jaildir }}"
+      register: result
+
+    - name: "Assert: Storage does not exist {{ bsd_ezjail_jaildir }}"
+      ansible.builtin.fail:
+        msg: "[ERR] Storage {{ bsd_ezjail_jaildir }} does not exist. End of play."
+      when: not result.stat.exists
+
+  # ZFS
+- name: "Assert: Check existence of storage {{ bsd_ezjail_jailzfs }}"
+  when:
+    - bsd_ezjail_use_zfs|upper == 'YES'
+    - bsd_jail_assert_enable.zfs
+  block:
+
+    - name: "Assert: Collect zfs_facts"
       community.general.zfs_facts:
         dataset: "{{ bsd_ezjail_jailzfs }}"
       register: result
       ignore_errors: true
-    - name: "assert: Storage {{ bsd_ezjail_jailzfs }} does not exist."
+
+    - name: "Assert: Storage does not exist {{ bsd_ezjail_jailzfs }}"
       ansible.builtin.fail:
         msg: "[ERR] Storage {{ bsd_ezjail_jailzfs }} does not exist. End of play."
       when: result.failed
-  when:
-    - bsd_ezjail_use_zfs|upper == 'YES'
-    - bsd_jail_assert_enable.zfs
 
-# TODO
-# * Check network
-# ifconfig_lo1_alias0="inet 10.2.0.10 netmask 255.255.255.255"
-# gateway_enable="YES"
-# * Check sysctl
-# sysctl net.inet.ip.forwarding=1
-# * Check PF
-# ext_if="em0"
-# jail_if="lo1"
-# IP_PUB="192.0.2.1"
-# IP_JAIL_WWW="10.6.6.6"
-# NET_JAIL="10.6.6.0/24"
-# PORT_WWW="{80,443}"
-# # nat all jail traffic
-# nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
-# # redirect www
-# rdr pass on $ext_if proto tcp from any to $IP_PUB port $PORT_WWW -> $IP_JAIL_WWW
+  # TODO
+  # * Check network
+  # ifconfig_lo1_alias0="inet 10.2.0.10 netmask 255.255.255.255"
+  # gateway_enable="YES"
+  # * Check sysctl
+  # sysctl net.inet.ip.forwarding=1
+  # * Check PF
+  # ext_if="em0"
+  # jail_if="lo1"
+  # IP_PUB="192.0.2.1"
+  # IP_JAIL_WWW="10.6.6.6"
+  # NET_JAIL="10.6.6.0/24"
+  # PORT_WWW="{80,443}"
+  # # nat all jail traffic
+  # nat on $ext_if inet from ! ($ext_if) to any -> ($ext_if)
+  # # redirect www
+  # rdr pass on $ext_if proto tcp from any to $IP_PUB port $PORT_WWW -> $IP_JAIL_WWW
 
 # EOF
-...

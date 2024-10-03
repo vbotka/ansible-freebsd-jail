@@ -1,0 +1,41 @@
+---
+# defaults freebsd_jail
+bsd_jail_role_version: 2.6.2
+
+bsd_jail_debug: false
+bsd_jail_conf_backup: true
+
+# mount ISO
+bsd_jail_mount_iso: true
+
+# Service jail
+# Enable jail configuration
+bsd_jail: true
+# Enable service jail
+bsd_jail_enable: true
+# Service jail
+bsd_jail_service: jail
+
+# Service ezjail
+# Configure /etc/rc.conf and /usr/local/etc/ezjail.conf
+# Import: install, flavours, info, jails
+# Enable ezjail configuration
+bsd_ezjail: true
+# Enable service ezjail
+bsd_ezjail_enable: true
+# Service ezjail
+bsd_ezjail_service: ezjail
+
+# Start or stop jail by ezjail-admin star or stop
+bsd_jail_start: true
+
+# Execute firstboot script by ezjail-admin console -e
+bsd_jail_firstboot: true
+
+# Set executable /etc/rc.shutdown
+bsd_jail_shutdown: true
+
+# info
+bsd_jail_info: false
+
+# EOF
