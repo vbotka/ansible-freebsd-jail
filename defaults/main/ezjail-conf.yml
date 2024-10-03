@@ -1,0 +1,56 @@
+---
+bsd_ezjail_conf_path: /usr/local/etc
+bsd_ezjail_conf_file: "{{ bsd_ezjail_conf_path }}/ezjail.conf"
+bsd_ezjail_conf_owner: root
+bsd_ezjail_conf_group: wheel
+bsd_ezjail_conf_mode: "0644"
+
+bsd_ezjail_conf:
+  - ezjail_use_zfs="{{ bsd_ezjail_use_zfs }}"
+  - ezjail_use_zfs_for_jails="{{ bsd_ezjail_use_zfs_for_jails }}"
+  - ezjail_jaildir={{ bsd_ezjail_jaildir }}
+  - ezjail_ftphost=http://ftp.freebsd.org
+# - 'ezjail_jailzfs={{ bsd_ezjail_jailzfs }}'
+# - 'ezjail_ftphost=file:///export/distro/FreeBSD-12.0-RELEASE-i386-disc1.iso/usr/freebsd-dist'
+bsd_ezjail_use_zfs: "NO"
+bsd_ezjail_use_zfs_for_jails: "NO"
+# bsd_ezjail_jaildir and bsd_jail_jailzfs
+# - will not be created by this role
+# - shall be created before running this role
+# - existence will be checked
+bsd_ezjail_jailzfs: zroot/jails
+bsd_ezjail_jaildir: /local/jails # $jailroot
+# See contrib/jail-flavours
+bsd_ezjail_flavours: []
+# ezjail-admin install
+# bsd_ezjail_admin_force: True; run 'ezjail-admin install' even if basejail exists
+bsd_ezjail_install_force: false
+# (See man ezjail-admin)
+# 'install' function sub-command is normally run once in the life of
+# the ezjail environment. It allocates the directory structure used by
+# ezjail and populates the base jail using the minimal distribution
+# set from a FreeBSD FTP server.
+# See also ezjail-admin "update" to install the base jail from source,
+# as well as a method to update the base jail using freebsd-update(8).
+bsd_ezjail_install_command: install
+# (See man ezjail-admin)
+# -m Fetch and install man pages (ca. 10MB)
+# -s Fetch and install sources (ca. 450MB)
+# -p Invoke the portsnap(8) utility to fetch and extract a FreeBSD
+#    ports tree
+bsd_ezjail_install_options: ""
+
+# ezjail-admin restore
+# bsd_ezjail_admin_restore: true; restore jail from archive if the
+# archive exists. False; create jail from scratch.
+bsd_ezjail_admin_restore: false
+# (See man ezjail-admin)
+bsd_ezjail_admin_restore_options: ""
+
+# List of the restored jails to be restarted by ezjail
+bsd_ezjail_restart_jails: []
+# Misc default
+# command_result:
+#   failed: false
+
+# EOF

@@ -1,0 +1,8 @@
+---
+bsd_jail_assert: true # import tasks
+bsd_jail_assert_enable:
+  interfaces: true
+  jaildir: true
+  zfs: true
+
+# EOF

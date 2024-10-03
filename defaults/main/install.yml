@@ -1,0 +1,13 @@
+---
+freebsd_install_method: packages
+freebsd_use_packages: true
+freebsd_install_retries: 10
+freebsd_install_delay: 5
+
+bsd_jail_install: true
+bsd_jail_packages:
+  - sysutils/ezjail
+  - ports-mgmt/portsnap
+bsd_jail_packages_extra: []
+
+# EOF

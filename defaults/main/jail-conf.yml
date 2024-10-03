@@ -1,0 +1,28 @@
+---
+bsd_jail_conf_path: /etc
+bsd_jail_conf_file: "{{ bsd_jail_conf_path }}/jail.conf"
+bsd_jail_conf_owner: root
+bsd_jail_conf_group: wheel
+bsd_jail_conf_mode: "0644"
+
+bsd_jail_conf: []
+bsd_jail_id_dir: /var/run
+bsd_jail_stamp_dir: /var/db/jail-stamps
+bsd_jail_fstab_dir: /etc/jail
+bsd_jail_jails_defaults:
+  - { key: path, val: "{{ bsd_ezjail_jaildir }}/$name" }
+  - { key: mount.fstab, val: "{{ bsd_jail_fstab_dir }}/fstab.${name}" }
+  - { key: exec.start, val: /bin/sh /etc/rc }
+  - { key: exec.stop, val: /bin/sh /etc/rc.shutdown }
+  - { key: devfs_ruleset, val: "4" }
+  - { key: exec.clean }
+  - { key: mount.devfs }
+  - { key: mount.fdescfs }
+  - { key: mount.procfs }
+
+# /etc/jail.conf.d
+# Configure jails in jail.conf.d instead of jail.conf
+bsd_jail_confd: false
+bsd_jail_confd_dir: "{{ bsd_jail_conf_path }}/jail.conf.d"
+
+# EOF

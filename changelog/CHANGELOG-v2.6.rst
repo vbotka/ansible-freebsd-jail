@@ -20,6 +20,7 @@ Minor Changes
 * Update README
 * Fix lint errors
 * Handlers listen to lowercase labels
+* Split defaults in defaults/main/
 
 
 2.6.1
