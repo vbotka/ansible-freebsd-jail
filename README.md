@@ -2,6 +2,7 @@
 
 [![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_jail)
 [![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
+[![GitHub tag](https://img.shields.io/github/v/tag/vbotka/ansible-freebsd-jail)](https://github.com/vbotka/ansible-freebsd-jail/tags)
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
@@ -149,6 +150,7 @@ might want to speedup the execution of the role and fetch the ports tree by
 cron (see the *cron* command in *man portsnap*). Optionally, use the role
 [vbotka.ansible-freebsd-ports](https://github.com/vbotka/ansible-freebsd-ports/tree/master)
 to configure *portsnap cron*.
+
 
 ## Upgrade configuration to a new release
 
@@ -319,6 +321,7 @@ test_02-202410031453.03.tar.gz
 test_03-202410031452.41.tar.gz
 ```
 
+
 ## Stop and delete jail
 
 ```bash
@@ -344,6 +347,7 @@ ZR  13   127.0.2.3       test_03                        /local/jails/test_03
 ZR  11   127.0.2.1       test_01                        /local/jails/test_01
     11   em0|10.1.0.51
 ```
+
 
 ## Restore and Start jail
 
@@ -725,6 +729,7 @@ chown root:wheel etc/rc.d/ezjail.flavour.default
 chmod 0755 etc/rc.d/ezjail.flavour.default
 # EOF
 ```
+
 
 ## Known issues
 
