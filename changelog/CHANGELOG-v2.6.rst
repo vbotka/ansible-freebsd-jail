@@ -18,6 +18,7 @@ Major Changes
 Minor Changes
 -------------
 * Update README.
+* Fix travis formatting.
 
 
 2.6.2
