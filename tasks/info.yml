@@ -1,9 +1,9 @@
 ---
 - name: "Info: List jails"
-  ansible.builtin.command:
-    cmd: /usr/sbin/jls --libxo json
   register: bsd_jail_jls_result
   changed_when: false
+  ansible.builtin.command:
+    cmd: /usr/sbin/jls --libxo json
 
 - name: "Info: Set varaible bsd_jail_info"
   ansible.builtin.set_fact:
@@ -15,12 +15,12 @@
                      items2dict(key_name='hostname', value_name='jid') }}"
 
 - name: "Info: Debug bsd_jail_debug={{ bsd_jail_debug }}"
+  when: bsd_jail_debug | bool
   ansible.builtin.debug:
     msg: |-
       bsd_jail_list:
         {{ bsd_jail_list | to_nice_yaml(indent=2) | indent(2) }}
       bsd_jail_id:
         {{ bsd_jail_id | to_nice_yaml(indent=2) | indent(2) }}
-  when: bsd_jail_debug | bool
 
 # EOF

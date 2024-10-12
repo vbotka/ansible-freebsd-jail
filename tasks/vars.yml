@@ -1,29 +1,29 @@
 ---
 - name: "Vars: Debug bsd_jail_debug={{ bsd_jail_debug }}"
+  when: bsd_jail_debug | bool
   ansible.builtin.debug:
     msg: |
       bsd_jail_objects_dir: {{ bsd_jail_objects_dir }}
       bsd_jail_objects_dir_extension: {{ bsd_jail_objects_dir_extension }}
       bsd_jail_jails:
         {{ bsd_jail_jails | to_yaml(indent=2) | indent(2) }}
-  when: bsd_jail_debug | bool
 
 - name: "Vars: Read jail configurations lists"
+  delegate_to: localhost
+  run_once: true
+  vars:
+    jname: __jails_{{ item | basename | splitext | first }}
   ansible.builtin.include_vars:
     file: "{{ item }}"
     name: "{{ jname }}"
   with_fileglob: "{{ bsd_jail_objects_dir }}/*.{{ bsd_jail_objects_dir_extension }}"
   loop_control:
     label: "{{ jname }}"
-  delegate_to: localhost
-  run_once: true
-  vars:
-    jname: __jails_{{ item | basename | splitext | first }}
 
 - name: "Vars: Add jail configurations lists to bsd_jail_jails"
-  ansible.builtin.set_fact:
-    bsd_jail_jails: "{{ bsd_jail_jails + jails }}"
   vars:
     jails: "{{ lookup('community.general.merge_variables', '__jails_', pattern_type='prefix').objects }}"
+  ansible.builtin.set_fact:
+    bsd_jail_jails: "{{ bsd_jail_jails + jails }}"
 
 # EOF

@@ -1,42 +1,42 @@
 ---
 - name: "Pkg: Install packages"
+  when: freebsd_install_method | lower == 'packages'
+  register: result
   community.general.pkgng:
     name: "{{ bsd_jail_packages }}"
-  register: result
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method | lower == 'packages'
 
 - name: "Pkg: Install ports"
+  when: freebsd_install_method | lower == 'ports'
+  register: result
   community.general.portinstall:
     name: "{{ item }}"
     use_packages: "{{ freebsd_use_packages | d(true) }}"
   loop: "{{ bsd_jail_packages }}"
-  register: result
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method | lower == 'ports'
 
 - name: "Pkg: Install extra packages"
+  when: freebsd_install_method | lower == 'packages'
+  register: result
   community.general.pkgng:
     name: "{{ bsd_jail_packages_extra }}"
-  register: result
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method | lower == 'packages'
 
 - name: "Pkg: Install extra ports"
+  when: freebsd_install_method | lower == 'ports'
+  register: result
   community.general.portinstall:
     name: "{{ item }}"
     use_packages: "{{ freebsd_use_packages }}"
   loop: "{{ bsd_jail_packages_extra }}"
-  register: result
   until: result is succeeded
   retries: "{{ freebsd_install_retries }}"
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method | lower == 'ports'
 
 # EOF

@@ -1,5 +1,6 @@
 ---
 - name: "Ezjail-flavours: Create directories"
+  tags: bsd_jail_ezjail_flavours_create_dirs
   ansible.builtin.file:
     state: directory
     path: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/etc/rc.d"
@@ -7,42 +8,43 @@
   loop: "{{ bsd_ezjail_flavours }}"
   loop_control:
     label: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
-  tags: bsd_jail_ezjail_flavours_create_dirs
 
 - name: Unarchive files
   tags: bsd_jail_ezjail_flavours_archive
   block:
+
     - name: "Ezjail-flavours: Unarchive files"
+      register: result
+      environment:
+        CRYPTOGRAPHY_OPENSSL_NO_LEGACY: '1'
       ansible.builtin.unarchive:
         src: "{{ item.archive }}"
         dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}"
       loop: "{{ bsd_ezjail_flavours | selectattr('archive', 'defined') }}"
       loop_control:
         label: "{{ item.archive }}"
-      register: result
-      environment:
-        CRYPTOGRAPHY_OPENSSL_NO_LEGACY: '1'
 
-    - name: "Ezjail-flavours: Debug result"
+    - name: "Ezjail-flavours: Debug result bsd_jail_debug={{ bsd_jail_debug }}"
+      when: bsd_jail_debug | bool
       ansible.builtin.debug:
         var: result
-      when: bsd_jail_debug | bool
 
 - name: Synchronize files
   tags: bsd_jail_ezjail_flavours_dir
   block:
+
     - name: "Ezjail-flavours: Synchronize files"
+      register: result
       ansible.posix.synchronize:
         src: "{{ item.dir }}/"
         dest: "{{ bsd_ezjail_jaildir }}/flavours/{{ item.flavour }}/"
       loop: "{{ bsd_ezjail_flavours | selectattr('dir', 'defined') }}"
       loop_control:
         label: "{{ item.dir }}"
-      register: result
 
-    - name: "Ezjail-flavours: Debug result"
+    - name: "Ezjail-flavours: Debug result bsd_jail_debug={{ bsd_jail_debug }}"
+      when: bsd_jail_debug | bool
       ansible.builtin.debug:
         var: result
-      when: bsd_jail_debug | bool
 
 # EOF

@@ -4,14 +4,14 @@
     install_command: ezjail-admin {{ bsd_ezjail_install_command }} {{ bsd_ezjail_install_options }}
 
 - name: "Ezjail-install: Debug. ezjail-admin install command bsd_jail_debug={{ bsd_jail_debug }}"
+  when: bsd_jail_debug | bool
   ansible.builtin.debug:
     var: install_command
-  when: bsd_jail_debug | bool
 
 - name: "Ezjail-install: Run when bsd_ezjail_install_force '{{ install_command }}'"
+  when: bsd_ezjail_install_force | bool
   ansible.builtin.command: # noqa: no-changed-when
     cmd: "{{ install_command }}"
-  when: bsd_ezjail_install_force | bool
 
 - name: "Ezjail-install: Run when basejail does not exist '{{ install_command }}'"
   ansible.builtin.command:

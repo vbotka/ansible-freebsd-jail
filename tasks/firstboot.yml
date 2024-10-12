@@ -6,13 +6,13 @@
     mode: "0755"
 
 - name: "Firstboot: Exec firstboot scripts in the jails"
-  ansible.builtin.include_tasks: fn/firstboot.yml
-  loop: "{{ bsd_jail_jails_present }}"
-  loop_control:
-    label: "{{ item.jailname }}"
   when:
     - bsd_ezjail_enable | bool
     - item.start | d(true)
     - item.firstboot is defined
+  ansible.builtin.include_tasks: fn/firstboot.yml
+  loop: "{{ bsd_jail_jails_present }}"
+  loop_control:
+    label: "{{ item.jailname }}"
 
 # EOF

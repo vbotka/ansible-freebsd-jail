@@ -1,6 +1,6 @@
 ---
 # defaults freebsd_jail
-bsd_jail_role_version: 2.6.3
+bsd_jail_role_version: 2.6.4
 
 bsd_jail_debug: false
 bsd_jail_conf_backup: true
