@@ -1,5 +1,6 @@
 ---
 - name: "Ezjail-jails:delete: Debug {{ item.jailname }}"
+  when: bsd_jail_debug | bool
   vars:
     msg: |-
       item.jailname: {{ item.jailname }}
@@ -11,20 +12,19 @@
       bsd_jail_id: {{ bsd_jail_id[item.jailname] | d('UNDEFINED') }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
-  when: bsd_jail_debug | bool
 
 - name: "Ezjail-jails:delete: Shutdown jail {{ item.jailname ~ ' id ' ~ bsd_jail_id[item.jailname] }}"
-  ansible.builtin.command: # noqa: no-changed-when
-    cmd: /usr/sbin/jexec {{ bsd_jail_id[item.jailname] }} /etc/rc.shutdown
   when:
     - bsd_jail_shutdown | bool
     - bsd_jail_id[item.jailname] is defined
+  ansible.builtin.command: # noqa: no-changed-when
+    cmd: /usr/sbin/jexec {{ bsd_jail_id[item.jailname] }} /etc/rc.shutdown
 
 - name: "Ezjail-jails:delete: Stop jail {{ item.jailname }}"
+  when: bsd_jail_enable | bool
   ansible.builtin.command:
     cmd: /etc/rc.d/jail stop {{ item.jailname }}
     removes: "{{ bsd_jail_id_dir }}/jail_{{ item.jailname }}{{ '.' }}id"
-  when: bsd_jail_enable | bool
 
 - name: "Ezjail-jails:delete: Delete jail {{ item.jailname }}"
   ansible.builtin.command:
@@ -36,10 +36,10 @@
 # "/etc/fstab.{{ item.jailname }}"
 
 - name: "Ezjail-jails:delete: Delete stamp {{ stamp_file }}"
+  vars:
+    stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
   ansible.builtin.file:
     state: absent
     path: "{{ stamp_file }}"
-  vars:
-    stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
 
 # EOF

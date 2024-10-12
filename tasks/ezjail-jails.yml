@@ -1,16 +1,16 @@
 ---
 - name: "Ezjail-jails: Delete jails"
+  when: not item.present | d(true)
   ansible.builtin.include_tasks: fn/delete.yml
   loop: "{{ bsd_jail_jails_absent }}"
   loop_control:
     label: "{{ item.jailname }}"
-  when: not item.present | d(true)
 
 - name: "Ezjail-jails: Create and configure jails"
+  when: item.present | d(true)
   ansible.builtin.include_tasks: fn/create.yml
   loop: "{{ bsd_jail_jails_present }}"
   loop_control:
     label: "{{ item.jailname }}"
-  when: item.present | d(true)
 
 # EOF

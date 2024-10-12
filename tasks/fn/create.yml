@@ -1,8 +1,8 @@
 ---
 - name: "Ezjail-jails:create: Debug {{ item.jailname }}"
+  when: bsd_jail_debug | bool
   ansible.builtin.debug:
     var: item | to_yaml
-  when: bsd_jail_debug | bool
 
 - name: "Ezjail-jails:create: Create stamp dir {{ bsd_jail_stamp_dir }}"
   ansible.builtin.file:
@@ -10,124 +10,121 @@
     path: "{{ bsd_jail_stamp_dir }}"
     mode: "0755"
 
-- name: "Ezjail-jails:create: Stat {{ bsd_ezjail_jaildir ~ '/' ~ item.jailname }}"
-  ansible.builtin.stat:
-    path: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
-  register: jail_root
+- name: Stat jailname
+  block:
 
-- name: "Ezjail-jails:create: Debug stat bsd_jail_debug={{ bsd_jail_debug }}"
-  ansible.builtin.debug:
-    msg: |
-      jail_root.stat.exists: {{ jail_root.stat.exists }}
-  when: bsd_jail_debug | bool
+    - name: "Ezjail-jails:create: Stat {{ bsd_ezjail_jaildir ~ '/' ~ item.jailname }}"
+      register: jail_root
+      ansible.builtin.stat:
+        path: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
+
+    - name: "Ezjail-jails:create: Debug stat bsd_jail_debug={{ bsd_jail_debug }}"
+      when: bsd_jail_debug | bool
+      ansible.builtin.debug:
+        msg: |
+          jail_root.stat.exists: {{ jail_root.stat.exists }}
 
 - name: "Ezjail-jails:create: Create {{ item.jailname }}"
   when: not jail_root.stat.exists
-
-  # config ezjail/jailname
+  vars:
+    stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
+    local_command: >-
+      {% if bsd_ezjail_admin_restore | bool %}
+      ezjail-admin restore
+      {{ bsd_ezjail_admin_restore_options }}
+      {{ item.archive }} &&
+      touch {{ stamp_file }}
+      {% else %}
+      ezjail-admin create
+      -r {{ bsd_ezjail_jaildir }}/{{ item.jailname }}
+      {% if item.flavour is defined %}
+      -f {{ item.flavour }}
+      {% endif %}
+      -c {{ item.jailtype }}
+      {{ item.jailname }}
+      '{% for ifc in item.interface %}{{
+      ifc.dev }}{{ '|' }}{{ ifc.ip4 }}{%
+      if not loop.last %},{% endif %}{% endfor %}'
+      {% endif %}
   block:
-    - name: "Ezjail-jails:create: Set command to restore jail from archive"
-      ansible.builtin.set_fact:
-        local_command: >-
-          ezjail-admin restore
-          {{ bsd_ezjail_admin_restore_options }}
-          {{ item.archive }} &&
-          touch {{ stamp_file }}
-      vars:
-        stamp_file: "{{ bsd_jail_stamp_dir }}/{{ item.jailname }}-firstboot"
-      when: bsd_ezjail_admin_restore | bool
-
-    - name: "Ezjail-jails:create: Set command to create jail"
-      ansible.builtin.set_fact:
-        local_command: >-
-          ezjail-admin create
-          -r {{ bsd_ezjail_jaildir }}/{{ item.jailname }}
-          {% if item.flavour is defined %}
-          -f {{ item.flavour }}
-          {% endif %}
-          -c {{ item.jailtype }}
-          {{ item.jailname }}
-          '{% for ifc in item.interface %}{{
-          ifc.dev }}{{ '|' }}{{ ifc.ip4 }}{%
-          if not loop.last %},{% endif %}{% endfor %}'
-      when: not bsd_ezjail_admin_restore | bool
 
     - name: "Ezjail-jails:create: Debug ezjail-admin command bsd_jail_debug={{ bsd_jail_debug }}"
+      when: bsd_jail_debug | bool
       ansible.builtin.debug:
         var: local_command
-      when: bsd_jail_debug | bool
 
     - name: "Ezjail-jails:create: Create or Restore jail {{ item.jailname }}"
+      vars:
+        rc_ok: "{{ bsd_ezjail_admin_restore | bool | ternary(1, 0) }}"
+      register: result
+      failed_when: result.rc > rc_ok | int # See README: Known issues
       ansible.builtin.command:
         cmd: "{{ local_command }}"
         creates: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}"
-      register: result
-      failed_when: result.rc > rc_ok | int # See README: Known issues
-      vars:
-        rc_ok: "{{ bsd_ezjail_admin_restore | ternary(1, 0) }}"
 
     - name: "Ezjail-jails:create: Debug result of ezjail-admin command bsd_jail_debug={{ bsd_jail_debug }}"
+      when: bsd_jail_debug | bool
       ansible.builtin.debug:
         var: result
+
+- name: Configure ezjail
+  block:
+
+    - name: "Ezjail-jails:create: Clear variable local_parameters"
+      ansible.builtin.set_fact:
+        local_parameters: ""
+
+    - name: "Ezjail-jails:create: Create variable local_parameters"
+      ansible.builtin.set_fact:
+        local_parameters: "{{ local_parameters }} {{ parameter.key }}={{ parameter.val | ternary('1', '0') }}"
+      loop: "{{ item.parameters | d([]) }}"
+      loop_control:
+        loop_var: parameter
+      check_mode: false
+
+    - name: "Ezjail-jails:create: Debug local_parameters bsd_jail_debug={{ bsd_jail_debug }}"
       when: bsd_jail_debug | bool
+      ansible.builtin.debug:
+        msg: "{{ local_parameters | trim }}"
 
-- name: "Ezjail-jails:create: Clear variable local_parameters"
-  ansible.builtin.set_fact:
-    local_parameters: ""
+    - name: "Ezjail-jails:create: Configure parameters {{ bsd_ezjail_conf_path ~ '/ezjail/' ~ item.jailname }}"
+      register: result
+      ansible.builtin.lineinfile:
+        path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+        regexp: ^\s*export\s+jail_{{ item.jailname }}_parameters\s*=(.*)$
+        line: export jail_{{ item.jailname }}_parameters="{{ local_parameters | trim }}"
+        # backup: "{{ bsd_jail_conf_backup }}"  # 'ezjail-admin list' reports empty lines
+        create: true
+        mode: "0644"
 
-- name: "Ezjail-jails:create: Create variable local_parameters"
-  ansible.builtin.set_fact:
-    local_parameters: "{{ local_parameters }} {{ parameter.key }}={{ parameter.val | ternary('1', '0') }}"
-  loop: "{{ item.parameters | d([]) }}"
-  loop_control:
-    loop_var: parameter
-  check_mode: false
+    - name: "Ezjail-jails:create: Debug result bsd_jail_debug={{ bsd_jail_debug }}"
+      when: bsd_jail_debug | bool
+      ansible.builtin.debug:
+        var: result
 
-- name: "Ezjail-jails:create: Debug local_parameters bsd_jail_debug={{ bsd_jail_debug }}"
-  ansible.builtin.debug:
-    msg: "{{ local_parameters | trim }}"
-  when: bsd_jail_debug | bool
+    - name: "Ezjail-jails:create: Create list of jails to be restarted by ezjail"
+      when: result is changed # noqa no-handler
+      ansible.builtin.set_fact:
+        bsd_ezjail_restart_jails: "{{ bsd_ezjail_restart_jails + [item.jailname] }}"
 
-- name: "Ezjail-jails:create: Configure parameters {{ bsd_ezjail_conf_path ~ '/ezjail/' ~ item.jailname }}"
-  ansible.builtin.lineinfile:
-    path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
-    regexp: ^\s*export\s+jail_{{ item.jailname }}_parameters\s*=(.*)$
-    line: export jail_{{ item.jailname }}_parameters="{{ local_parameters | trim }}"
-    # backup: "{{ bsd_jail_conf_backup }}"  # 'ezjail-admin list' reports empty lines
-    create: true
-    mode: "0644"
-  register: result
-  when: not ansible_check_mode
-
-- name: "Ezjail-jails:create: Debug result bsd_jail_debug={{ bsd_jail_debug }}"
-  ansible.builtin.debug:
-    var: result
-  when: bsd_jail_debug | bool
-
-- name: "Ezjail-jails:create: Create list of jails to be restarted by ezjail"
-  ansible.builtin.set_fact:
-    bsd_ezjail_restart_jails: "{{ bsd_ezjail_restart_jails + [item.jailname] }}"
-  when: result is changed # noqa no-handler
-
-- name: "Ezjail-jails:create: Configure {{ bsd_ezjail_conf_path ~ '/ezjail/' ~ item.jailname }}"
-  ansible.builtin.lineinfile:
-    path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
-    regexp: ^\s*export\s+jail_{{ item.jailname }}_{{ export.key }}\s*=(.*)$
-    line: export jail_{{ item.jailname }}_{{ export.key }}="{{ export.val }}"
-    backup: "{{ bsd_jail_conf_backup }}"
-    create: true
-    mode: "0644"
-  loop: "{{ item.ezjail_conf | d([]) }}"
-  loop_control:
-    loop_var: export
-  when: not ansible_check_mode
+    - name: "Ezjail-jails:create: Configure {{ bsd_ezjail_conf_path ~ '/ezjail/' ~ item.jailname }}"
+      ansible.builtin.lineinfile:
+        path: "{{ bsd_ezjail_conf_path }}/ezjail/{{ item.jailname }}"
+        regexp: ^\s*export\s+jail_{{ item.jailname }}_{{ export.key }}\s*=(.*)$
+        line: export jail_{{ item.jailname }}_{{ export.key }}="{{ export.val }}"
+        backup: "{{ bsd_jail_conf_backup }}"
+        create: true
+        mode: "0644"
+      loop: "{{ item.ezjail_conf | d([]) }}"
+      loop_control:
+        loop_var: export
 
 - name: "Ezjail-jails:create: Set executable by owner {{ bsd_ezjail_jaildir ~ '/' ~ item.jailname ~ '/etc/rc.shutdown' }}"
-  ansible.builtin.file:
-    path: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}/etc/rc.shutdown"
-    mode: u+x
   when:
     - bsd_jail_shutdown | bool
     - bsd_jail_id[item.jailname] is defined
+  ansible.builtin.file:
+    path: "{{ bsd_ezjail_jaildir }}/{{ item.jailname }}/etc/rc.shutdown"
+    mode: u+x
 
 # EOF
