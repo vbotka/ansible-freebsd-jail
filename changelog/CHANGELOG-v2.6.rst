@@ -5,6 +5,14 @@ vbotka.freebsd_jail 2.6 Release Notes
 .. contents:: Topics
 
 
+2.6.6
+=====
+
+Release Summary
+---------------
+Fix README link to the article 'Ansible FreeBSD jails - ezjail'.
+
+
 2.6.5
 =====
 

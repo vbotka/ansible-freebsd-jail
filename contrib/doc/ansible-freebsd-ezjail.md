@@ -11,7 +11,7 @@ tags: article, journal, ansible, freebsd, jails
 
 Vladimir Botka (@vbotka) November 13, 2024
 
-Ansible role vbotka.freebsd_jail ver.2.6.5
+Ansible role vbotka.freebsd_jail ver.2.6.6
 
 github.com/vbotka/ansible-freebsd-jail/blob/master/doc/freebsd-ezjail.pdf
 
