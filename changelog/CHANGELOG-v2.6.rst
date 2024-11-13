@@ -5,6 +5,21 @@ vbotka.freebsd_jail 2.6 Release Notes
 .. contents:: Topics
 
 
+2.6.5
+=====
+
+Release Summary
+---------------
+Add article 'Ansible FreeBSD jails'
+
+Major Changes
+-------------
+
+Minor Changes
+-------------
+* Add contrib/doc/ansible-freebsd-jails.\*
+
+
 2.6.4
 =====
 
