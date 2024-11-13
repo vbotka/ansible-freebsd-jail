@@ -1,1 +1,0 @@
-pandoc ansible-freebsd-jails.md --pdf-engine=xelatex -o ansible-freebsd-jails.pdf

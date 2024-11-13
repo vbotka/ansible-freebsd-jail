@@ -1,0 +1,1 @@
+pandoc ansible-freebsd-ezjail.md --pdf-engine=xelatex -o ansible-freebsd-ezjail.pdf

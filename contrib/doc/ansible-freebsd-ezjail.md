@@ -5,13 +5,20 @@ tags: article, journal, ansible, freebsd, jails
 
 # Ansible FreeBSD jails
 
+## (ezjail – Jail administration framework)
+
+<p>&nbsp;</p>
+
 Vladimir Botka (@vbotka) November 13, 2024
 
 Ansible role vbotka.freebsd_jail ver.2.6.5
 
+github.com/vbotka/ansible-freebsd-jail/blob/master/doc/freebsd-ezjail.pdf
+
+
 ## Abstract
 
-In this article, we describe how to manage FreeBSD jails with [Ansible]. Introduction describes how to setup Ansible, configure a project, and create jails using [Ansible role freebsd_jail]. The second chapter describes jails' management by [ezjail]. A simple project how to use jails is described in the third chapter. Ansible usage of [iocage] is not described here.
+In this article, we describe how to manage [FreeBSD Jails] with [Ansible]. Introduction describes how to setup Ansible, configure a project, and create jails using [Ansible role freebsd_jail]. This role uses [ezjail] to manage [FreeBSD Jails]. The second chapter describes [FreeBSD Jail Management] by [ezjail]. A simple Ansible project how to use jails is described in the third chapter. Usage of [iocage] is not described here.
 
 
 ## Table of Contents
@@ -1496,6 +1503,8 @@ All product names, logos, and brands are property of their respective owners.
 [Configure the connection]: https://docs.ansible.com/ansible/latest/inventory_guide/connection_details.html
 [Escalate the privilege]: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_privilege_escalation.html
 [FreeBSD jail managers]: https://docs.freebsd.org/en/books/handbook/jails/#jail-managers-and-containers
+[FreeBSD Jail Management]: https://docs.freebsd.org/en/books/handbook/jails/#jail-management
+[FreeBSD Jails]: https://docs.freebsd.org/en/books/handbook/jails/
 [How to build your inventory]: https://docs.ansible.com/ansible/latest/inventory_guide/intro_inventory.html
 [PyPI]: https://pypi.org/
 [Python virtual environment]: https://www.redhat.com/sysadmin/python-venv-ansible
