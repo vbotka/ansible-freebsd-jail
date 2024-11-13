@@ -6,7 +6,7 @@
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
 
-See the article [Ansible FreeBSD jails](https://github.com/vbotka/ansible-freebsd-jail/tree/master/contrib/docs/ansible-freebsd-jails.pdf).
+See the article [Ansible FreeBSD jails](https://github.com/vbotka/ansible-freebsd-jail/tree/master/docs/freebsd-ezjail.pdf).
 
 Feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-jail/issues).
 
