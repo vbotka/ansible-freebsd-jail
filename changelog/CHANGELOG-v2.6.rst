@@ -4,6 +4,11 @@ vbotka.freebsd_jail 2.6 Release Notes
 
 .. contents:: Topics
 
+LEGACY ANNOUNCEMENT
+===================
+
+The jails management development moved to [ansible-collection-freebsd](https://github.com/vbotka/ansible-collection-freebsd).
+
 
 2.6.6
 =====

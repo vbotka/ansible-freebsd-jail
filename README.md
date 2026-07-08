@@ -4,7 +4,9 @@
 [![Build Status](https://app.travis-ci.com/vbotka/ansible-freebsd-jail.svg?branch=master)](https://app.travis-ci.com/vbotka/ansible-freebsd-jail)
 [![GitHub tag](https://img.shields.io/github/v/tag/vbotka/ansible-freebsd-jail)](https://github.com/vbotka/ansible-freebsd-jail/tags)
 
-[Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management.
+[Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_jail/) FreeBSD Jails' Management. (LEGACY)
+
+**The jails management development moved to [ansible-collection-freebsd](https://github.com/vbotka/ansible-collection-freebsd).**
 
 See the article [Ansible FreeBSD jails](https://github.com/vbotka/ansible-freebsd-jail/blob/master/doc/freebsd-ezjail.pdf).
 
